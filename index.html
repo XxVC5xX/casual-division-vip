@@ -30,8 +30,11 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
 .payment-label { font-size: 9px; color: #8B6914; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 6px; }
 .price { font-size: 42px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 4px; }
 .lifetime { font-size: 9px; color: #555; letter-spacing: 3px; text-transform: uppercase; }
-.cta { display: block; text-align: center; background: #D4AF37; color: #0a0a0a; padding: 15px; font-size: 13px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; }
-.legal { text-align: center; margin-top: 1.2rem; font-size: 9px; color: #333; line-height: 1.8; letter-spacing: 0.5px; }
+.cta { display: block; text-align: center; background: #D4AF37; color: #0a0a0a; padding: 15px; font-size: 13px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; margin-bottom: 1.5rem; }
+.legal-box { border-top: 0.5px solid #2a2a2a; padding-top: 1.2rem; }
+.legal-title { font-size: 9px; color: #8B6914; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.8rem; }
+.legal-text { font-size: 10px; color: #444; line-height: 1.8; letter-spacing: 0.3px; font-family: sans-serif; }
+.legal-text p { margin-bottom: 0.5rem; }
 </style>
 </head>
 <body>
@@ -61,68 +64,128 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
       <div class="lifetime" id="t-lifetime">ACCÈS À VIE — SANS ABONNEMENT</div>
     </div>
     <a href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" class="cta" id="t-cta">REJOINDRE MAINTENANT →</a>
-    <div class="legal" id="t-legal">Accès personnel et non transférable · Aucun remboursement après activation<br>Service soumis à maintenance ponctuelle · Conditions modifiables à tout moment</div>
+    <div class="legal-box">
+      <div class="legal-title" id="t-legal-title">CONDITIONS D'ACCÈS</div>
+      <div class="legal-text" id="t-legal"></div>
+    </div>
   </div>
 </div>
 <script>
 const langs = {
   fr: {
-    title: "ACCÈS VIP — À VIE", sub: "Casu avant tout le monde.", section: "CE QUE TU OBTIENS",
+    title: "ACCÈS VIP — À VIE",
+    sub: "Casu avant tout le monde.",
+    section: "CE QUE TU OBTIENS",
     items: [
-      ["Bot Vinted ultra-actif — 250+ pièces/semaine garanties", "scan automatique plusieurs fois par jour, les meilleures affaires directement dans ton Discord avant tout le monde"],
+      ["Bot Vinted ultra-actif — en moyenne 250+ pièces/semaine", "scan automatique plusieurs fois par jour, les meilleures affaires directement dans ton Discord avant tout le monde"],
       ["Alertes sur les TRÈS BONNES AFFAIRES", "quand une pièce est en dessous du prix du marché, tu es notifié en priorité absolue"],
       ["Liste exclusive des meilleurs vendeurs Vinted casual", "vendeurs vérifiés, fiables, spécialisés casual"],
-      ["Sélection manuelle Stone Island & CP Company", "authentifiées par un membre de l'équipe, 20+ pièces/semaine"],
+      ["Sélection manuelle Stone Island & CP Company", "avis indicatif par un membre de l'équipe, en moyenne 20+ pièces/semaine"],
       ["Marques surveillées :", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, et bien d'autres..."],
       ["Priorité aux pièces noir & marine", "les plus recherchées"],
       ["Accès au chat membres exclusif", ""]
     ],
-    payment: "PAIEMENT UNIQUE", lifetime: "ACCÈS À VIE — SANS ABONNEMENT", cta: "REJOINDRE MAINTENANT →",
-    legal: "Accès personnel et non transférable · Aucun remboursement après activation<br>Service soumis à maintenance ponctuelle · Conditions modifiables à tout moment"
+    payment: "PAIEMENT UNIQUE",
+    lifetime: "ACCÈS À VIE — SANS ABONNEMENT",
+    cta: "REJOINDRE MAINTENANT →",
+    legalTitle: "CONDITIONS D'ACCÈS",
+    legal: `
+      <p>1. L'accès est strictement personnel et non transférable.</p>
+      <p>2. Aucun remboursement ne sera effectué après activation de l'accès, conformément à l'article L221-28 du Code de la consommation relatif aux contenus numériques.</p>
+      <p>3. Le service de scan automatique est fourni à titre indicatif. Casual Division ne garantit pas un volume fixe d'annonces et ne peut être tenu responsable d'interruptions techniques, notamment liées aux restrictions des plateformes tierces.</p>
+      <p>4. Les avis d'authenticité sur les pièces Stone Island et CP Company sont donnés à titre indicatif et ne constituent pas une expertise professionnelle. L'acheteur reste seul responsable de sa décision d'achat.</p>
+      <p>5. Les annonces partagées proviennent de plateformes tierces (Vinted). Casual Division n'intervient pas dans les transactions et ne peut être tenu responsable des litiges entre acheteurs et vendeurs.</p>
+      <p>6. Casual Division se réserve le droit de modifier les conditions du service à tout moment, avec notification préalable aux membres.</p>
+      <p>7. En cas d'abus ou de comportement contraire aux règles de la communauté, l'accès pourra être révoqué sans remboursement.</p>
+      <p style="margin-top:0.8rem; color:#555;">Éditeur : Casu'Hall — Micro-entreprise — SIRET : 95307634600022 — casuhall.fr</p>
+    `
   },
   en: {
-    title: "VIP ACCESS — LIFETIME", sub: "Casu before everyone else.", section: "WHAT YOU GET",
+    title: "VIP ACCESS — LIFETIME",
+    sub: "Casu before everyone else.",
+    section: "WHAT YOU GET",
     items: [
-      ["Ultra-active Vinted Bot — 250+ items/week guaranteed", "automatic scan multiple times a day, the best deals delivered directly to your Discord"],
+      ["Ultra-active Vinted Bot — on average 250+ items/week", "automatic scan multiple times a day, the best deals delivered directly to your Discord"],
       ["Alerts on GREAT DEALS", "when an item drops below market price, you're notified first"],
       ["Exclusive list of the best casual Vinted sellers", "verified, reliable sellers specialised in casual wear"],
-      ["Manual selection of Stone Island & CP Company", "authenticated by a team member, 20+ items/week"],
+      ["Manual selection of Stone Island & CP Company", "indicative opinion by a team member, on average 20+ items/week"],
       ["Monitored brands:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, and many more..."],
       ["Priority on black & navy items", "the most sought-after pieces"],
       ["Access to exclusive members chat", ""]
     ],
-    payment: "ONE-TIME PAYMENT", lifetime: "LIFETIME ACCESS — NO SUBSCRIPTION", cta: "JOIN NOW →",
-    legal: "Personal and non-transferable access · No refunds after activation<br>Service subject to occasional maintenance · Terms subject to change"
+    payment: "ONE-TIME PAYMENT",
+    lifetime: "LIFETIME ACCESS — NO SUBSCRIPTION",
+    cta: "JOIN NOW →",
+    legalTitle: "TERMS & CONDITIONS",
+    legal: `
+      <p>1. Access is strictly personal and non-transferable.</p>
+      <p>2. No refund will be made after activation of access, in accordance with regulations applicable to digital content.</p>
+      <p>3. The automatic scanning service is provided for informational purposes. Casual Division does not guarantee a fixed volume of listings and cannot be held responsible for technical interruptions.</p>
+      <p>4. Authenticity opinions on Stone Island and CP Company items are indicative only and do not constitute professional expertise. The buyer remains solely responsible for their purchase decision.</p>
+      <p>5. Listings shared come from third-party platforms (Vinted). Casual Division is not involved in transactions and cannot be held liable for disputes between buyers and sellers.</p>
+      <p>6. Casual Division reserves the right to modify service conditions at any time, with prior notice to members.</p>
+      <p>7. In case of abuse or behaviour contrary to community rules, access may be revoked without refund.</p>
+      <p style="margin-top:0.8rem; color:#555;">Publisher: Casu'Hall — Sole trader — SIRET : 95307634600022 — casuhall.fr</p>
+    `
   },
   de: {
-    title: "VIP-ZUGANG — LEBENSLANG", sub: "Casu vor allen anderen.", section: "WAS DU BEKOMMST",
+    title: "VIP-ZUGANG — LEBENSLANG",
+    sub: "Casu vor allen anderen.",
+    section: "WAS DU BEKOMMST",
     items: [
-      ["Ultra-aktiver Vinted-Bot — 250+ Artikel/Woche garantiert", "automatischer Scan mehrmals täglich, die besten Angebote direkt in deinen Discord"],
+      ["Ultra-aktiver Vinted-Bot — durchschnittlich 250+ Artikel/Woche", "automatischer Scan mehrmals täglich, die besten Angebote direkt in deinen Discord"],
       ["Alarme bei TOP-ANGEBOTEN", "wenn ein Artikel unter dem Marktpreis liegt, wirst du sofort benachrichtigt"],
       ["Exklusive Liste der besten Casual-Vinted-Verkäufer", "geprüfte, zuverlässige Verkäufer spezialisiert auf Casual-Mode"],
-      ["Manuelle Auswahl Stone Island & CP Company", "von einem Teammitglied authentifiziert, 20+ Artikel/Woche"],
+      ["Manuelle Auswahl Stone Island & CP Company", "indikativer Hinweis eines Teammitglieds, durchschnittlich 20+ Artikel/Woche"],
       ["Überwachte Marken:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan und viele mehr..."],
       ["Priorität für schwarze & marine Teile", "die meistgesuchten Stücke"],
       ["Zugang zum exklusiven Mitglieder-Chat", ""]
     ],
-    payment: "EINMALIGE ZAHLUNG", lifetime: "LEBENSLANGER ZUGANG — KEIN ABO", cta: "JETZT BEITRETEN →",
-    legal: "Persönlicher und nicht übertragbarer Zugang · Keine Rückerstattung nach Aktivierung<br>Service kann gelegentlich gewartet werden · Bedingungen können geändert werden"
+    payment: "EINMALIGE ZAHLUNG",
+    lifetime: "LEBENSLANGER ZUGANG — KEIN ABO",
+    cta: "JETZT BEITRETEN →",
+    legalTitle: "NUTZUNGSBEDINGUNGEN",
+    legal: `
+      <p>1. Der Zugang ist streng persönlich und nicht übertragbar.</p>
+      <p>2. Nach Aktivierung des Zugangs erfolgt keine Rückerstattung.</p>
+      <p>3. Der automatische Scan-Service wird nur zu Informationszwecken bereitgestellt. Casual Division garantiert kein festes Volumen an Angeboten.</p>
+      <p>4. Echtheitsmeinungen zu Stone Island- und CP Company-Artikeln sind nur indikativ und stellen keine professionelle Expertise dar.</p>
+      <p>5. Die geteilten Angebote stammen von Drittanbieter-Plattformen (Vinted). Casual Division haftet nicht für Streitigkeiten zwischen Käufern und Verkäufern.</p>
+      <p>6. Casual Division behält sich das Recht vor, die Servicebedingungen jederzeit zu ändern.</p>
+      <p>7. Bei Missbrauch kann der Zugang ohne Rückerstattung widerrufen werden.</p>
+      <p style="margin-top:0.8rem; color:#555;">Herausgeber: Casu'Hall — Einzelunternehmer — SIRET : 95307634600022 — casuhall.fr</p>
+    `
   },
   es: {
-    title: "ACCESO VIP — DE POR VIDA", sub: "Casu antes que nadie.", section: "LO QUE OBTIENES",
+    title: "ACCESO VIP — DE POR VIDA",
+    sub: "Casu antes que nadie.",
+    section: "LO QUE OBTIENES",
     items: [
-      ["Bot Vinted ultra-activo — 250+ piezas/semana garantizadas", "escaneo automático varias veces al día, las mejores ofertas directamente en tu Discord"],
+      ["Bot Vinted ultra-activo — una media de 250+ piezas/semana", "escaneo automático varias veces al día, las mejores ofertas directamente en tu Discord"],
       ["Alertas de GRANDES OFERTAS", "cuando una pieza está por debajo del precio de mercado, eres notificado con prioridad absoluta"],
       ["Lista exclusiva de los mejores vendedores Vinted casual", "vendedores verificados, fiables, especializados en casual"],
-      ["Selección manual Stone Island & CP Company", "autentificadas por un miembro del equipo, 20+ piezas/semana"],
+      ["Selección manual Stone Island & CP Company", "opinión indicativa de un miembro del equipo, una media de 20+ piezas/semana"],
       ["Marcas vigiladas:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, y muchas más..."],
       ["Prioridad en piezas negras y azul marino", "las más buscadas"],
       ["Acceso al chat exclusivo de miembros", ""]
     ],
-    payment: "PAGO ÚNICO", lifetime: "ACCESO DE POR VIDA — SIN SUSCRIPCIÓN", cta: "UNIRSE AHORA →",
-    legal: "Acceso personal e intransferible · Sin reembolso tras la activación<br>Servicio sujeto a mantenimiento puntual · Condiciones modificables en cualquier momento"
+    payment: "PAGO ÚNICO",
+    lifetime: "ACCESO DE POR VIDA — SIN SUSCRIPCIÓN",
+    cta: "UNIRSE AHORA →",
+    legalTitle: "CONDICIONES DE ACCESO",
+    legal: `
+      <p>1. El acceso es estrictamente personal e intransferible.</p>
+      <p>2. No se realizarán reembolsos tras la activación del acceso.</p>
+      <p>3. El servicio de escaneo automático se proporciona a título informativo. Casual Division no garantiza un volumen fijo de anuncios.</p>
+      <p>4. Las opiniones de autenticidad sobre piezas Stone Island y CP Company son indicativas y no constituyen una pericia profesional.</p>
+      <p>5. Los anuncios compartidos provienen de plataformas de terceros (Vinted). Casual Division no interviene en las transacciones.</p>
+      <p>6. Casual Division se reserva el derecho de modificar las condiciones del servicio en cualquier momento.</p>
+      <p>7. En caso de abuso, el acceso podrá ser revocado sin reembolso.</p>
+      <p style="margin-top:0.8rem; color:#555;">Editor: Casu'Hall — Autónomo — SIRET : 95307634600022 — casuhall.fr</p>
+    `
   }
 };
+
 function setLang(lang) {
   const d = langs[lang];
   document.getElementById('t-title').textContent = d.title;
@@ -131,6 +194,7 @@ function setLang(lang) {
   document.getElementById('t-payment').textContent = d.payment;
   document.getElementById('t-lifetime').textContent = d.lifetime;
   document.getElementById('t-cta').textContent = d.cta;
+  document.getElementById('t-legal-title').textContent = d.legalTitle;
   document.getElementById('t-legal').innerHTML = d.legal;
   const container = document.getElementById('items');
   container.innerHTML = '';
