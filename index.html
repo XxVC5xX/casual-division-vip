@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casual Division — Accès VIP</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; font-family: 'Garamond', 'Georgia', serif; }
+.card { max-width: 560px; width: 100%; }
+.lang-btns { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.5rem; }
+.lang-btns button { padding: 6px 14px; font-size: 11px; letter-spacing: 2px; cursor: pointer; font-family: Georgia, serif; border: 1px solid #8B6914; background: #1a1a1a; color: #D4AF37; }
+.lang-btns button.active { background: #D4AF37; color: #0a0a0a; border-color: #D4AF37; }
+.box { border: 1px solid #8B6914; padding: 2.5rem; position: relative; background: #0f0f0f; }
+.bar-top, .bar-bot { position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #8B6914, #D4AF37, #8B6914); }
+.bar-top { top: 0; } .bar-bot { bottom: 0; }
+.header { text-align: center; margin-bottom: 2rem; }
+.brand { font-size: 11px; color: #8B6914; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.8rem; }
+.vip-title { font-size: 22px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 0.5rem; }
+.divider { width: 50px; height: 1px; background: #D4AF37; margin: 0 auto 1.2rem; }
+.subtitle { font-size: 13px; color: #999; font-style: italic; line-height: 1.7; }
+.benefits { border-top: 0.5px solid #2a2a2a; border-bottom: 0.5px solid #2a2a2a; padding: 1.5rem 0; margin-bottom: 1.5rem; }
+.section-title { font-size: 9px; color: #D4AF37; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1.2rem; }
+.item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.item:last-child { margin-bottom: 0; }
+.dot { color: #D4AF37; font-size: 8px; margin-top: 5px; flex-shrink: 0; }
+.item-text { color: #ccc; font-size: 13px; line-height: 1.6; }
+.item-text strong { color: #fff; font-weight: bold; }
+.price-box { text-align: center; padding: 1.2rem; margin-bottom: 1.5rem; }
+.payment-label { font-size: 9px; color: #8B6914; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 6px; }
+.price { font-size: 42px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 4px; }
+.lifetime { font-size: 9px; color: #555; letter-spacing: 3px; text-transform: uppercase; }
+.cta { display: block; text-align: center; background: #D4AF37; color: #0a0a0a; padding: 15px; font-size: 13px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; }
+.legal { text-align: center; margin-top: 1.2rem; font-size: 9px; color: #333; line-height: 1.8; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="lang-btns">
+    <button class="active" onclick="setLang('fr')">FR</button>
+    <button onclick="setLang('en')">EN</button>
+    <button onclick="setLang('de')">DE</button>
+    <button onclick="setLang('es')">ES</button>
+  </div>
+  <div class="box">
+    <div class="bar-top"></div>
+    <div class="bar-bot"></div>
+    <div class="header">
+      <div class="brand">⚜ &nbsp; C A S U A L &nbsp; D I V I S I O N &nbsp; ⚜</div>
+      <div class="vip-title" id="t-title">ACCÈS VIP — À VIE</div>
+      <div class="divider"></div>
+      <div class="subtitle" id="t-sub">Casu avant tout le monde.</div>
+    </div>
+    <div class="benefits">
+      <div class="section-title" id="t-section">CE QUE TU OBTIENS</div>
+      <div id="items"></div>
+    </div>
+    <div class="price-box">
+      <div class="payment-label" id="t-payment">PAIEMENT UNIQUE</div>
+      <div class="price">19.99€</div>
+      <div class="lifetime" id="t-lifetime">ACCÈS À VIE — SANS ABONNEMENT</div>
+    </div>
+    <a href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" class="cta" id="t-cta">REJOINDRE MAINTENANT →</a>
+    <div class="legal" id="t-legal">Accès personnel et non transférable · Aucun remboursement après activation<br>Service soumis à maintenance ponctuelle · Conditions modifiables à tout moment</div>
+  </div>
+</div>
+<script>
+const langs = {
+  fr: {
+    title: "ACCÈS VIP — À VIE", sub: "Casu avant tout le monde.", section: "CE QUE TU OBTIENS",
+    items: [
+      ["Bot Vinted ultra-actif — 250+ pièces/semaine garanties", "scan automatique plusieurs fois par jour, les meilleures affaires directement dans ton Discord avant tout le monde"],
+      ["Alertes sur les TRÈS BONNES AFFAIRES", "quand une pièce est en dessous du prix du marché, tu es notifié en priorité absolue"],
+      ["Liste exclusive des meilleurs vendeurs Vinted casual", "vendeurs vérifiés, fiables, spécialisés casual"],
+      ["Sélection manuelle Stone Island & CP Company", "authentifiées par un membre de l'équipe, 20+ pièces/semaine"],
+      ["Marques surveillées :", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, et bien d'autres..."],
+      ["Priorité aux pièces noir & marine", "les plus recherchées"],
+      ["Accès au chat membres exclusif", ""]
+    ],
+    payment: "PAIEMENT UNIQUE", lifetime: "ACCÈS À VIE — SANS ABONNEMENT", cta: "REJOINDRE MAINTENANT →",
+    legal: "Accès personnel et non transférable · Aucun remboursement après activation<br>Service soumis à maintenance ponctuelle · Conditions modifiables à tout moment"
+  },
+  en: {
+    title: "VIP ACCESS — LIFETIME", sub: "Casu before everyone else.", section: "WHAT YOU GET",
+    items: [
+      ["Ultra-active Vinted Bot — 250+ items/week guaranteed", "automatic scan multiple times a day, the best deals delivered directly to your Discord"],
+      ["Alerts on GREAT DEALS", "when an item drops below market price, you're notified first"],
+      ["Exclusive list of the best casual Vinted sellers", "verified, reliable sellers specialised in casual wear"],
+      ["Manual selection of Stone Island & CP Company", "authenticated by a team member, 20+ items/week"],
+      ["Monitored brands:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, and many more..."],
+      ["Priority on black & navy items", "the most sought-after pieces"],
+      ["Access to exclusive members chat", ""]
+    ],
+    payment: "ONE-TIME PAYMENT", lifetime: "LIFETIME ACCESS — NO SUBSCRIPTION", cta: "JOIN NOW →",
+    legal: "Personal and non-transferable access · No refunds after activation<br>Service subject to occasional maintenance · Terms subject to change"
+  },
+  de: {
+    title: "VIP-ZUGANG — LEBENSLANG", sub: "Casu vor allen anderen.", section: "WAS DU BEKOMMST",
+    items: [
+      ["Ultra-aktiver Vinted-Bot — 250+ Artikel/Woche garantiert", "automatischer Scan mehrmals täglich, die besten Angebote direkt in deinen Discord"],
+      ["Alarme bei TOP-ANGEBOTEN", "wenn ein Artikel unter dem Marktpreis liegt, wirst du sofort benachrichtigt"],
+      ["Exklusive Liste der besten Casual-Vinted-Verkäufer", "geprüfte, zuverlässige Verkäufer spezialisiert auf Casual-Mode"],
+      ["Manuelle Auswahl Stone Island & CP Company", "von einem Teammitglied authentifiziert, 20+ Artikel/Woche"],
+      ["Überwachte Marken:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan und viele mehr..."],
+      ["Priorität für schwarze & marine Teile", "die meistgesuchten Stücke"],
+      ["Zugang zum exklusiven Mitglieder-Chat", ""]
+    ],
+    payment: "EINMALIGE ZAHLUNG", lifetime: "LEBENSLANGER ZUGANG — KEIN ABO", cta: "JETZT BEITRETEN →",
+    legal: "Persönlicher und nicht übertragbarer Zugang · Keine Rückerstattung nach Aktivierung<br>Service kann gelegentlich gewartet werden · Bedingungen können geändert werden"
+  },
+  es: {
+    title: "ACCESO VIP — DE POR VIDA", sub: "Casu antes que nadie.", section: "LO QUE OBTIENES",
+    items: [
+      ["Bot Vinted ultra-activo — 250+ piezas/semana garantizadas", "escaneo automático varias veces al día, las mejores ofertas directamente en tu Discord"],
+      ["Alertas de GRANDES OFERTAS", "cuando una pieza está por debajo del precio de mercado, eres notificado con prioridad absoluta"],
+      ["Lista exclusiva de los mejores vendedores Vinted casual", "vendedores verificados, fiables, especializados en casual"],
+      ["Selección manual Stone Island & CP Company", "autentificadas por un miembro del equipo, 20+ piezas/semana"],
+      ["Marcas vigiladas:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, y muchas más..."],
+      ["Prioridad en piezas negras y azul marino", "las más buscadas"],
+      ["Acceso al chat exclusivo de miembros", ""]
+    ],
+    payment: "PAGO ÚNICO", lifetime: "ACCESO DE POR VIDA — SIN SUSCRIPCIÓN", cta: "UNIRSE AHORA →",
+    legal: "Acceso personal e intransferible · Sin reembolso tras la activación<br>Servicio sujeto a mantenimiento puntual · Condiciones modificables en cualquier momento"
+  }
+};
+function setLang(lang) {
+  const d = langs[lang];
+  document.getElementById('t-title').textContent = d.title;
+  document.getElementById('t-sub').textContent = d.sub;
+  document.getElementById('t-section').textContent = d.section;
+  document.getElementById('t-payment').textContent = d.payment;
+  document.getElementById('t-lifetime').textContent = d.lifetime;
+  document.getElementById('t-cta').textContent = d.cta;
+  document.getElementById('t-legal').innerHTML = d.legal;
+  const container = document.getElementById('items');
+  container.innerHTML = '';
+  d.items.forEach(([bold, rest]) => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = '<div class="dot">●</div><div class="item-text"><strong>' + bold + '</strong>' + (rest ? ' — ' + rest : '') + '</div>';
+    container.appendChild(div);
+  });
+  document.querySelectorAll('.lang-btns button').forEach(b => b.classList.remove('active'));
+  document.querySelector('.lang-btns button[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
+}
+setLang('fr');
+</script>
+</body>
+</html>
