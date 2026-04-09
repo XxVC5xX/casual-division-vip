@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casual Division — Vendeurs Vinted</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; min-height: 100vh; padding: 2rem; font-family: 'Garamond', 'Georgia', serif; }
+.container { max-width: 700px; margin: 0 auto; }
+.header { text-align: center; margin-bottom: 2rem; border: 1px solid #8B6914; padding: 2rem; position: relative; background: #0f0f0f; }
+.bar { position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #8B6914, #D4AF37, #8B6914); }
+.bar.top { top: 0; } .bar.bottom { bottom: 0; }
+.brand { font-size: 10px; color: #8B6914; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.5rem; }
+.title { font-size: 20px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 0.5rem; }
+.subtitle { font-size: 12px; color: #666; font-style: italic; }
+.count { font-size: 10px; color: #8B6914; letter-spacing: 2px; margin-top: 0.5rem; font-family: sans-serif; }
+
+.section-title { font-size: 9px; color: #D4AF37; letter-spacing: 4px; text-transform: uppercase; margin: 1.5rem 0 1rem; font-family: sans-serif; }
+
+.grid { display: flex; flex-direction: column; gap: 10px; }
+
+.seller-card { display: flex; align-items: center; gap: 16px; background: #0f0f0f; border: 0.5px solid #2a2a2a; padding: 14px 16px; text-decoration: none; transition: border-color 0.2s; position: relative; }
+.seller-card:hover { border-color: #8B6914; }
+.seller-card.top { border: 1px solid #D4AF37; background: #111; }
+.seller-card.top::before { content: '⭐ TOP VENDEUR'; position: absolute; top: -1px; right: 12px; background: #D4AF37; color: #0a0a0a; font-size: 8px; font-weight: bold; padding: 2px 8px; letter-spacing: 1px; font-family: sans-serif; }
+
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; color: #D4AF37; font-family: sans-serif; font-weight: bold; }
+.seller-card.top .avatar { border-color: #D4AF37; }
+
+.info { flex: 1; }
+.name { color: #fff; font-size: 14px; font-family: sans-serif; font-weight: 600; margin-bottom: 2px; }
+.seller-card.top .name { color: #D4AF37; }
+.tag { font-size: 10px; color: #555; font-family: sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+
+.arrow { color: #333; font-size: 14px; font-family: sans-serif; }
+.seller-card:hover .arrow { color: #D4AF37; }
+
+.admin-section { margin-top: 2rem; border: 0.5px solid #2a2a2a; padding: 1.5rem; background: #0f0f0f; }
+.admin-title { font-size: 9px; color: #555; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; font-family: sans-serif; }
+.admin-form { display: none; flex-direction: column; gap: 10px; }
+.admin-form.visible { display: flex; }
+input { background: #1a1a1a; border: 0.5px solid #333; color: #fff; padding: 10px 12px; font-size: 13px; font-family: sans-serif; width: 100%; }
+input:focus { outline: none; border-color: #8B6914; }
+.btn { background: #D4AF37; color: #0a0a0a; border: none; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: sans-serif; }
+.btn:hover { background: #c49b2e; }
+.btn-unlock { background: transparent; border: 0.5px solid #333; color: #555; padding: 8px 16px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: sans-serif; }
+.btn-unlock:hover { border-color: #8B6914; color: #8B6914; }
+.error { color: #cc4444; font-size: 11px; font-family: sans-serif; }
+.success { color: #44aa44; font-size: 11px; font-family: sans-serif; }
+.checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666; font-family: sans-serif; }
+input[type="checkbox"] { width: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="bar top"></div>
+    <div class="bar bottom"></div>
+    <div class="brand">⚜ CASUAL DIVISION ⚜</div>
+    <div class="title">VENDEURS VINTED VÉRIFIÉS</div>
+    <div class="subtitle">Sélectionnés par l'équipe — spécialisés casual</div>
+    <div class="count" id="count"></div>
+  </div>
+
+  <div class="section-title">⭐ TOP VENDEURS</div>
+  <div class="grid" id="top-list"></div>
+
+  <div class="section-title">VENDEURS RECOMMANDÉS</div>
+  <div class="grid" id="regular-list"></div>
+
+  <div class="admin-section">
+    <div class="admin-title">ESPACE ADMINISTRATEUR</div>
+    <button class="btn-unlock" onclick="showUnlock()">🔒 Accès admin</button>
+    <div id="unlock-form" style="margin-top:1rem; display:none;">
+      <input type="password" id="code-input" placeholder="Code d'accès..." style="max-width:200px; display:inline-block; margin-right:8px;">
+      <button class="btn" onclick="checkCode()" style="display:inline-block; padding:10px 20px;">OK</button>
+      <div id="code-error" class="error" style="margin-top:8px;"></div>
+    </div>
+    <div class="admin-form" id="admin-form">
+      <div style="font-size:11px; color:#44aa44; font-family:sans-serif; margin-bottom:0.5rem;">✅ Accès admin autorisé</div>
+      <input type="text" id="new-name" placeholder="Pseudo Vinted (ex: casual_store)">
+      <input type="text" id="new-url" placeholder="Lien Vinted (ex: https://www.vinted.fr/member/123456)">
+      <div class="checkbox-row">
+        <input type="checkbox" id="new-top">
+        <label for="new-top">Top vendeur (badge doré)</label>
+      </div>
+      <button class="btn" onclick="addSeller()">+ AJOUTER LE VENDEUR</button>
+      <div id="add-status"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_CODE = "VC5";
+
+let sellers = [
+  { name: "Casual_Store", url: "https://www.vinted.fr/member/222715715", top: true },
+  { name: "OC'CASUAL", url: "https://www.vinted.fr/member/45952213", top: true },
+  { name: "Val", url: "https://www.vinted.fr/member/25584555", top: true },
+  { name: "terrace_carlos", url: "https://www.vinted.fr/member/3135806057", top: false },
+  { name: "1312christian131", url: "https://www.vinted.fr/member/272051765", top: false },
+  { name: "s.slazioforza", url: "https://www.vinted.fr/member/273058301", top: false },
+  { name: "casualland", url: "https://www.vinted.fr/member/180314715", top: false },
+  { name: "nilsnocap", url: "https://www.vinted.fr/member/86082493", top: false },
+  { name: "louis_mrt732", url: "https://www.vinted.fr/member/282792070", top: false },
+  { name: "casual_brand_mrlpl", url: "https://www.vinted.fr/member/295062969", top: false },
+  { name: "seller076", url: "https://www.vinted.fr/member/235048354", top: false },
+];
+
+function getInitials(name) {
+  return name.replace(/[^a-zA-Z]/g, '').substring(0, 2).toUpperCase() || '??';
+}
+
+function renderSellers() {
+  const topList = document.getElementById('top-list');
+  const regularList = document.getElementById('regular-list');
+  topList.innerHTML = '';
+  regularList.innerHTML = '';
+
+  const tops = sellers.filter(s => s.top);
+  const regulars = sellers.filter(s => !s.top);
+
+  document.getElementById('count').textContent = sellers.length + ' vendeurs référencés';
+
+  tops.forEach(s => {
+    const card = document.createElement('a');
+    card.href = s.url;
+    card.target = '_blank';
+    card.className = 'seller-card top';
+    card.innerHTML = `
+      <div class="avatar">${getInitials(s.name)}</div>
+      <div class="info">
+        <div class="name">${s.name}</div>
+        <div class="tag">Vendeur Casual · Vérifié</div>
+      </div>
+      <div class="arrow">→</div>
+    `;
+    topList.appendChild(card);
+  });
+
+  regulars.forEach(s => {
+    const card = document.createElement('a');
+    card.href = s.url;
+    card.target = '_blank';
+    card.className = 'seller-card';
+    card.innerHTML = `
+      <div class="avatar">${getInitials(s.name)}</div>
+      <div class="info">
+        <div class="name">${s.name}</div>
+        <div class="tag">Vendeur Casual · Vérifié</div>
+      </div>
+      <div class="arrow">→</div>
+    `;
+    regularList.appendChild(card);
+  });
+}
+
+function showUnlock() {
+  document.getElementById('unlock-form').style.display = 'block';
+}
+
+function checkCode() {
+  const code = document.getElementById('code-input').value.trim();
+  if (code === ADMIN_CODE) {
+    document.getElementById('unlock-form').style.display = 'none';
+    document.getElementById('admin-form').classList.add('visible');
+  } else {
+    document.getElementById('code-error').textContent = 'Code incorrect.';
+  }
+}
+
+function addSeller() {
+  const name = document.getElementById('new-name').value.trim();
+  const url = document.getElementById('new-url').value.trim();
+  const top = document.getElementById('new-top').checked;
+  const status = document.getElementById('add-status');
+
+  if (!name || !url) {
+    status.className = 'error';
+    status.textContent = 'Remplis tous les champs.';
+    return;
+  }
+  if (!url.includes('vinted.fr')) {
+    status.className = 'error';
+    status.textContent = 'Le lien doit être un lien Vinted.';
+    return;
+  }
+
+  sellers.push({ name, url, top });
+  renderSellers();
+
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-url').value = '';
+  document.getElementById('new-top').checked = false;
+  status.className = 'success';
+  status.textContent = '✅ Vendeur ajouté avec succès !';
+  setTimeout(() => status.textContent = '', 3000);
+}
+
+renderSellers();
+</script>
+</body>
+</html>
