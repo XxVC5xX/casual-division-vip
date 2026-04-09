@@ -63,6 +63,11 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
       <div class="price">19.99€</div>
       <div class="lifetime" id="t-lifetime">ACCÈS À VIE — SANS ABONNEMENT</div>
     </div>
+    <div id="t-activation-box" style="border:1px solid #D4AF37;padding:12px 16px;margin-bottom:1rem;background:#1a1400;text-align:center;">
+      <div style="font-size:10px;color:#8B6914;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;font-family:sans-serif;" id="t-activation-label">DÉLAI D'ACTIVATION</div>
+      <div style="font-size:20px;color:#D4AF37;font-weight:bold;letter-spacing:2px;">⏱ 12H MAX</div>
+      <div style="font-size:11px;color:#999;margin-top:4px;font-family:sans-serif;" id="t-activation-text">Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.</div>
+    </div>
     <a href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" class="cta" id="t-cta">REJOINDRE MAINTENANT →</a>
     <div class="legal-box">
       <div class="legal-title" id="t-legal-title">CONDITIONS D'ACCÈS</div>
@@ -88,9 +93,10 @@ const langs = {
     payment: "PAIEMENT UNIQUE",
     lifetime: "ACCÈS À VIE — SANS ABONNEMENT",
     cta: "REJOINDRE MAINTENANT →",
-    legalTitle: "CONDITIONS D'ACCÈS",
+    legalTitle: "CONDITIONS D'ACCÈS", activationLabel: "DÉLAI D'ACTIVATION", activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.",
     legal: `
       <p>1. L'accès est strictement personnel et non transférable.</p>
+      <p>0. Après validation du paiement, l'accès VIP est activé manuellement sous 12h maximum.</p>
       <p>2. Aucun remboursement ne sera effectué après activation de l'accès, conformément à l'article L221-28 du Code de la consommation relatif aux contenus numériques.</p>
       <p>3. Le service de scan automatique est fourni à titre indicatif. Casual Division ne garantit pas un volume fixe d'annonces et ne peut être tenu responsable d'interruptions techniques, notamment liées aux restrictions des plateformes tierces.</p>
       <p>4. Les avis d'authenticité sur les pièces Stone Island et CP Company sont donnés à titre indicatif et ne constituent pas une expertise professionnelle. L'acheteur reste seul responsable de sa décision d'achat.</p>
@@ -116,9 +122,10 @@ const langs = {
     payment: "ONE-TIME PAYMENT",
     lifetime: "LIFETIME ACCESS — NO SUBSCRIPTION",
     cta: "JOIN NOW →",
-    legalTitle: "TERMS & CONDITIONS",
+    legalTitle: "TERMS & CONDITIONS", activationLabel: "ACTIVATION DELAY", activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum.",
     legal: `
       <p>1. Access is strictly personal and non-transferable.</p>
+      <p>0. After payment confirmation, VIP access is activated manually within 12 hours maximum.</p>
       <p>2. No refund will be made after activation of access, in accordance with regulations applicable to digital content.</p>
       <p>3. The automatic scanning service is provided for informational purposes. Casual Division does not guarantee a fixed volume of listings and cannot be held responsible for technical interruptions.</p>
       <p>4. Authenticity opinions on Stone Island and CP Company items are indicative only and do not constitute professional expertise. The buyer remains solely responsible for their purchase decision.</p>
@@ -144,9 +151,10 @@ const langs = {
     payment: "EINMALIGE ZAHLUNG",
     lifetime: "LEBENSLANGER ZUGANG — KEIN ABO",
     cta: "JETZT BEITRETEN →",
-    legalTitle: "NUTZUNGSBEDINGUNGEN",
+    legalTitle: "NUTZUNGSBEDINGUNGEN", activationLabel: "AKTIVIERUNGSZEIT", activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.",
     legal: `
       <p>1. Der Zugang ist streng persönlich und nicht übertragbar.</p>
+      <p>0. Nach Zahlungsbestätigung wird der VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.</p>
       <p>2. Nach Aktivierung des Zugangs erfolgt keine Rückerstattung.</p>
       <p>3. Der automatische Scan-Service wird nur zu Informationszwecken bereitgestellt. Casual Division garantiert kein festes Volumen an Angeboten.</p>
       <p>4. Echtheitsmeinungen zu Stone Island- und CP Company-Artikeln sind nur indikativ und stellen keine professionelle Expertise dar.</p>
@@ -172,9 +180,10 @@ const langs = {
     payment: "PAGO ÚNICO",
     lifetime: "ACCESO DE POR VIDA — SIN SUSCRIPCIÓN",
     cta: "UNIRSE AHORA →",
-    legalTitle: "CONDICIONES DE ACCESO",
+    legalTitle: "CONDICIONES DE ACCESO", activationLabel: "PLAZO DE ACTIVACIÓN", activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.",
     legal: `
       <p>1. El acceso es estrictamente personal e intransferible.</p>
+      <p>0. Tras la confirmación del pago, el acceso VIP se activa manualmente en un máximo de 12 horas.</p>
       <p>2. No se realizarán reembolsos tras la activación del acceso.</p>
       <p>3. El servicio de escaneo automático se proporciona a título informativo. Casual Division no garantiza un volumen fijo de anuncios.</p>
       <p>4. Las opiniones de autenticidad sobre piezas Stone Island y CP Company son indicativas y no constituyen una pericia profesional.</p>
@@ -195,6 +204,8 @@ function setLang(lang) {
   document.getElementById('t-lifetime').textContent = d.lifetime;
   document.getElementById('t-cta').textContent = d.cta;
   document.getElementById('t-legal-title').textContent = d.legalTitle;
+  if(d.activationLabel) document.getElementById('t-activation-label').textContent = d.activationLabel;
+  if(d.activationText) document.getElementById('t-activation-text').textContent = d.activationText;
   document.getElementById('t-legal').innerHTML = d.legal;
   const container = document.getElementById('items');
   container.innerHTML = '';
