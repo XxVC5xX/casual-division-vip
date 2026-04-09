@@ -15,27 +15,20 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; font-family: 'Gara
 .title { font-size: 20px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 0.5rem; }
 .subtitle { font-size: 12px; color: #666; font-style: italic; }
 .count { font-size: 10px; color: #8B6914; letter-spacing: 2px; margin-top: 0.5rem; font-family: sans-serif; }
-
 .section-title { font-size: 9px; color: #D4AF37; letter-spacing: 4px; text-transform: uppercase; margin: 1.5rem 0 1rem; font-family: sans-serif; }
-
 .grid { display: flex; flex-direction: column; gap: 10px; }
-
 .seller-card { display: flex; align-items: center; gap: 16px; background: #0f0f0f; border: 0.5px solid #2a2a2a; padding: 14px 16px; text-decoration: none; transition: border-color 0.2s; position: relative; }
 .seller-card:hover { border-color: #8B6914; }
 .seller-card.top { border: 1px solid #D4AF37; background: #111; }
 .seller-card.top::before { content: '⭐ TOP VENDEUR'; position: absolute; top: -1px; right: 12px; background: #D4AF37; color: #0a0a0a; font-size: 8px; font-weight: bold; padding: 2px 8px; letter-spacing: 1px; font-family: sans-serif; }
-
-.avatar { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; color: #D4AF37; font-family: sans-serif; font-weight: bold; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; color: #D4AF37; font-family: sans-serif; font-weight: bold; }
 .seller-card.top .avatar { border-color: #D4AF37; }
-
 .info { flex: 1; }
 .name { color: #fff; font-size: 14px; font-family: sans-serif; font-weight: 600; margin-bottom: 2px; }
 .seller-card.top .name { color: #D4AF37; }
 .tag { font-size: 10px; color: #555; font-family: sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-
 .arrow { color: #333; font-size: 14px; font-family: sans-serif; }
 .seller-card:hover .arrow { color: #D4AF37; }
-
 .admin-section { margin-top: 2rem; border: 0.5px solid #2a2a2a; padding: 1.5rem; background: #0f0f0f; }
 .admin-title { font-size: 9px; color: #555; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; font-family: sans-serif; }
 .admin-form { display: none; flex-direction: column; gap: 10px; }
@@ -43,9 +36,9 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; font-family: 'Gara
 input { background: #1a1a1a; border: 0.5px solid #333; color: #fff; padding: 10px 12px; font-size: 13px; font-family: sans-serif; width: 100%; }
 input:focus { outline: none; border-color: #8B6914; }
 .btn { background: #D4AF37; color: #0a0a0a; border: none; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: sans-serif; }
-.btn:hover { background: #c49b2e; }
 .btn-unlock { background: transparent; border: 0.5px solid #333; color: #555; padding: 8px 16px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: sans-serif; }
 .btn-unlock:hover { border-color: #8B6914; color: #8B6914; }
+.btn-danger { background: #8B0000; color: #fff; border: none; padding: 4px 10px; font-size: 10px; cursor: pointer; font-family: sans-serif; margin-left: 8px; }
 .error { color: #cc4444; font-size: 11px; font-family: sans-serif; }
 .success { color: #44aa44; font-size: 11px; font-family: sans-serif; }
 .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666; font-family: sans-serif; }
@@ -93,8 +86,9 @@ input[type="checkbox"] { width: auto; }
 
 <script>
 const ADMIN_CODE = "VC5";
+const STORAGE_KEY = "casual_division_sellers";
 
-let sellers = [
+const DEFAULT_SELLERS = [
   { name: "Casual_Store", url: "https://www.vinted.fr/member/222715715", top: true },
   { name: "OC'CASUAL", url: "https://www.vinted.fr/member/45952213", top: true },
   { name: "Val", url: "https://www.vinted.fr/member/25584555", top: true },
@@ -108,52 +102,69 @@ let sellers = [
   { name: "seller076", url: "https://www.vinted.fr/member/235048354", top: false },
 ];
 
+function loadSellers() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  saveSellers(DEFAULT_SELLERS);
+  return DEFAULT_SELLERS;
+}
+
+function saveSellers(sellers) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sellers));
+  } catch(e) {}
+}
+
+let sellers = loadSellers();
+
 function getInitials(name) {
   return name.replace(/[^a-zA-Z]/g, '').substring(0, 2).toUpperCase() || '??';
 }
+
+let isAdmin = false;
 
 function renderSellers() {
   const topList = document.getElementById('top-list');
   const regularList = document.getElementById('regular-list');
   topList.innerHTML = '';
   regularList.innerHTML = '';
-
-  const tops = sellers.filter(s => s.top);
-  const regulars = sellers.filter(s => !s.top);
-
   document.getElementById('count').textContent = sellers.length + ' vendeurs référencés';
 
-  tops.forEach(s => {
-    const card = document.createElement('a');
-    card.href = s.url;
-    card.target = '_blank';
-    card.className = 'seller-card top';
-    card.innerHTML = `
-      <div class="avatar">${getInitials(s.name)}</div>
-      <div class="info">
-        <div class="name">${s.name}</div>
-        <div class="tag">Vendeur Casual · Vérifié</div>
-      </div>
-      <div class="arrow">→</div>
-    `;
-    topList.appendChild(card);
+  sellers.filter(s => s.top).forEach((s, i) => {
+    topList.appendChild(createCard(s, sellers.indexOf(s)));
   });
+  sellers.filter(s => !s.top).forEach((s) => {
+    regularList.appendChild(createCard(s, sellers.indexOf(s)));
+  });
+}
 
-  regulars.forEach(s => {
-    const card = document.createElement('a');
-    card.href = s.url;
-    card.target = '_blank';
-    card.className = 'seller-card';
-    card.innerHTML = `
-      <div class="avatar">${getInitials(s.name)}</div>
-      <div class="info">
-        <div class="name">${s.name}</div>
-        <div class="tag">Vendeur Casual · Vérifié</div>
-      </div>
-      <div class="arrow">→</div>
-    `;
-    regularList.appendChild(card);
-  });
+function createCard(s, index) {
+  const card = document.createElement('a');
+  card.href = s.url;
+  card.target = '_blank';
+  card.className = 'seller-card' + (s.top ? ' top' : '');
+  card.innerHTML = `
+    <div class="avatar">${getInitials(s.name)}</div>
+    <div class="info">
+      <div class="name">${s.name}</div>
+      <div class="tag">Vendeur Casual · Vérifié</div>
+    </div>
+    <div class="arrow">→</div>
+    ${isAdmin ? `<button class="btn-danger" onclick="removeSeller(event, ${index})">✕</button>` : ''}
+  `;
+  return card;
+}
+
+function removeSeller(e, index) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (confirm('Supprimer ce vendeur ?')) {
+    sellers.splice(index, 1);
+    saveSellers(sellers);
+    renderSellers();
+  }
 }
 
 function showUnlock() {
@@ -163,8 +174,10 @@ function showUnlock() {
 function checkCode() {
   const code = document.getElementById('code-input').value.trim();
   if (code === ADMIN_CODE) {
+    isAdmin = true;
     document.getElementById('unlock-form').style.display = 'none';
     document.getElementById('admin-form').classList.add('visible');
+    renderSellers();
   } else {
     document.getElementById('code-error').textContent = 'Code incorrect.';
   }
@@ -188,13 +201,14 @@ function addSeller() {
   }
 
   sellers.push({ name, url, top });
+  saveSellers(sellers);
   renderSellers();
 
   document.getElementById('new-name').value = '';
   document.getElementById('new-url').value = '';
   document.getElementById('new-top').checked = false;
   status.className = 'success';
-  status.textContent = '✅ Vendeur ajouté avec succès !';
+  status.textContent = '✅ Vendeur ajouté et sauvegardé !';
   setTimeout(() => status.textContent = '', 3000);
 }
 
