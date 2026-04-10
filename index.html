@@ -68,8 +68,14 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
       <div style="font-size:20px;color:#D4AF37;font-weight:bold;letter-spacing:2px;">⏱ 12H MAX</div>
       <div style="font-size:11px;color:#999;margin-top:4px;font-family:sans-serif;" id="t-activation-text">Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.</div>
     </div>
-    <a href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" class="cta" id="t-cta">REJOINDRE MAINTENANT →</a>
-    <div class="legal-box">
+    <div style="margin-bottom:1rem;padding:12px 16px;background:#111;border:0.5px solid #2a2a2a;">
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="cgu-check" style="margin-top:3px;width:auto;accent-color:#D4AF37;" onchange="toggleCTA()">
+        <span id="t-cgu-text" style="font-size:11px;color:#666;font-family:sans-serif;line-height:1.6;">J'ai lu et j'accepte les <a href="#legal" style="color:#8B6914;text-decoration:underline;">conditions d'utilisation</a> de Casual Division by Casu'Hall</span>
+      </label>
+    </div>
+    <a href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" class="cta" id="t-cta" onclick="return checkCGU()" style="opacity:0.4;cursor:not-allowed;">REJOINDRE MAINTENANT →</a>
+    <div class="legal-box" id="legal">
       <div class="legal-title" id="t-legal-title">CONDITIONS D'ACCÈS</div>
       <div class="legal-text" id="t-legal"></div>
     </div>
@@ -93,7 +99,7 @@ const langs = {
     payment: "PAIEMENT UNIQUE",
     lifetime: "ACCÈS À VIE — SANS ABONNEMENT",
     cta: "REJOINDRE MAINTENANT →",
-    legalTitle: "CONDITIONS D'ACCÈS", activationLabel: "DÉLAI D'ACTIVATION", activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.",
+    legalTitle: "CONDITIONS D'UTILISATION", activationLabel: "DÉLAI D'ACTIVATION", activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.", cguText: "J'ai lu et j'accepte les <a href='#legal' style='color:#8B6914;text-decoration:underline;'>conditions d'utilisation</a> de Casual Division by Casu'Hall",
     legal: `
       <p>1. L'accès est strictement personnel et non transférable.</p>
       <p>0. Après validation du paiement, l'accès VIP est activé manuellement sous 12h maximum.</p>
@@ -122,7 +128,7 @@ const langs = {
     payment: "ONE-TIME PAYMENT",
     lifetime: "LIFETIME ACCESS — NO SUBSCRIPTION",
     cta: "JOIN NOW →",
-    legalTitle: "TERMS & CONDITIONS", activationLabel: "ACTIVATION DELAY", activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum.",
+    legalTitle: "TERMS OF USE", activationLabel: "ACTIVATION DELAY", activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum.", cguText: "I have read and accept the <a href='#legal' style='color:#8B6914;text-decoration:underline;'>terms of use</a> of Casual Division by Casu'Hall",
     legal: `
       <p>1. Access is strictly personal and non-transferable.</p>
       <p>0. After payment confirmation, VIP access is activated manually within 12 hours maximum.</p>
@@ -151,7 +157,7 @@ const langs = {
     payment: "EINMALIGE ZAHLUNG",
     lifetime: "LEBENSLANGER ZUGANG — KEIN ABO",
     cta: "JETZT BEITRETEN →",
-    legalTitle: "NUTZUNGSBEDINGUNGEN", activationLabel: "AKTIVIERUNGSZEIT", activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.",
+    legalTitle: "NUTZUNGSBEDINGUNGEN", activationLabel: "AKTIVIERUNGSZEIT", activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.", cguText: "Ich habe die <a href='#legal' style='color:#8B6914;text-decoration:underline;'>Nutzungsbedingungen</a> von Casual Division by Casu'Hall gelesen und akzeptiere sie.",
     legal: `
       <p>1. Der Zugang ist streng persönlich und nicht übertragbar.</p>
       <p>0. Nach Zahlungsbestätigung wird der VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.</p>
@@ -180,7 +186,7 @@ const langs = {
     payment: "PAGO ÚNICO",
     lifetime: "ACCESO DE POR VIDA — SIN SUSCRIPCIÓN",
     cta: "UNIRSE AHORA →",
-    legalTitle: "CONDICIONES DE ACCESO", activationLabel: "PLAZO DE ACTIVACIÓN", activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.",
+    legalTitle: "CONDICIONES DE USO", activationLabel: "PLAZO DE ACTIVACIÓN", activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.", cguText: "He leído y acepto las <a href='#legal' style='color:#8B6914;text-decoration:underline;'>condiciones de uso</a> de Casual Division by Casu'Hall",
     legal: `
       <p>1. El acceso es estrictamente personal e intransferible.</p>
       <p>0. Tras la confirmación del pago, el acceso VIP se activa manualmente en un máximo de 12 horas.</p>
@@ -205,6 +211,7 @@ function setLang(lang) {
   document.getElementById('t-cta').textContent = d.cta;
   document.getElementById('t-legal-title').textContent = d.legalTitle;
   if(d.activationLabel) document.getElementById('t-activation-label').textContent = d.activationLabel;
+  if(d.cguText) document.getElementById('t-cgu-text').innerHTML = d.cguText;
   if(d.activationText) document.getElementById('t-activation-text').textContent = d.activationText;
   document.getElementById('t-legal').innerHTML = d.legal;
   const container = document.getElementById('items');
@@ -219,6 +226,21 @@ function setLang(lang) {
   document.querySelector('.lang-btns button[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
 }
 setLang('fr');
+
+function toggleCTA() {
+  const checked = document.getElementById('cgu-check').checked;
+  const btn = document.getElementById('t-cta');
+  btn.style.opacity = checked ? '1' : '0.4';
+  btn.style.cursor = checked ? 'pointer' : 'not-allowed';
+}
+
+function checkCGU() {
+  if (!document.getElementById('cgu-check').checked) {
+    alert('Veuillez accepter les conditions d\'utilisation pour continuer.');
+    return false;
+  }
+  return true;
+}
 </script>
 </body>
 </html>
