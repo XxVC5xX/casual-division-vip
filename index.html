@@ -50,7 +50,7 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
     <div class="bar-bot"></div>
     <div class="header">
       <div class="brand">⚜ &nbsp; C A S U A L &nbsp; D I V I S I O N &nbsp; ⚜</div>
-      <div class="vip-title" id="t-title">ACCÈS VIP — À VIE</div>
+      <div class="vip-title" id="t-title">ACCÈS VIP — PERMANENT</div>
       <div class="divider"></div>
       <div class="subtitle" id="t-sub">Casu avant tout le monde.</div>
     </div>
@@ -61,7 +61,7 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
     <div class="price-box">
       <div class="payment-label" id="t-payment">PAIEMENT UNIQUE</div>
       <div class="price">19.99€</div>
-      <div class="lifetime" id="t-lifetime">ACCÈS À VIE — SANS ABONNEMENT</div>
+      <div class="lifetime" id="t-lifetime">ACCÈS PERMANENT — SANS ABONNEMENT</div>
     </div>
     <div id="t-activation-box" style="border:1px solid #D4AF37;padding:12px 16px;margin-bottom:1rem;background:#1a1400;text-align:center;">
       <div style="font-size:10px;color:#8B6914;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;font-family:sans-serif;" id="t-activation-label">DÉLAI D'ACTIVATION</div>
@@ -84,7 +84,7 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
 <script>
 const langs = {
   fr: {
-    title: "ACCÈS VIP — À VIE",
+    title: "ACCÈS VIP — PERMANENT",
     sub: "Casu avant tout le monde.",
     section: "CE QUE TU OBTIENS",
     items: [
@@ -97,12 +97,13 @@ const langs = {
       ["Accès au chat membres exclusif", ""]
     ],
     payment: "PAIEMENT UNIQUE",
-    lifetime: "ACCÈS À VIE — SANS ABONNEMENT",
+    lifetime: "ACCÈS PERMANENT — SANS ABONNEMENT",
     cta: "REJOINDRE MAINTENANT →",
     legalTitle: "CONDITIONS D'UTILISATION", activationLabel: "DÉLAI D'ACTIVATION", activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.", cguText: "J'ai lu et j'accepte les <a href='#legal' style='color:#8B6914;text-decoration:underline;'>conditions d'utilisation</a> de Casual Division by Casu'Hall",
     legal: `
-      <p>1. L'accès est strictement personnel et non transférable.</p>
       <p>0. Après validation du paiement, l'accès VIP est activé manuellement sous 12h maximum.</p>
+      <p>1. L'accès est strictement personnel et non transférable.</p>
+      <p>2b. L'accès est permanent tant que le service est en activité. En cas de fermeture définitive, les membres seront informés avec un préavis minimum de 30 jours. Casu'Hall ne pourra être tenu responsable d'une interruption liée à des causes extérieures (fermeture de plateformes tierces, cas de force majeure).</p>
       <p>2. Aucun remboursement ne sera effectué après activation de l'accès, conformément à l'article L221-28 du Code de la consommation relatif aux contenus numériques.</p>
       <p>3. Le service de scan automatique est fourni à titre indicatif. Casual Division ne garantit pas un volume fixe d'annonces et ne peut être tenu responsable d'interruptions techniques, notamment liées aux restrictions des plateformes tierces.</p>
       <p>4. Les avis d'authenticité sur les pièces Stone Island et CP Company sont donnés à titre indicatif et ne constituent pas une expertise professionnelle. L'acheteur reste seul responsable de sa décision d'achat.</p>
@@ -113,7 +114,7 @@ const langs = {
     `
   },
   en: {
-    title: "VIP ACCESS — LIFETIME",
+    title: "VIP ACCESS — PERMANENT",
     sub: "Casu before everyone else.",
     section: "WHAT YOU GET",
     items: [
@@ -126,9 +127,9 @@ const langs = {
       ["Access to exclusive members chat", ""]
     ],
     payment: "ONE-TIME PAYMENT",
-    lifetime: "LIFETIME ACCESS — NO SUBSCRIPTION",
+    lifetime: "PERMANENT ACCESS — NO SUBSCRIPTION",
     cta: "JOIN NOW →",
-    legalTitle: "TERMS OF USE", activationLabel: "ACTIVATION DELAY", activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum.", cguText: "I have read and accept the <a href='#legal' style='color:#8B6914;text-decoration:underline;'>terms of use</a> of Casual Division by Casu'Hall",
+    legalTitle: "TERMS OF USE", activationLabel: "ACTIVATION DELAY", activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum. Access is permanent for as long as the service operates.", cguText: "I have read and accept the <a href='#legal' style='color:#8B6914;text-decoration:underline;'>terms of use</a> of Casual Division by Casu'Hall",
     legal: `
       <p>1. Access is strictly personal and non-transferable.</p>
       <p>0. After payment confirmation, VIP access is activated manually within 12 hours maximum.</p>
@@ -142,7 +143,7 @@ const langs = {
     `
   },
   de: {
-    title: "VIP-ZUGANG — LEBENSLANG",
+    title: "VIP-ZUGANG — PERMANENT",
     sub: "Casu vor allen anderen.",
     section: "WAS DU BEKOMMST",
     items: [
@@ -155,7 +156,7 @@ const langs = {
       ["Zugang zum exklusiven Mitglieder-Chat", ""]
     ],
     payment: "EINMALIGE ZAHLUNG",
-    lifetime: "LEBENSLANGER ZUGANG — KEIN ABO",
+    lifetime: "PERMANENTER ZUGANG — KEIN ABO",
     cta: "JETZT BEITRETEN →",
     legalTitle: "NUTZUNGSBEDINGUNGEN", activationLabel: "AKTIVIERUNGSZEIT", activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.", cguText: "Ich habe die <a href='#legal' style='color:#8B6914;text-decoration:underline;'>Nutzungsbedingungen</a> von Casual Division by Casu'Hall gelesen und akzeptiere sie.",
     legal: `
@@ -171,7 +172,7 @@ const langs = {
     `
   },
   es: {
-    title: "ACCESO VIP — DE POR VIDA",
+    title: "ACCESO VIP — PERMANENTE",
     sub: "Casu antes que nadie.",
     section: "LO QUE OBTIENES",
     items: [
@@ -184,7 +185,7 @@ const langs = {
       ["Acceso al chat exclusivo de miembros", ""]
     ],
     payment: "PAGO ÚNICO",
-    lifetime: "ACCESO DE POR VIDA — SIN SUSCRIPCIÓN",
+    lifetime: "ACCESO PERMANENTE — SIN SUSCRIPCIÓN",
     cta: "UNIRSE AHORA →",
     legalTitle: "CONDICIONES DE USO", activationLabel: "PLAZO DE ACTIVACIÓN", activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.", cguText: "He leído y acepto las <a href='#legal' style='color:#8B6914;text-decoration:underline;'>condiciones de uso</a> de Casual Division by Casu'Hall",
     legal: `
