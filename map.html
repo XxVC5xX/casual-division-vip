@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casual Map — Casual Division</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f3ef;--gold:#c9a84c;--gold-dark:#8a6f2e;--surface:#141414;--surface2:#1e1e1e;--border:#2a2a2a;--muted:#666;--red:#e24b4a}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+header{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--black);position:sticky;top:0;z-index:1000}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em}
+.logo span{color:var(--gold)}
+.logo-sub{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
+.discord-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--surface2);border:1px solid var(--border);padding:0.4rem 1rem;border-radius:2px;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:border-color 0.2s,color 0.2s}
+.discord-badge:hover{border-color:var(--gold);color:var(--gold)}
+.discord-dot{width:8px;height:8px;background:#5865F2;border-radius:50%}
+.header-right{text-align:right}
+.counter-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.counter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
+.layout{display:grid;grid-template-columns:320px 1fr 260px;height:calc(100vh - 72px)}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.form-section{padding:1.25rem;border-bottom:1px solid var(--border)}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
+.form-group{margin-bottom:0.85rem;position:relative}
+.form-group label{display:block;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.35rem}
+.form-group input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.55rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;border-radius:2px;transition:border-color 0.2s}
+.form-group input:focus{border-color:var(--gold)}
+.form-group input::placeholder{color:var(--muted)}
+.btn-add{width:100%;padding:0.7rem;background:var(--gold);color:var(--black);border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.15em;cursor:pointer;border-radius:2px;transition:background 0.2s,transform 0.1s}
+.btn-add:hover{background:#e8c06a}
+.btn-add:active{transform:scale(0.98)}
+.members-section{flex:1;overflow-y:auto;padding:1rem 1.25rem}
+.section-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem}
+.member-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
+.member-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.member-info{flex:1;min-width:0}
+.member-pseudo{font-size:0.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.member-location{font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:0.2rem 0.4rem;display:none;transition:color 0.15s;flex-shrink:0}
+.btn-del:hover{color:var(--red)}
+body.admin-mode .btn-del{display:block}
+#map{z-index:1}
+.right-panel{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.clubs-section{padding:1.25rem;flex:1;overflow-y:auto}
+.clubs-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
+.club-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
+.club-rank{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--muted);width:18px;text-align:center;flex-shrink:0}
+.club-rank.top1{color:var(--gold)}
+.club-rank.top2{color:#aaa}
+.club-rank.top3{color:#cd7f32}
+.club-name{flex:1;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.club-count{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold);flex-shrink:0}
+.casual-strip{padding:1rem 1.25rem;border-top:1px solid var(--border);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.8}
+.casual-strip a{color:var(--gold);text-decoration:none}
+.search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-top:none;z-index:100;max-height:160px;overflow-y:auto}
+.search-result-item{padding:0.45rem 0.75rem;font-size:0.8rem;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s}
+.search-result-item:hover{background:var(--surface2);color:var(--gold)}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid var(--gold);color:var(--white);padding:0.6rem 1rem;font-size:0.82rem;border-radius:2px;z-index:9999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.empty-state{text-align:center;padding:2rem 0.5rem;color:var(--muted);font-size:0.78rem;line-height:1.7}
+.admin-btn{position:fixed;bottom:2rem;left:2rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.8rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s}
+.admin-btn:hover{border-color:var(--gold);color:var(--gold)}
+body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
+.leaflet-container{background:#0d0d0d}
+.leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--white);box-shadow:0 8px 24px rgba(0,0,0,0.7)}
+.leaflet-popup-tip{background:var(--surface)}
+.leaflet-popup-content{margin:10px 14px;font-family:'DM Sans',sans-serif}
+.popup-pseudo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.05em;color:var(--gold)}
+.popup-city{font-size:0.75rem;color:var(--muted);margin-top:2px}
+.popup-club{font-size:0.8rem;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">CASUAL <span>MAP</span></div>
+    <div class="logo-sub">Casual Division</div>
+  </div>
+  <a class="discord-badge" href="https://discord.gg/hbKPnjCWtZ" target="_blank">
+    <span class="discord-dot"></span>Rejoindre Casual Division
+  </a>
+  <div class="header-right">
+    <div class="counter-label">Membres sur la carte</div>
+    <div class="counter" id="total-counter">0</div>
+  </div>
+</header>
+<div class="layout">
+  <div class="sidebar">
+    <div class="form-section">
+      <div class="form-title">Rejoins la carte</div>
+      <div class="form-group">
+        <label>Pseudo Discord *</label>
+        <input type="text" id="input-pseudo" placeholder="ton_pseudo" maxlength="32"/>
+      </div>
+      <div class="form-group">
+        <label>Ville *</label>
+        <input type="text" id="input-city" placeholder="Recherche ta ville..." autocomplete="off"/>
+        <div class="search-results" id="city-results" style="display:none"></div>
+      </div>
+      <div class="form-group">
+        <label>Club supporté (optionnel)</label>
+        <input type="text" id="input-club" placeholder="Ex: PSG, Manchester City..." maxlength="50"/>
+      </div>
+      <button class="btn-add" onclick="addMember()">AJOUTER MON MARQUEUR</button>
+    </div>
+    <div class="members-section">
+      <div class="section-label">Membres — <span id="member-count">0</span></div>
+      <div id="members-list"><div class="empty-state">Aucun membre encore.<br>Sois le premier !</div></div>
+    </div>
+  </div>
+  <div id="map"></div>
+  <div class="right-panel">
+    <div class="clubs-section">
+      <div class="clubs-title">Top Clubs</div>
+      <div id="clubs-list"><div class="empty-state">Aucun club<br>pour l'instant</div></div>
+    </div>
+    <div class="casual-strip">
+      Lyle &amp; Scott · Fred Perry<br>
+      Weekend Offender · Peaceful Hooligan<br>
+      Alpha Industries · Ma.Strum<br><br>
+      <a href="https://xxvc5xx.github.io/casual-division-vip" target="_blank">Casual Elite VIP →</a>
+    </div>
+  </div>
+</div>
+<button class="admin-btn" onclick="toggleAdmin()">Admin</button>
+<div class="toast" id="toast"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+const STORAGE_KEY='casual_map_v2';
+const ADMIN_CODE='VC5';
+let members=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false;
+
+function initMap(){
+  map=L.map('map',{center:[48.5,10],zoom:5,attributionControl:false});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
+  clusterGroup=L.markerClusterGroup({
+    iconCreateFunction:function(c){
+      return L.divIcon({html:'<div style="background:#c9a84c;color:#0a0a0a;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #8a6f2e">'+c.getChildCount()+'</div>',iconSize:[34,34],className:''});
+    },
+    maxClusterRadius:60
+  });
+  map.addLayer(clusterGroup);
+  renderAll();
+}
+
+const goldIcon=L.divIcon({html:'<div style="width:12px;height:12px;background:#c9a84c;border-radius:50%;border:2px solid #8a6f2e"></div>',iconSize:[12,12],iconAnchor:[6,6],className:''});
+
+function renderAll(){
+  clusterGroup.clearLayers();
+  document.getElementById('total-counter').textContent=members.length;
+  document.getElementById('member-count').textContent=members.length;
+  const list=document.getElementById('members-list');
+  if(!members.length){
+    list.innerHTML='<div class="empty-state">Aucun membre encore.<br>Sois le premier !</div>';
+  } else {
+    list.innerHTML=members.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${i})">✕</button></div>`).join('');
+  }
+  members.forEach(m=>{
+    const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
+    mk.bindPopup(`<div class="popup-pseudo">${esc(m.pseudo)}</div><div class="popup-city">${esc(m.city)}</div>${m.club?'<div class="popup-club">⚽ '+esc(m.club)+'</div>':''}`);
+    clusterGroup.addLayer(mk);
+  });
+  renderClubs();
+}
+
+function renderClubs(){
+  const counts={};
+  members.forEach(m=>{if(m.club){const k=m.club.trim();counts[k]=(counts[k]||0)+1;}});
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const cl=document.getElementById('clubs-list');
+  if(!sorted.length){cl.innerHTML='<div class="empty-state">Aucun club<br>pour l\'instant</div>';return;}
+  cl.innerHTML=sorted.map(([name,count],i)=>`<div class="club-item"><div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`).join('');
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(members))}
+
+function toast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.borderColor=err?'#e24b4a':'#c9a84c';
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function addMember(){
+  const pseudo=document.getElementById('input-pseudo').value.trim();
+  const club=document.getElementById('input-club').value.trim();
+  if(!pseudo){toast('Entre ton pseudo Discord',true);return;}
+  if(!selectedCity){toast('Sélectionne une ville dans la liste',true);return;}
+  const idx=members.findIndex(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
+  const entry={pseudo,city:selectedCity.name,lat:selectedCity.lat,lng:selectedCity.lng,club:club||''};
+  if(idx>=0){members[idx]=entry;toast('Marqueur mis à jour !');}
+  else{members.push(entry);toast('Bienvenue sur la Casual Map ! 🍋');}
+  save();
+  document.getElementById('input-pseudo').value='';
+  document.getElementById('input-city').value='';
+  document.getElementById('input-club').value='';
+  selectedCity=null;
+  renderAll();
+  map.flyTo([entry.lat,entry.lng],8,{duration:1.5});
+}
+
+function deleteMember(i){
+  if(!isAdmin)return;
+  members.splice(i,1);save();renderAll();toast('Marqueur supprimé');
+}
+
+function toggleAdmin(){
+  if(isAdmin){isAdmin=false;document.body.classList.remove('admin-mode');toast('Mode admin désactivé');return;}
+  const code=prompt('Code admin :');
+  if(code===ADMIN_CODE){isAdmin=true;document.body.classList.add('admin-mode');toast('Mode admin activé');}
+  else if(code!==null){toast('Code incorrect',true);}
+}
+
+async function searchCity(q){
+  if(q.length<2){document.getElementById('city-results').style.display='none';return;}
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6&accept-language=fr`);
+    const data=await r.json();
+    const el=document.getElementById('city-results');
+    if(!data.length){el.style.display='none';return;}
+    el.style.display='block';
+    el.innerHTML=data.map(d=>{
+      const name=d.display_name.split(',').slice(0,2).join(',').trim();
+      return `<div class="search-result-item" onclick="selectCity('${name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}',${d.lat},${d.lon})">${name}</div>`;
+    }).join('');
+  }catch(e){}
+}
+
+function selectCity(name,lat,lng){
+  selectedCity={name,lat:parseFloat(lat),lng:parseFloat(lng)};
+  document.getElementById('input-city').value=name;
+  document.getElementById('city-results').style.display='none';
+}
+
+document.getElementById('input-city').addEventListener('input',function(){clearTimeout(searchTimeout);searchTimeout=setTimeout(()=>searchCity(this.value),350);});
+document.addEventListener('click',e=>{if(!e.target.closest('.form-group'))document.getElementById('city-results').style.display='none';});
+document.getElementById('input-club').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
+document.getElementById('input-pseudo').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
+
+initMap();
+</script>
+</body>
+</html>
