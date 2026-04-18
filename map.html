@@ -55,7 +55,10 @@ body.admin-mode .btn-del{display:block}
 .club-rank.top3{color:#cd7f32}
 .club-name{flex:1;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .club-count{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold);flex-shrink:0}
-.casual-strip{padding:1rem 1.25rem;border-top:1px solid var(--border);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.8}
+.club-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0;filter:brightness(0.9)}
+.club-logo-placeholder{width:22px;height:22px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;color:var(--muted);letter-spacing:0}
+
+.casual-strip{padding:0.85rem 1.25rem;border-top:1px solid var(--border);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.8}
 .casual-strip a{color:var(--gold);text-decoration:none}
 .search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-top:none;z-index:100;max-height:160px;overflow-y:auto}
 .search-result-item{padding:0.45rem 0.75rem;font-size:0.8rem;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s}
@@ -120,10 +123,7 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
       <div id="clubs-list"><div class="empty-state">Aucun club<br>pour l'instant</div></div>
     </div>
     <div class="casual-strip">
-      Lyle &amp; Scott · Fred Perry<br>
-      Weekend Offender · Peaceful Hooligan<br>
-      Alpha Industries · Ma.Strum<br><br>
-      <a href="https://xxvc5xx.github.io/casual-division-vip" target="_blank">Casual Elite VIP →</a>
+      <a href="https://casuhall.fr" target="_blank" style="color:var(--gold);text-decoration:none;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase">casuhall.fr — Les meilleures pièces casual d'occasion →</a>
     </div>
   </div>
 </div>
@@ -170,13 +170,54 @@ function renderAll(){
   renderClubs();
 }
 
+function getClubLogo(name){
+  const logos={
+    'psg':'https://upload.wikimedia.org/wikipedia/fr/thumb/8/86/Paris_Saint-Germain_Logo.svg/40px-Paris_Saint-Germain_Logo.svg.png',
+    'paris saint-germain':'https://upload.wikimedia.org/wikipedia/fr/thumb/8/86/Paris_Saint-Germain_Logo.svg/40px-Paris_Saint-Germain_Logo.svg.png',
+    'manchester city':'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/40px-Manchester_City_FC_badge.svg.png',
+    'manchester united':'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/40px-Manchester_United_FC_crest.svg.png',
+    'liverpool':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/40px-Liverpool_FC.svg.png',
+    'arsenal':'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/40px-Arsenal_FC.svg.png',
+    'chelsea':'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/40px-Chelsea_FC.svg.png',
+    'tottenham':'https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Tottenham_Hotspur.svg/40px-Tottenham_Hotspur.svg.png',
+    'real madrid':'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/40px-Real_Madrid_CF.svg.png',
+    'barcelona':'https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/40px-FC_Barcelona_%28crest%29.svg.png',
+    'atletico madrid':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/40px-Atletico_Madrid_2017_logo.svg.png',
+    'juventus':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Juventus_FC_2017_icon_%28black%29.svg/40px-Juventus_FC_2017_icon_%28black%29.svg.png',
+    'ac milan':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/40px-Logo_of_AC_Milan.svg.png',
+    'inter milan':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/40px-FC_Internazionale_Milano_2021.svg.png',
+    'bayern munich':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/40px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png',
+    'borussia dortmund':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/40px-Borussia_Dortmund_logo.svg.png',
+    'celtic':'https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Celtic_FC.svg/40px-Celtic_FC.svg.png',
+    'rangers':'https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Rangers_FC.svg/40px-Rangers_FC.svg.png',
+    'leeds united':'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Leeds_United_F.C._logo.svg/40px-Leeds_United_F.C._logo.svg.png',
+    'west ham':'https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/West_Ham_United_FC_logo.svg/40px-West_Ham_United_FC_logo.svg.png',
+    'everton':'https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Everton_FC_logo.svg/40px-Everton_FC_logo.svg.png',
+    'newcastle':'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/40px-Newcastle_United_Logo.svg.png',
+    'aston villa':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Aston_Villa_FC_new_crest.svg/40px-Aston_Villa_FC_new_crest.svg.png',
+    'olympique de marseille':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
+    'om':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
+    'olympique lyonnais':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
+    'ol':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
+    'ajax':'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Ajax_Amsterdam.svg/40px-Ajax_Amsterdam.svg.png',
+    'porto':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/40px-FC_Porto.svg.png',
+    'benfica':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/40px-SL_Benfica_logo.svg.png',
+  };
+  return logos[name.toLowerCase()]||null;
+}
+
 function renderClubs(){
   const counts={};
   members.forEach(m=>{if(m.club){const k=m.club.trim();counts[k]=(counts[k]||0)+1;}});
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
   const cl=document.getElementById('clubs-list');
   if(!sorted.length){cl.innerHTML='<div class="empty-state">Aucun club<br>pour l\'instant</div>';return;}
-  cl.innerHTML=sorted.map(([name,count],i)=>`<div class="club-item"><div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`).join('');
+  cl.innerHTML=sorted.map(([name,count],i)=>{
+    const logo=getClubLogo(name);
+    const initials=name.split(' ').filter(w=>w.length>2).map(w=>w[0].toUpperCase()).slice(0,2).join('')||name.slice(0,2).toUpperCase();
+    const logoHtml=logo?`<img class="club-logo" src="${logo}" alt="" onerror="this.outerHTML='<div class=\"club-logo-placeholder\">${initials}</div>'">`:`<div class="club-logo-placeholder">${initials}</div>`;
+    return `<div class="club-item">${logoHtml}<div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`;
+  }).join('');
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
