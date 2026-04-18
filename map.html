@@ -22,7 +22,7 @@ header{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;a
 .header-right{text-align:right}
 .counter-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
 .counter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
-.layout{display:grid;grid-template-columns:320px 1fr 260px;height:calc(100vh - 72px)}
+.layout{display:grid;grid-template-columns:280px 1fr 240px;height:calc(100vh - 72px)}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .form-section{padding:1.25rem;border-bottom:1px solid var(--border)}
 .form-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
@@ -34,6 +34,7 @@ header{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;a
 .btn-add{width:100%;padding:0.7rem;background:var(--gold);color:var(--black);border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.15em;cursor:pointer;border-radius:2px;transition:background 0.2s,transform 0.1s}
 .btn-add:hover{background:#e8c06a}
 .btn-add:active{transform:scale(0.98)}
+.btn-add:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .members-section{flex:1;overflow-y:auto;padding:1rem 1.25rem}
 .section-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem}
 .member-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
@@ -55,9 +56,8 @@ body.admin-mode .btn-del{display:block}
 .club-rank.top3{color:#cd7f32}
 .club-name{flex:1;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .club-count{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold);flex-shrink:0}
-.club-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0;filter:brightness(0.9)}
-.club-logo-placeholder{width:22px;height:22px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;color:var(--muted);letter-spacing:0}
-
+.club-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+.club-logo-placeholder{width:22px;height:22px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;color:var(--muted)}
 .casual-strip{padding:0.85rem 1.25rem;border-top:1px solid var(--border);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.8}
 .casual-strip a{color:var(--gold);text-decoration:none}
 .search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-top:none;z-index:100;max-height:160px;overflow-y:auto}
@@ -69,6 +69,7 @@ body.admin-mode .btn-del{display:block}
 .admin-btn{position:fixed;bottom:2rem;left:2rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.8rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s}
 .admin-btn:hover{border-color:var(--gold);color:var(--gold)}
 body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
+.loading-bar{height:2px;background:var(--gold);width:0;transition:width 0.3s;position:fixed;top:0;left:0;z-index:9999}
 .leaflet-container{background:#0d0d0d}
 .leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--white);box-shadow:0 8px 24px rgba(0,0,0,0.7)}
 .leaflet-popup-tip{background:var(--surface)}
@@ -76,9 +77,30 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 .popup-pseudo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.05em;color:var(--gold)}
 .popup-city{font-size:0.75rem;color:var(--muted);margin-top:2px}
 .popup-club{font-size:0.8rem;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;height:auto}
+  .sidebar{border-right:none;border-bottom:1px solid var(--border)}
+  .right-panel{border-left:none;border-top:1px solid var(--border);flex-direction:row;flex-wrap:wrap}
+  .clubs-section{flex:1;min-width:200px}
+  .casual-strip{width:100%;border-top:1px solid var(--border)}
+  #map{height:55vh;min-height:300px}
+  header{padding:0.85rem 1rem}
+  .logo{font-size:1.4rem}
+  .counter{font-size:1.4rem}
+  .discord-badge{display:none}
+  .members-section{max-height:200px}
+}
+@media(max-width:600px){
+  #map{height:45vh;min-height:250px}
+  .right-panel{flex-direction:column}
+  .clubs-section{max-height:180px;overflow-y:auto}
+  .admin-btn{bottom:1rem;left:1rem}
+  .toast{bottom:1rem;right:1rem;left:1rem;text-align:center}
+}
 </style>
 </head>
 <body>
+<div class="loading-bar" id="loading-bar"></div>
 <header>
   <div>
     <div class="logo">CASUAL <span>MAP</span></div>
@@ -89,7 +111,7 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
   </a>
   <div class="header-right">
     <div class="counter-label">Membres sur la carte</div>
-    <div class="counter" id="total-counter">0</div>
+    <div class="counter" id="total-counter">...</div>
   </div>
 </header>
 <div class="layout">
@@ -109,21 +131,21 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
         <label>Club supporté (optionnel)</label>
         <input type="text" id="input-club" placeholder="Ex: PSG, Manchester City..." maxlength="50"/>
       </div>
-      <button class="btn-add" onclick="addMember()">AJOUTER MON MARQUEUR</button>
+      <button class="btn-add" id="btn-add" onclick="addMember()">AJOUTER MON MARQUEUR</button>
     </div>
     <div class="members-section">
       <div class="section-label">Membres — <span id="member-count">0</span></div>
-      <div id="members-list"><div class="empty-state">Aucun membre encore.<br>Sois le premier !</div></div>
+      <div id="members-list"><div class="empty-state">Chargement...</div></div>
     </div>
   </div>
   <div id="map"></div>
   <div class="right-panel">
     <div class="clubs-section">
       <div class="clubs-title">Top Clubs</div>
-      <div id="clubs-list"><div class="empty-state">Aucun club<br>pour l'instant</div></div>
+      <div id="clubs-list"><div class="empty-state">Chargement...</div></div>
     </div>
     <div class="casual-strip">
-      <a href="https://casuhall.fr" target="_blank" style="color:var(--gold);text-decoration:none;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase">casuhall.fr — Les meilleures pièces casual d'occasion →</a>
+      <a href="https://casuhall.fr" target="_blank">casuhall.fr — Les meilleures pièces casual d'occasion →</a>
     </div>
   </div>
 </div>
@@ -132,10 +154,45 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
-const STORAGE_KEY='casual_map_v2';
+const GITHUB_TOKEN='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';
+const GITHUB_REPO='XxVC5xX/casual-division-vip';
+const DATA_FILE='map-data.json';
 const ADMIN_CODE='VC5';
-let members=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false;
+
+let members=[];
+let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false,fileSha=null;
+
+function setLoading(v){document.getElementById('loading-bar').style.width=v?'70%':'0'}
+
+async function loadData(){
+  setLoading(true);
+  try{
+    const r=await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE}`,{
+      headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Accept':'application/vnd.github.v3+json'}
+    });
+    if(r.status===404){members=[];fileSha=null;}
+    else{
+      const d=await r.json();
+      fileSha=d.sha;
+      members=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    }
+  }catch(e){members=[];}
+  setLoading(false);
+  renderAll();
+}
+
+async function saveData(){
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(members))));
+  const body={message:'Update casual map',content};
+  if(fileSha)body.sha=fileSha;
+  const r=await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE}`,{
+    method:'PUT',
+    headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  const d=await r.json();
+  if(d.content)fileSha=d.content.sha;
+}
 
 function initMap(){
   map=L.map('map',{center:[48.5,10],zoom:5,attributionControl:false});
@@ -143,11 +200,10 @@ function initMap(){
   clusterGroup=L.markerClusterGroup({
     iconCreateFunction:function(c){
       return L.divIcon({html:'<div style="background:#c9a84c;color:#0a0a0a;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #8a6f2e">'+c.getChildCount()+'</div>',iconSize:[34,34],className:''});
-    },
-    maxClusterRadius:60
+    },maxClusterRadius:60
   });
   map.addLayer(clusterGroup);
-  renderAll();
+  loadData();
 }
 
 const goldIcon=L.divIcon({html:'<div style="width:12px;height:12px;background:#c9a84c;border-radius:50%;border:2px solid #8a6f2e"></div>',iconSize:[12,12],iconAnchor:[6,6],className:''});
@@ -157,11 +213,8 @@ function renderAll(){
   document.getElementById('total-counter').textContent=members.length;
   document.getElementById('member-count').textContent=members.length;
   const list=document.getElementById('members-list');
-  if(!members.length){
-    list.innerHTML='<div class="empty-state">Aucun membre encore.<br>Sois le premier !</div>';
-  } else {
-    list.innerHTML=members.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${i})">✕</button></div>`).join('');
-  }
+  if(!members.length){list.innerHTML='<div class="empty-state">Aucun membre encore.<br>Sois le premier !</div>';}
+  else{list.innerHTML=members.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${i})">✕</button></div>`).join('');}
   members.forEach(m=>{
     const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
     mk.bindPopup(`<div class="popup-pseudo">${esc(m.pseudo)}</div><div class="popup-city">${esc(m.city)}</div>${m.club?'<div class="popup-club">⚽ '+esc(m.club)+'</div>':''}`);
@@ -202,6 +255,58 @@ function getClubLogo(name){
     'ajax':'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Ajax_Amsterdam.svg/40px-Ajax_Amsterdam.svg.png',
     'porto':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/40px-FC_Porto.svg.png',
     'benfica':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/40px-SL_Benfica_logo.svg.png',
+    'west bromwich':'https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/West_Bromwich_Albion.svg/40px-West_Bromwich_Albion.svg.png',
+    'birmingham':'https://upload.wikimedia.org/wikipedia/en/thumb/6/68/Birmingham_City_FC_logo.svg/40px-Birmingham_City_FC_logo.svg.png',
+    'sheffield united':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/Sheffield_United_FC_logo.svg/40px-Sheffield_United_FC_logo.svg.png',
+    'sheffield wednesday':'https://upload.wikimedia.org/wikipedia/en/thumb/8/88/Sheffield_Wednesday_badge.svg/40px-Sheffield_Wednesday_badge.svg.png',
+    'millwall':'https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Millwall_FC_logo.svg/40px-Millwall_FC_logo.svg.png',
+    'burnley':'https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Burnley_F.C._Logo.svg/40px-Burnley_F.C._Logo.svg.png',
+    'ipswich':'https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Ipswich_Town.svg/40px-Ipswich_Town.svg.png',
+    'sunderland':'https://upload.wikimedia.org/wikipedia/en/thumb/7/77/Logo_Sunderland.svg/40px-Logo_Sunderland.svg.png',
+    'stoke city':'https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Stoke_City_FC.svg/40px-Stoke_City_FC.svg.png',
+    'hull city':'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Hull_City_A.F.C._logo.svg/40px-Hull_City_A.F.C._logo.svg.png',
+    'blackburn':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0f/Blackburn_Rovers.svg/40px-Blackburn_Rovers.svg.png',
+    'bolton':'https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Bolton_Wanderers_FC_logo.svg/40px-Bolton_Wanderers_FC_logo.svg.png',
+    'cardiff':'https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/Cardiff_City_crest.svg/40px-Cardiff_City_crest.svg.png',
+    'swansea':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Swansea_City_AFC_logo.svg/40px-Swansea_City_AFC_logo.svg.png',
+    'nottingham forest':'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/40px-Nottingham_Forest_F.C._logo.svg.png',
+    'leicester':'https://upload.wikimedia.org/wikipedia/en/thumb/2/2d/Leicester_City_crest.svg/40px-Leicester_City_crest.svg.png',
+    'southampton':'https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/FC_Southampton.svg/40px-FC_Southampton.svg.png',
+    'wolves':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Wolverhampton_Wanderers.svg/40px-Wolverhampton_Wanderers.svg.png',
+    'wolverhampton':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Wolverhampton_Wanderers.svg/40px-Wolverhampton_Wanderers.svg.png',
+    'brighton':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/40px-Brighton_%26_Hove_Albion_logo.svg.png',
+    'brentford':'https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Brentford_FC_crest.svg/40px-Brentford_FC_crest.svg.png',
+    'fulham':'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/40px-Fulham_FC_%28shield%29.svg.png',
+    'crystal palace':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Crystal_Palace_FC_logo_%282022%29.svg/40px-Crystal_Palace_FC_logo_%282022%29.svg.png',
+    'bournemouth':'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/AFC_Bournemouth_%282013%29.svg/40px-AFC_Bournemouth_%282013%29.svg.png',
+    'lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
+    'rc lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
+    'lille':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
+    'losc':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
+    'monaco':'https://upload.wikimedia.org/wikipedia/fr/thumb/f/fd/AS_Monaco_FC.svg/40px-AS_Monaco_FC.svg.png',
+    'as monaco':'https://upload.wikimedia.org/wikipedia/fr/thumb/f/fd/AS_Monaco_FC.svg/40px-AS_Monaco_FC.svg.png',
+    'rennes':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/2a/Logo_Stade_Rennais_FC.svg/40px-Logo_Stade_Rennais_FC.svg.png',
+    'nantes':'https://upload.wikimedia.org/wikipedia/fr/thumb/d/d9/Logo_FC_Nantes_%28avec_fond%29.svg/40px-Logo_FC_Nantes_%28avec_fond%29.svg.png',
+    'nice':'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b4/Logo_OGC_Nice_2013.svg/40px-Logo_OGC_Nice_2013.svg.png',
+    'ogc nice':'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b4/Logo_OGC_Nice_2013.svg/40px-Logo_OGC_Nice_2013.svg.png',
+    'strasbourg':'https://upload.wikimedia.org/wikipedia/fr/thumb/9/97/Racing_Club_de_Strasbourg_logo.svg/40px-Racing_Club_de_Strasbourg_logo.svg.png',
+    'sevilla':'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Sevilla_FC_logo.svg/40px-Sevilla_FC_logo.svg.png',
+    'villarreal':'https://upload.wikimedia.org/wikipedia/en/thumb/b/b9/Villarreal_CF_Logo.svg/40px-Villarreal_CF_Logo.svg.png',
+    'napoli':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/SSC_Napoli_S.p.A..svg/40px-SSC_Napoli_S.p.A..svg.png',
+    'roma':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/AS_Roma_logo_%282017%29.svg/40px-AS_Roma_logo_%282017%29.svg.png',
+    'lazio':'https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/40px-S.S._Lazio_badge.svg.png',
+    'fiorentina':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/ACF_Fiorentina_%282022%29.svg/40px-ACF_Fiorentina_%282022%29.svg.png',
+    'bayer leverkusen':'https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/40px-Bayer_04_Leverkusen_logo.svg.png',
+    'rb leipzig':'https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2014_logo.svg/40px-RB_Leipzig_2014_logo.svg.png',
+    'eintracht frankfurt':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/40px-Eintracht_Frankfurt_Logo.svg.png',
+    'psv':'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/PSV_Eindhoven.svg/40px-PSV_Eindhoven.svg.png',
+    'feyenoord':'https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Feyenoord_logo.svg/40px-Feyenoord_logo.svg.png',
+    'sporting':'https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Sporting_CP_logo.svg/40px-Sporting_CP_logo.svg.png',
+    'anderlecht':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/28/RSC_Anderlecht_logo.svg/40px-RSC_Anderlecht_logo.svg.png',
+    'club brugge':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Club_Brugge_KV_logo.svg/40px-Club_Brugge_KV_logo.svg.png',
+    'galatasaray':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Galatasaray_Sports_Club_Logo.svg/40px-Galatasaray_Sports_Club_Logo.svg.png',
+    'fenerbahce':'https://upload.wikimedia.org/wikipedia/en/thumb/4/4f/Fenerbah%C3%A7e_SK.svg/40px-Fenerbah%C3%A7e_SK.svg.png',
+    'shakhtar':'https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/FC_Shakhtar_Donetsk.svg/40px-FC_Shakhtar_Donetsk.svg.png',
   };
   return logos[name.toLowerCase()]||null;
 }
@@ -215,13 +320,12 @@ function renderClubs(){
   cl.innerHTML=sorted.map(([name,count],i)=>{
     const logo=getClubLogo(name);
     const initials=name.split(' ').filter(w=>w.length>2).map(w=>w[0].toUpperCase()).slice(0,2).join('')||name.slice(0,2).toUpperCase();
-    const logoHtml=logo?`<img class="club-logo" src="${logo}" alt="" onerror="this.outerHTML='<div class=\"club-logo-placeholder\">${initials}</div>'">`:`<div class="club-logo-placeholder">${initials}</div>`;
+    const logoHtml=logo?`<img class="club-logo" src="${logo}" alt="" onerror="this.outerHTML='<div class=\\"club-logo-placeholder\\">${initials}</div>'">`:`<div class="club-logo-placeholder">${initials}</div>`;
     return `<div class="club-item">${logoHtml}<div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`;
   }).join('');
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(members))}
 
 function toast(msg,err){
   const t=document.getElementById('toast');
@@ -229,27 +333,36 @@ function toast(msg,err){
   t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-function addMember(){
+async function addMember(){
   const pseudo=document.getElementById('input-pseudo').value.trim();
   const club=document.getElementById('input-club').value.trim();
   if(!pseudo){toast('Entre ton pseudo Discord',true);return;}
   if(!selectedCity){toast('Sélectionne une ville dans la liste',true);return;}
-  const idx=members.findIndex(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
-  const entry={pseudo,city:selectedCity.name,lat:selectedCity.lat,lng:selectedCity.lng,club:club||''};
-  if(idx>=0){members[idx]=entry;toast('Marqueur mis à jour !');}
-  else{members.push(entry);toast('Bienvenue sur la Casual Map ! 🍋');}
-  save();
-  document.getElementById('input-pseudo').value='';
-  document.getElementById('input-city').value='';
-  document.getElementById('input-club').value='';
-  selectedCity=null;
-  renderAll();
-  map.flyTo([entry.lat,entry.lng],8,{duration:1.5});
+  const btn=document.getElementById('btn-add');
+  btn.disabled=true;btn.textContent='ENREGISTREMENT...';
+  try{
+    await loadData();
+    const idx=members.findIndex(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
+    const entry={pseudo,city:selectedCity.name,lat:selectedCity.lat,lng:selectedCity.lng,club:club||''};
+    if(idx>=0){members[idx]=entry;}else{members.push(entry);}
+    await saveData();
+    renderAll();
+    document.getElementById('input-pseudo').value='';
+    document.getElementById('input-city').value='';
+    document.getElementById('input-club').value='';
+    selectedCity=null;
+    toast(idx>=0?'Marqueur mis à jour !':'Bienvenue sur la Casual Map ! 🍋');
+    map.flyTo([entry.lat,entry.lng],8,{duration:1.5});
+  }catch(e){toast('Erreur — réessaie',true);}
+  btn.disabled=false;btn.textContent='AJOUTER MON MARQUEUR';
 }
 
-function deleteMember(i){
+async function deleteMember(i){
   if(!isAdmin)return;
-  members.splice(i,1);save();renderAll();toast('Marqueur supprimé');
+  members.splice(i,1);
+  await saveData();
+  renderAll();
+  toast('Marqueur supprimé');
 }
 
 function toggleAdmin(){
