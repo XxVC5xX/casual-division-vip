@@ -69,7 +69,6 @@ body.admin-mode .btn-del{display:block}
 .admin-btn{position:fixed;bottom:2rem;left:2rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.8rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s}
 .admin-btn:hover{border-color:var(--gold);color:var(--gold)}
 body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
-.loading-bar{height:2px;background:var(--gold);width:0;transition:width 0.3s;position:fixed;top:0;left:0;z-index:9999}
 .leaflet-container{background:#0d0d0d}
 .leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--white);box-shadow:0 8px 24px rgba(0,0,0,0.7)}
 .leaflet-popup-tip{background:var(--surface)}
@@ -100,7 +99,6 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 </style>
 </head>
 <body>
-<div class="loading-bar" id="loading-bar"></div>
 <header>
   <div>
     <div class="logo">CASUAL <span>MAP</span></div>
@@ -153,45 +151,20 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 <div class="toast" id="toast"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const GITHUB_TOKEN='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';
-const GITHUB_REPO='XxVC5xX/casual-division-vip';
-const DATA_FILE='map-data.json';
+const SUPABASE_URL='https://emiveacfwbhhpcdghanv.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaXZlYWNmd2JoaHBjZGdoYW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjQ1NTgsImV4cCI6MjA5MjEwMDU1OH0.zZ6eWTPVXMhUp1VQbpUI-J5L_t0osI9ipLTSoLeQQRY';
 const ADMIN_CODE='VC5';
 
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let members=[];
-let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false,fileSha=null;
-
-function setLoading(v){document.getElementById('loading-bar').style.width=v?'70%':'0'}
+let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false;
 
 async function loadData(){
-  setLoading(true);
-  try{
-    const r=await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE}`,{
-      headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Accept':'application/vnd.github.v3+json'}
-    });
-    if(r.status===404){members=[];fileSha=null;}
-    else{
-      const d=await r.json();
-      fileSha=d.sha;
-      members=JSON.parse(atob(d.content.replace(/\n/g,'')));
-    }
-  }catch(e){members=[];}
-  setLoading(false);
+  const{data,error}=await sb.from('members').select('*');
+  if(!error&&data){members=data;}
   renderAll();
-}
-
-async function saveData(){
-  const content=btoa(unescape(encodeURIComponent(JSON.stringify(members))));
-  const body={message:'Update casual map',content};
-  if(fileSha)body.sha=fileSha;
-  const r=await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE}`,{
-    method:'PUT',
-    headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-    body:JSON.stringify(body)
-  });
-  const d=await r.json();
-  if(d.content)fileSha=d.content.sha;
 }
 
 function initMap(){
@@ -214,7 +187,7 @@ function renderAll(){
   document.getElementById('member-count').textContent=members.length;
   const list=document.getElementById('members-list');
   if(!members.length){list.innerHTML='<div class="empty-state">Aucun membre encore.<br>Sois le premier !</div>';}
-  else{list.innerHTML=members.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${i})">✕</button></div>`).join('');}
+  else{list.innerHTML=members.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
   members.forEach(m=>{
     const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
     mk.bindPopup(`<div class="popup-pseudo">${esc(m.pseudo)}</div><div class="popup-city">${esc(m.city)}</div>${m.club?'<div class="popup-club">⚽ '+esc(m.club)+'</div>':''}`);
@@ -248,65 +221,39 @@ function getClubLogo(name){
     'everton':'https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Everton_FC_logo.svg/40px-Everton_FC_logo.svg.png',
     'newcastle':'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/40px-Newcastle_United_Logo.svg.png',
     'aston villa':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Aston_Villa_FC_new_crest.svg/40px-Aston_Villa_FC_new_crest.svg.png',
-    'olympique de marseille':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
     'om':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
-    'olympique lyonnais':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
+    'olympique de marseille':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
     'ol':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
-    'ajax':'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Ajax_Amsterdam.svg/40px-Ajax_Amsterdam.svg.png',
-    'porto':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/40px-FC_Porto.svg.png',
-    'benfica':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/40px-SL_Benfica_logo.svg.png',
-    'west bromwich':'https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/West_Bromwich_Albion.svg/40px-West_Bromwich_Albion.svg.png',
-    'birmingham':'https://upload.wikimedia.org/wikipedia/en/thumb/6/68/Birmingham_City_FC_logo.svg/40px-Birmingham_City_FC_logo.svg.png',
-    'sheffield united':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/Sheffield_United_FC_logo.svg/40px-Sheffield_United_FC_logo.svg.png',
-    'sheffield wednesday':'https://upload.wikimedia.org/wikipedia/en/thumb/8/88/Sheffield_Wednesday_badge.svg/40px-Sheffield_Wednesday_badge.svg.png',
-    'millwall':'https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Millwall_FC_logo.svg/40px-Millwall_FC_logo.svg.png',
-    'burnley':'https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Burnley_F.C._Logo.svg/40px-Burnley_F.C._Logo.svg.png',
-    'ipswich':'https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Ipswich_Town.svg/40px-Ipswich_Town.svg.png',
-    'sunderland':'https://upload.wikimedia.org/wikipedia/en/thumb/7/77/Logo_Sunderland.svg/40px-Logo_Sunderland.svg.png',
-    'stoke city':'https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Stoke_City_FC.svg/40px-Stoke_City_FC.svg.png',
-    'hull city':'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Hull_City_A.F.C._logo.svg/40px-Hull_City_A.F.C._logo.svg.png',
-    'blackburn':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0f/Blackburn_Rovers.svg/40px-Blackburn_Rovers.svg.png',
-    'bolton':'https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Bolton_Wanderers_FC_logo.svg/40px-Bolton_Wanderers_FC_logo.svg.png',
-    'cardiff':'https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/Cardiff_City_crest.svg/40px-Cardiff_City_crest.svg.png',
-    'swansea':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Swansea_City_AFC_logo.svg/40px-Swansea_City_AFC_logo.svg.png',
-    'nottingham forest':'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/40px-Nottingham_Forest_F.C._logo.svg.png',
-    'leicester':'https://upload.wikimedia.org/wikipedia/en/thumb/2/2d/Leicester_City_crest.svg/40px-Leicester_City_crest.svg.png',
-    'southampton':'https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/FC_Southampton.svg/40px-FC_Southampton.svg.png',
-    'wolves':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Wolverhampton_Wanderers.svg/40px-Wolverhampton_Wanderers.svg.png',
-    'wolverhampton':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Wolverhampton_Wanderers.svg/40px-Wolverhampton_Wanderers.svg.png',
-    'brighton':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/40px-Brighton_%26_Hove_Albion_logo.svg.png',
-    'brentford':'https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Brentford_FC_crest.svg/40px-Brentford_FC_crest.svg.png',
-    'fulham':'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/40px-Fulham_FC_%28shield%29.svg.png',
-    'crystal palace':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Crystal_Palace_FC_logo_%282022%29.svg/40px-Crystal_Palace_FC_logo_%282022%29.svg.png',
-    'bournemouth':'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/AFC_Bournemouth_%282013%29.svg/40px-AFC_Bournemouth_%282013%29.svg.png',
-    'lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
+    'olympique lyonnais':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
     'rc lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
-    'lille':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
+    'lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
     'losc':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
+    'lille':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
     'monaco':'https://upload.wikimedia.org/wikipedia/fr/thumb/f/fd/AS_Monaco_FC.svg/40px-AS_Monaco_FC.svg.png',
     'as monaco':'https://upload.wikimedia.org/wikipedia/fr/thumb/f/fd/AS_Monaco_FC.svg/40px-AS_Monaco_FC.svg.png',
     'rennes':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/2a/Logo_Stade_Rennais_FC.svg/40px-Logo_Stade_Rennais_FC.svg.png',
     'nantes':'https://upload.wikimedia.org/wikipedia/fr/thumb/d/d9/Logo_FC_Nantes_%28avec_fond%29.svg/40px-Logo_FC_Nantes_%28avec_fond%29.svg.png',
     'nice':'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b4/Logo_OGC_Nice_2013.svg/40px-Logo_OGC_Nice_2013.svg.png',
     'ogc nice':'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b4/Logo_OGC_Nice_2013.svg/40px-Logo_OGC_Nice_2013.svg.png',
-    'strasbourg':'https://upload.wikimedia.org/wikipedia/fr/thumb/9/97/Racing_Club_de_Strasbourg_logo.svg/40px-Racing_Club_de_Strasbourg_logo.svg.png',
+    'ajax':'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Ajax_Amsterdam.svg/40px-Ajax_Amsterdam.svg.png',
+    'porto':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/40px-FC_Porto.svg.png',
+    'benfica':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/40px-SL_Benfica_logo.svg.png',
+    'sheffield united':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/Sheffield_United_FC_logo.svg/40px-Sheffield_United_FC_logo.svg.png',
+    'nottingham forest':'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/40px-Nottingham_Forest_F.C._logo.svg.png',
+    'leicester':'https://upload.wikimedia.org/wikipedia/en/thumb/2/2d/Leicester_City_crest.svg/40px-Leicester_City_crest.svg.png',
+    'wolves':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Wolverhampton_Wanderers.svg/40px-Wolverhampton_Wanderers.svg.png',
+    'brighton':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/40px-Brighton_%26_Hove_Albion_logo.svg.png',
+    'fulham':'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/40px-Fulham_FC_%28shield%29.svg.png',
+    'crystal palace':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Crystal_Palace_FC_logo_%282022%29.svg/40px-Crystal_Palace_FC_logo_%282022%29.svg.png',
     'sevilla':'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Sevilla_FC_logo.svg/40px-Sevilla_FC_logo.svg.png',
-    'villarreal':'https://upload.wikimedia.org/wikipedia/en/thumb/b/b9/Villarreal_CF_Logo.svg/40px-Villarreal_CF_Logo.svg.png',
     'napoli':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/SSC_Napoli_S.p.A..svg/40px-SSC_Napoli_S.p.A..svg.png',
     'roma':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/AS_Roma_logo_%282017%29.svg/40px-AS_Roma_logo_%282017%29.svg.png',
-    'lazio':'https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/40px-S.S._Lazio_badge.svg.png',
-    'fiorentina':'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/ACF_Fiorentina_%282022%29.svg/40px-ACF_Fiorentina_%282022%29.svg.png',
     'bayer leverkusen':'https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/40px-Bayer_04_Leverkusen_logo.svg.png',
     'rb leipzig':'https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2014_logo.svg/40px-RB_Leipzig_2014_logo.svg.png',
-    'eintracht frankfurt':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Eintracht_Frankfurt_Logo.svg/40px-Eintracht_Frankfurt_Logo.svg.png',
     'psv':'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/PSV_Eindhoven.svg/40px-PSV_Eindhoven.svg.png',
     'feyenoord':'https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Feyenoord_logo.svg/40px-Feyenoord_logo.svg.png',
-    'sporting':'https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Sporting_CP_logo.svg/40px-Sporting_CP_logo.svg.png',
-    'anderlecht':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/28/RSC_Anderlecht_logo.svg/40px-RSC_Anderlecht_logo.svg.png',
-    'club brugge':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a8/Club_Brugge_KV_logo.svg/40px-Club_Brugge_KV_logo.svg.png',
     'galatasaray':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Galatasaray_Sports_Club_Logo.svg/40px-Galatasaray_Sports_Club_Logo.svg.png',
-    'fenerbahce':'https://upload.wikimedia.org/wikipedia/en/thumb/4/4f/Fenerbah%C3%A7e_SK.svg/40px-Fenerbah%C3%A7e_SK.svg.png',
-    'shakhtar':'https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/FC_Shakhtar_Donetsk.svg/40px-FC_Shakhtar_Donetsk.svg.png',
+    'anderlecht':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/28/RSC_Anderlecht_logo.svg/40px-RSC_Anderlecht_logo.svg.png',
   };
   return logos[name.toLowerCase()]||null;
 }
@@ -341,27 +288,30 @@ async function addMember(){
   const btn=document.getElementById('btn-add');
   btn.disabled=true;btn.textContent='ENREGISTREMENT...';
   try{
-    await loadData();
-    const idx=members.findIndex(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
+    const existing=members.find(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
     const entry={pseudo,city:selectedCity.name,lat:selectedCity.lat,lng:selectedCity.lng,club:club||''};
-    if(idx>=0){members[idx]=entry;}else{members.push(entry);}
-    await saveData();
-    renderAll();
+    if(existing){
+      await sb.from('members').update(entry).eq('id',existing.id);
+      toast('Marqueur mis à jour !');
+    }else{
+      await sb.from('members').insert(entry);
+      toast('Bienvenue sur la Casual Map ! 🍋');
+    }
+    await loadData();
     document.getElementById('input-pseudo').value='';
     document.getElementById('input-city').value='';
     document.getElementById('input-club').value='';
     selectedCity=null;
-    toast(idx>=0?'Marqueur mis à jour !':'Bienvenue sur la Casual Map ! 🍋');
-    map.flyTo([entry.lat,entry.lng],8,{duration:1.5});
+    const m=members.find(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
+    if(m)map.flyTo([m.lat,m.lng],8,{duration:1.5});
   }catch(e){toast('Erreur — réessaie',true);}
   btn.disabled=false;btn.textContent='AJOUTER MON MARQUEUR';
 }
 
-async function deleteMember(i){
+async function deleteMember(id){
   if(!isAdmin)return;
-  members.splice(i,1);
-  await saveData();
-  renderAll();
+  await sb.from('members').delete().eq('id',id);
+  await loadData();
   toast('Marqueur supprimé');
 }
 
