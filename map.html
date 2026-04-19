@@ -22,7 +22,7 @@ header{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;a
 .header-right{text-align:right}
 .counter-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
 .counter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
-.layout{display:grid;grid-template-columns:280px 1fr 240px;height:calc(100vh - 72px)}
+.layout{display:grid;grid-template-columns:210px 1fr 190px;height:calc(100vh - 72px)}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .form-section{padding:1.25rem;border-bottom:1px solid var(--border)}
 .form-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
@@ -76,6 +76,31 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 .popup-pseudo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.05em;color:var(--gold)}
 .popup-city{font-size:0.75rem;color:var(--muted);margin-top:2px}
 .popup-club{font-size:0.8rem;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+.share-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.9rem;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
+.share-btn:hover{border-color:var(--gold);color:var(--gold)}
+.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:none;align-items:center;justify-content:center}
+.share-overlay.open{display:flex}
+.share-modal{background:#0f0f0f;border:1px solid var(--border);width:360px;max-width:90vw;overflow:hidden;position:relative}
+.share-close{position:absolute;top:0.75rem;right:0.75rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;line-height:1;padding:0.2rem 0.4rem;transition:color 0.2s}
+.share-close:hover{color:var(--white)}
+.share-card{padding:2rem;background:#0f0f0f}
+.share-card-inner{border:1px solid #2a2a2a;padding:1.5rem;background:#111;position:relative;overflow:hidden}
+.share-card-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a84c,transparent)}
+.share-card-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.08em;line-height:1;margin-bottom:0.15rem}
+.share-card-title span{color:var(--gold)}
+.share-card-sub{font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem}
+.share-card-divider{height:1px;background:var(--border);margin:1rem 0}
+.share-card-cta{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
+.share-card-url{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold);letter-spacing:0.05em;word-break:break-all}
+.share-card-badge{position:absolute;top:1rem;right:1rem;background:var(--gold);color:#0a0a0a;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:0.1em;padding:0.2rem 0.5rem;border-radius:1px}
+.share-actions{padding:0 1.5rem 1.5rem;display:flex;flex-direction:column;gap:0.5rem}
+.share-action-btn{width:100%;padding:0.65rem;border:1px solid var(--border);background:none;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px;transition:all 0.2s;text-align:center}
+.share-action-btn:hover{border-color:var(--gold);color:var(--gold)}
+.share-action-btn.primary{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
+.share-action-btn.primary:hover{background:#e8c06a}
+.share-hint{font-size:0.65rem;color:var(--muted);text-align:center;padding:0 1.5rem 1rem;letter-spacing:0.05em}
+
+
 @media(max-width:900px){
   .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;height:auto}
   .sidebar{border-right:none;border-bottom:1px solid var(--border)}
@@ -107,9 +132,19 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
   <a class="discord-badge" href="https://discord.gg/hbKPnjCWtZ" target="_blank">
     <span class="discord-dot"></span>Rejoindre Casual Division
   </a>
-  <div class="header-right">
-    <div class="counter-label">Membres sur la carte</div>
-    <div class="counter" id="total-counter">...</div>
+  <button class="share-btn" onclick="openShare()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    Partager
+  </button>
+  <div style="display:flex;gap:1.5rem;align-items:center">
+    <div style="text-align:center">
+      <div class="counter" id="total-counter">...</div>
+      <div class="counter-label">Membres</div>
+    </div>
+    <div style="text-align:center">
+      <div class="counter" id="stat-clubs">0</div>
+      <div class="counter-label">Clubs</div>
+    </div>
   </div>
 </header>
 <div class="layout">
@@ -143,12 +178,36 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
       <div id="clubs-list"><div class="empty-state">Chargement...</div></div>
     </div>
     <div class="casual-strip">
-      <a href="https://casuhall.fr" target="_blank">casuhall.fr — Les meilleures pièces casual d'occasion →</a>
+      <a href="https://casuhall.fr" target="_blank" style="display:flex;align-items:center;gap:0.6rem">
+        <img src="data:image/png;base64,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" alt="Casu'Hall" style="height:28px;width:auto;opacity:0.85;mix-blend-mode:screen"/>
+        <span>casuhall.fr — Les meilleures pièces casual d'occasion →</span>
+      </a>
     </div>
   </div>
 </div>
 <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
 <div class="toast" id="toast"></div>
+<div class="share-overlay" id="share-overlay" onclick="if(event.target===this)closeShare()">
+  <div class="share-modal">
+    <button class="share-close" onclick="closeShare()">✕</button>
+    <div class="share-card">
+      <div class="share-card-inner">
+        <div class="share-card-badge">LIVE</div>
+        <div class="share-card-title">CASUAL <span>MAP</span></div>
+        <div class="share-card-sub">Casual Division — Europe</div>
+        <div class="share-card-divider"></div>
+        <div class="share-card-cta">Ajoute ton marqueur sur la carte</div>
+        <div class="share-card-url">xxvc5xx.github.io/casual-division-vip/map.html</div>
+      </div>
+    </div>
+    <div class="share-actions">
+      <button class="share-action-btn primary" onclick="copyLink()">COPIER LE LIEN</button>
+      <button class="share-action-btn" onclick="shareInstagram()">PARTAGER EN STORY INSTAGRAM</button>
+    </div>
+    <div class="share-hint">Fais une capture d'écran de la card pour la partager en story</div>
+  </div>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -172,103 +231,57 @@ function initMap(){
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
   clusterGroup=L.markerClusterGroup({
     iconCreateFunction:function(c){
-      return L.divIcon({html:'<div style="background:#c9a84c;color:#0a0a0a;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #8a6f2e">'+c.getChildCount()+'</div>',iconSize:[34,34],className:''});
-    },maxClusterRadius:60
+      return L.divIcon({html:'<div style="background:#c9a84c;color:#0a0a0a;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #8a6f2e;box-shadow:0 0 8px rgba(201,168,76,0.5)">'+c.getChildCount()+'</div>',iconSize:[34,34],className:''});
+    },maxClusterRadius:15
   });
   map.addLayer(clusterGroup);
+
+  // Frontières pays en doré subtil
+  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+    .then(r=>r.json())
+    .then(data=>{
+      L.geoJSON(data,{
+        style:{color:'#c0c8d8',weight:1.5,opacity:0.55,fillOpacity:0}
+      }).addTo(map);
+    }).catch(()=>{});
+
   loadData();
 }
 
-const goldIcon=L.divIcon({html:'<div style="width:12px;height:12px;background:#c9a84c;border-radius:50%;border:2px solid #8a6f2e"></div>',iconSize:[12,12],iconAnchor:[6,6],className:''});
+const goldIcon=L.divIcon({html:'<div style="width:14px;height:14px;background:#c9a84c;border-radius:50%;border:2px solid #8a6f2e;box-shadow:0 0 6px rgba(201,168,76,0.6)"></div>',iconSize:[14,14],iconAnchor:[7,7],className:''});
 
 function renderAll(){
   clusterGroup.clearLayers();
-  document.getElementById('total-counter').textContent=members.length;
-  document.getElementById('member-count').textContent=members.length;
+  const filtered=members;
+
+  // Stats
+  const clubs=new Set(members.filter(m=>m.club).map(m=>m.club.trim()));
+  document.getElementById('stat-clubs').textContent=clubs.size;
+  document.getElementById('total-counter').textContent=filtered.length;
+  document.getElementById('member-count').textContent=filtered.length;
+
   const list=document.getElementById('members-list');
-  if(!members.length){list.innerHTML='<div class="empty-state">Aucun membre encore.<br>Sois le premier !</div>';}
-  else{list.innerHTML=members.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
-  members.forEach(m=>{
+  if(!filtered.length){list.innerHTML='<div class="empty-state">Aucun membre<br>pour ce pays</div>';}
+  else{list.innerHTML=filtered.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
+
+  filtered.forEach(m=>{
     const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
     mk.bindPopup(`<div class="popup-pseudo">${esc(m.pseudo)}</div><div class="popup-city">${esc(m.city)}</div>${m.club?'<div class="popup-club">⚽ '+esc(m.club)+'</div>':''}`);
     clusterGroup.addLayer(mk);
   });
-  renderClubs();
+  renderClubs(filtered);
 }
 
-function getClubLogo(name){
-  const logos={
-    'psg':'https://upload.wikimedia.org/wikipedia/fr/thumb/8/86/Paris_Saint-Germain_Logo.svg/40px-Paris_Saint-Germain_Logo.svg.png',
-    'paris saint-germain':'https://upload.wikimedia.org/wikipedia/fr/thumb/8/86/Paris_Saint-Germain_Logo.svg/40px-Paris_Saint-Germain_Logo.svg.png',
-    'manchester city':'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/40px-Manchester_City_FC_badge.svg.png',
-    'manchester united':'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/40px-Manchester_United_FC_crest.svg.png',
-    'liverpool':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/40px-Liverpool_FC.svg.png',
-    'arsenal':'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/40px-Arsenal_FC.svg.png',
-    'chelsea':'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/40px-Chelsea_FC.svg.png',
-    'tottenham':'https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Tottenham_Hotspur.svg/40px-Tottenham_Hotspur.svg.png',
-    'real madrid':'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/40px-Real_Madrid_CF.svg.png',
-    'barcelona':'https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/40px-FC_Barcelona_%28crest%29.svg.png',
-    'atletico madrid':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/40px-Atletico_Madrid_2017_logo.svg.png',
-    'juventus':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Juventus_FC_2017_icon_%28black%29.svg/40px-Juventus_FC_2017_icon_%28black%29.svg.png',
-    'ac milan':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/40px-Logo_of_AC_Milan.svg.png',
-    'inter milan':'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/40px-FC_Internazionale_Milano_2021.svg.png',
-    'bayern munich':'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg/40px-FC_Bayern_M%C3%BCnchen_logo_%282002%E2%80%932017%29.svg.png',
-    'borussia dortmund':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/40px-Borussia_Dortmund_logo.svg.png',
-    'celtic':'https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Celtic_FC.svg/40px-Celtic_FC.svg.png',
-    'rangers':'https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Rangers_FC.svg/40px-Rangers_FC.svg.png',
-    'leeds united':'https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Leeds_United_F.C._logo.svg/40px-Leeds_United_F.C._logo.svg.png',
-    'west ham':'https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/West_Ham_United_FC_logo.svg/40px-West_Ham_United_FC_logo.svg.png',
-    'everton':'https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Everton_FC_logo.svg/40px-Everton_FC_logo.svg.png',
-    'newcastle':'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/40px-Newcastle_United_Logo.svg.png',
-    'aston villa':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Aston_Villa_FC_new_crest.svg/40px-Aston_Villa_FC_new_crest.svg.png',
-    'om':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
-    'olympique de marseille':'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_Marseille_logo.svg/40px-Olympique_Marseille_logo.svg.png',
-    'ol':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
-    'olympique lyonnais':'https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Olympique_Lyonnais_logo.svg/40px-Olympique_Lyonnais_logo.svg.png',
-    'rc lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
-    'lens':'https://upload.wikimedia.org/wikipedia/fr/thumb/4/41/RC_Lens_logo_2010.svg/40px-RC_Lens_logo_2010.svg.png',
-    'losc':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
-    'lille':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Logo_LOSC_Lille_2011.svg/40px-Logo_LOSC_Lille_2011.svg.png',
-    'monaco':'https://upload.wikimedia.org/wikipedia/fr/thumb/f/fd/AS_Monaco_FC.svg/40px-AS_Monaco_FC.svg.png',
-    'as monaco':'https://upload.wikimedia.org/wikipedia/fr/thumb/f/fd/AS_Monaco_FC.svg/40px-AS_Monaco_FC.svg.png',
-    'rennes':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/2a/Logo_Stade_Rennais_FC.svg/40px-Logo_Stade_Rennais_FC.svg.png',
-    'nantes':'https://upload.wikimedia.org/wikipedia/fr/thumb/d/d9/Logo_FC_Nantes_%28avec_fond%29.svg/40px-Logo_FC_Nantes_%28avec_fond%29.svg.png',
-    'nice':'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b4/Logo_OGC_Nice_2013.svg/40px-Logo_OGC_Nice_2013.svg.png',
-    'ogc nice':'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b4/Logo_OGC_Nice_2013.svg/40px-Logo_OGC_Nice_2013.svg.png',
-    'ajax':'https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Ajax_Amsterdam.svg/40px-Ajax_Amsterdam.svg.png',
-    'porto':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/40px-FC_Porto.svg.png',
-    'benfica':'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/40px-SL_Benfica_logo.svg.png',
-    'sheffield united':'https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/Sheffield_United_FC_logo.svg/40px-Sheffield_United_FC_logo.svg.png',
-    'nottingham forest':'https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Nottingham_Forest_F.C._logo.svg/40px-Nottingham_Forest_F.C._logo.svg.png',
-    'leicester':'https://upload.wikimedia.org/wikipedia/en/thumb/2/2d/Leicester_City_crest.svg/40px-Leicester_City_crest.svg.png',
-    'wolves':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Wolverhampton_Wanderers.svg/40px-Wolverhampton_Wanderers.svg.png',
-    'brighton':'https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Brighton_%26_Hove_Albion_logo.svg/40px-Brighton_%26_Hove_Albion_logo.svg.png',
-    'fulham':'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/40px-Fulham_FC_%28shield%29.svg.png',
-    'crystal palace':'https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Crystal_Palace_FC_logo_%282022%29.svg/40px-Crystal_Palace_FC_logo_%282022%29.svg.png',
-    'sevilla':'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Sevilla_FC_logo.svg/40px-Sevilla_FC_logo.svg.png',
-    'napoli':'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/SSC_Napoli_S.p.A..svg/40px-SSC_Napoli_S.p.A..svg.png',
-    'roma':'https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/AS_Roma_logo_%282017%29.svg/40px-AS_Roma_logo_%282017%29.svg.png',
-    'bayer leverkusen':'https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/40px-Bayer_04_Leverkusen_logo.svg.png',
-    'rb leipzig':'https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2014_logo.svg/40px-RB_Leipzig_2014_logo.svg.png',
-    'psv':'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/PSV_Eindhoven.svg/40px-PSV_Eindhoven.svg.png',
-    'feyenoord':'https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Feyenoord_logo.svg/40px-Feyenoord_logo.svg.png',
-    'galatasaray':'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Galatasaray_Sports_Club_Logo.svg/40px-Galatasaray_Sports_Club_Logo.svg.png',
-    'anderlecht':'https://upload.wikimedia.org/wikipedia/fr/thumb/2/28/RSC_Anderlecht_logo.svg/40px-RSC_Anderlecht_logo.svg.png',
-  };
-  return logos[name.toLowerCase()]||null;
-}
-
-function renderClubs(){
+function renderClubs(src){
+  const list=(src&&src.length!==undefined)?src:members;
   const counts={};
-  members.forEach(m=>{if(m.club){const k=m.club.trim();counts[k]=(counts[k]||0)+1;}});
+  list.forEach(m=>{if(m.club){const k=m.club.trim();counts[k]=(counts[k]||0)+1;}});
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
   const cl=document.getElementById('clubs-list');
   if(!sorted.length){cl.innerHTML='<div class="empty-state">Aucun club<br>pour l\'instant</div>';return;}
   cl.innerHTML=sorted.map(([name,count],i)=>{
-    const logo=getClubLogo(name);
     const initials=name.split(' ').filter(w=>w.length>2).map(w=>w[0].toUpperCase()).slice(0,2).join('')||name.slice(0,2).toUpperCase();
-    const logoHtml=logo?`<img class="club-logo" src="${logo}" alt="" onerror="this.outerHTML='<div class=\\"club-logo-placeholder\\">${initials}</div>'">`:`<div class="club-logo-placeholder">${initials}</div>`;
-    return `<div class="club-item">${logoHtml}<div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`;
+    return `<div class="club-item"><div class="club-logo-placeholder">${initials}</div><div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`;
   }).join('');
 }
 
@@ -347,6 +360,22 @@ document.getElementById('input-city').addEventListener('input',function(){clearT
 document.addEventListener('click',e=>{if(!e.target.closest('.form-group'))document.getElementById('city-results').style.display='none';});
 document.getElementById('input-club').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
 document.getElementById('input-pseudo').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
+
+function openShare(){document.getElementById('share-overlay').classList.add('open')}
+function closeShare(){document.getElementById('share-overlay').classList.remove('open')}
+function copyLink(){
+  navigator.clipboard.writeText('https://xxvc5xx.github.io/casual-division-vip/map.html');
+  toast('Lien copié ! 🍋');
+  closeShare();
+}
+function shareInstagram(){
+  if(navigator.share){
+    navigator.share({title:'Casual Map — Casual Division',url:'https://xxvc5xx.github.io/casual-division-vip/map.html'});
+  } else {
+    copyLink();
+    toast('Lien copié — colle-le dans ta story !');
+  }
+}
 
 initMap();
 </script>
