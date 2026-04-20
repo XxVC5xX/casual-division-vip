@@ -99,6 +99,20 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 .share-action-btn.primary{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
 .share-action-btn.primary:hover{background:#e8c06a}
 .share-hint{font-size:0.65rem;color:var(--muted);text-align:center;padding:0 1.5rem 1rem;letter-spacing:0.05em}
+.edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9100;display:none;align-items:center;justify-content:center}
+.edit-overlay.open{display:flex}
+.edit-modal{background:#0f0f0f;border:1px solid var(--border);width:320px;max-width:92vw;padding:1.5rem;position:relative}
+.edit-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:var(--gold);margin-bottom:1.25rem}
+.edit-field{margin-bottom:0.85rem}
+.edit-field label{display:block;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem}
+.edit-field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.5rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;border-radius:2px}
+.edit-field input:focus{border-color:var(--gold)}
+.edit-actions{display:flex;gap:0.5rem;margin-top:1.25rem}
+.edit-save{flex:1;padding:0.6rem;background:var(--gold);color:#0a0a0a;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px}
+.edit-cancel{flex:1;padding:0.6rem;background:none;color:var(--muted);border:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px}
+.btn-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:0.2rem 0.3rem;display:none;transition:color 0.15s;flex-shrink:0}
+.btn-edit:hover{color:var(--gold)}
+body.admin-mode .btn-edit{display:block}
 
 
 @media(max-width:900px){
@@ -115,11 +129,30 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
   .members-section{max-height:200px}
 }
 @media(max-width:600px){
-  #map{height:45vh;min-height:250px}
+  header{padding:0.6rem 0.75rem;flex-wrap:wrap;gap:0.5rem}
+  .logo{font-size:1.2rem}
+  .logo-sub{font-size:0.55rem}
+  .counter{font-size:1.3rem}
+  .counter-label{font-size:0.55rem}
+  .share-btn{font-size:0.72rem;padding:0.3rem 0.6rem}
+  #map{height:42vh;min-height:240px}
   .right-panel{flex-direction:column}
-  .clubs-section{max-height:180px;overflow-y:auto}
-  .admin-btn{bottom:1rem;left:1rem}
-  .toast{bottom:1rem;right:1rem;left:1rem;text-align:center}
+  .clubs-section{max-height:160px;overflow-y:auto;padding:0.85rem 1rem}
+  .clubs-title{font-size:0.85rem;margin-bottom:0.6rem}
+  .club-item{padding:0.35rem 0}
+  .form-section{padding:1rem}
+  .form-group{margin-bottom:0.65rem}
+  .form-group input{padding:0.45rem 0.6rem;font-size:0.78rem}
+  .btn-add{padding:0.6rem;font-size:0.85rem}
+  .members-section{padding:0.75rem 1rem;max-height:130px}
+  .member-pseudo{font-size:0.78rem}
+  .member-location{font-size:0.68rem}
+  .admin-btn{bottom:1rem;left:1rem;font-size:0.6rem;padding:0.3rem 0.6rem}
+  .toast{bottom:1rem;right:0.5rem;left:0.5rem;text-align:center;font-size:0.75rem}
+  .casual-strip{padding:0.6rem 1rem;font-size:0.62rem}
+  .share-modal{width:95vw}
+  .share-card{padding:1.25rem}
+  .share-card-title{font-size:1.6rem}
 }
 </style>
 </head>
@@ -156,13 +189,13 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
         <input type="text" id="input-pseudo" placeholder="ton_pseudo" maxlength="32"/>
       </div>
       <div class="form-group">
-        <label>Ville *</label>
-        <input type="text" id="input-city" placeholder="Recherche ta ville..." autocomplete="off"/>
+        <label>Ville du club *</label>
+        <input type="text" id="input-city" placeholder="Ex: Manchester, Paris, Lyon..." autocomplete="off"/>
         <div class="search-results" id="city-results" style="display:none"></div>
       </div>
       <div class="form-group">
-        <label>Club supporté (optionnel)</label>
-        <input type="text" id="input-club" placeholder="Ex: PSG, Manchester City..." maxlength="50"/>
+        <label>Nom du club *</label>
+        <input type="text" id="input-club" placeholder="Ex: PSG, Lyle FC, Man City..." maxlength="50"/>
       </div>
       <button class="btn-add" id="btn-add" onclick="addMember()">AJOUTER MON MARQUEUR</button>
     </div>
@@ -187,6 +220,30 @@ body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
 </div>
 <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
 <div class="toast" id="toast"></div>
+<div class="edit-overlay" id="edit-overlay" onclick="if(event.target===this)closeEdit()">
+  <div class="edit-modal">
+    <button class="share-close" onclick="closeEdit()">✕</button>
+    <h3>MODIFIER LE MEMBRE</h3>
+    <input type="hidden" id="edit-id"/>
+    <div class="edit-field">
+      <label>Pseudo Discord</label>
+      <input type="text" id="edit-pseudo" maxlength="32" disabled style="opacity:0.5"/>
+    </div>
+    <div class="edit-field">
+      <label>Nom du club</label>
+      <input type="text" id="edit-club" maxlength="50"/>
+    </div>
+    <div class="edit-field">
+      <label>Ville du club</label>
+      <input type="text" id="edit-city" maxlength="100"/>
+    </div>
+    <div class="edit-actions">
+      <button class="edit-cancel" onclick="closeEdit()">ANNULER</button>
+      <button class="edit-save" onclick="saveMember()">ENREGISTRER</button>
+    </div>
+  </div>
+</div>
+
 <div class="share-overlay" id="share-overlay" onclick="if(event.target===this)closeShare()">
   <div class="share-modal">
     <button class="share-close" onclick="closeShare()">✕</button>
@@ -262,11 +319,11 @@ function renderAll(){
 
   const list=document.getElementById('members-list');
   if(!filtered.length){list.innerHTML='<div class="empty-state">Aucun membre<br>pour ce pays</div>';}
-  else{list.innerHTML=filtered.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${esc(m.city)}${m.club?' · '+esc(m.club):''}</div></div><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
+  else{list.innerHTML=filtered.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${m.club?esc(m.club)+' · ':''} ${esc(m.city)}</div></div><button class="btn-edit" onclick="editMember(${m.id})">✏️</button><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
 
   filtered.forEach(m=>{
     const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
-    mk.bindPopup(`<div class="popup-pseudo">${esc(m.pseudo)}</div><div class="popup-city">${esc(m.city)}</div>${m.club?'<div class="popup-club">⚽ '+esc(m.club)+'</div>':''}`);
+    mk.bindPopup(`<div class="popup-pseudo">${m.club?esc(m.club):esc(m.pseudo)}</div>${m.club?'<div style="font-size:0.72rem;color:#666;margin-top:2px">'+esc(m.pseudo)+'</div>':''}<div class="popup-city">📍 ${esc(m.city)}</div>`);
     clusterGroup.addLayer(mk);
   });
   renderClubs(filtered);
@@ -297,7 +354,8 @@ async function addMember(){
   const pseudo=document.getElementById('input-pseudo').value.trim();
   const club=document.getElementById('input-club').value.trim();
   if(!pseudo){toast('Entre ton pseudo Discord',true);return;}
-  if(!selectedCity){toast('Sélectionne une ville dans la liste',true);return;}
+  if(!selectedCity){toast('Sélectionne la ville du club dans la liste',true);return;}
+  if(!club){toast('Entre le nom de ton club',true);return;}
   const btn=document.getElementById('btn-add');
   btn.disabled=true;btn.textContent='ENREGISTREMENT...';
   try{
@@ -360,6 +418,27 @@ document.getElementById('input-city').addEventListener('input',function(){clearT
 document.addEventListener('click',e=>{if(!e.target.closest('.form-group'))document.getElementById('city-results').style.display='none';});
 document.getElementById('input-club').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
 document.getElementById('input-pseudo').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
+
+function editMember(id){
+  const m=members.find(x=>x.id===id);
+  if(!m)return;
+  document.getElementById('edit-id').value=id;
+  document.getElementById('edit-pseudo').value=m.pseudo;
+  document.getElementById('edit-club').value=m.club||'';
+  document.getElementById('edit-city').value=m.city||'';
+  document.getElementById('edit-overlay').classList.add('open');
+}
+function closeEdit(){document.getElementById('edit-overlay').classList.remove('open')}
+async function saveMember(){
+  const id=parseInt(document.getElementById('edit-id').value);
+  const club=document.getElementById('edit-club').value.trim();
+  const city=document.getElementById('edit-city').value.trim();
+  if(!club||!city){toast('Club et ville obligatoires',true);return;}
+  await sb.from('members').update({club,city}).eq('id',id);
+  closeEdit();
+  await loadData();
+  toast('Membre mis à jour ✓');
+}
 
 function openShare(){document.getElementById('share-overlay').classList.add('open')}
 function closeShare(){document.getElementById('share-overlay').classList.remove('open')}
