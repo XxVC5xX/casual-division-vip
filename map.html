@@ -12,7 +12,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--black:#0a0a0a;--white:#f5f3ef;--gold:#c9a84c;--gold-dark:#8a6f2e;--surface:#141414;--surface2:#1e1e1e;--border:#2a2a2a;--muted:#666;--red:#e24b4a}
 body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-header{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--black);position:sticky;top:0;z-index:1000}
+header{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--black);position:sticky;top:0;z-index:1000}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em}
 .logo span{color:var(--gold)}
 .logo-sub{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
@@ -23,6 +23,12 @@ header{padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;a
 .counter-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
 .counter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
 .layout{display:grid;grid-template-columns:210px 1fr 190px;height:calc(100vh - 72px)}
+@media(max-width:1100px) and (min-width:901px){
+  .layout{grid-template-columns:180px 1fr 170px}
+  .form-section{padding:0.85rem}
+  .form-group{margin-bottom:0.6rem}
+  .clubs-section{padding:0.85rem 1rem}
+}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .form-section{padding:1.25rem;border-bottom:1px solid var(--border)}
 .form-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
@@ -66,9 +72,9 @@ body.admin-mode .btn-del{display:block}
 .toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid var(--gold);color:var(--white);padding:0.6rem 1rem;font-size:0.82rem;border-radius:2px;z-index:9999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 .empty-state{text-align:center;padding:2rem 0.5rem;color:var(--muted);font-size:0.78rem;line-height:1.7}
-.admin-btn{position:fixed;bottom:2rem;left:2rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.8rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s}
+.admin-btn{position:fixed;bottom:0.5rem;left:0.5rem;background:rgba(10,10,10,0.7);border:1px solid #222;color:#333;padding:0.2rem 0.5rem;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s;backdrop-filter:blur(4px)}
 .admin-btn:hover{border-color:var(--gold);color:var(--gold)}
-body.admin-mode .admin-btn{border-color:var(--red);color:var(--red)}
+body.admin-mode .admin-btn{border-color:var(--red);color:var(--red);background:rgba(226,75,74,0.1)}
 .leaflet-container{background:#0d0d0d}
 .leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--white);box-shadow:0 8px 24px rgba(0,0,0,0.7)}
 .leaflet-popup-tip{background:var(--surface)}
@@ -147,7 +153,7 @@ body.admin-mode .btn-edit{display:block}
   .members-section{padding:0.75rem 1rem;max-height:130px}
   .member-pseudo{font-size:0.78rem}
   .member-location{font-size:0.68rem}
-  .admin-btn{bottom:1rem;left:1rem;font-size:0.6rem;padding:0.3rem 0.6rem}
+  .admin-btn{bottom:0.3rem;left:0.3rem;font-size:0.5rem;padding:0.15rem 0.4rem}
   .toast{bottom:1rem;right:0.5rem;left:0.5rem;text-align:center;font-size:0.75rem}
   .casual-strip{padding:0.6rem 1rem;font-size:0.62rem}
   .share-modal{width:95vw}
