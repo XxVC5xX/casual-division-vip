@@ -7,185 +7,669 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#0a0a0a;--white:#f5f3ef;--gold:#c9a84c;--gold-dark:#8a6f2e;--surface:#141414;--surface2:#1e1e1e;--border:#2a2a2a;--muted:#666;--red:#e24b4a}
-body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-header{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--black);position:sticky;top:0;z-index:1000}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em}
-.logo span{color:var(--gold)}
-.logo-sub{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
-.discord-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--surface2);border:1px solid var(--border);padding:0.4rem 1rem;border-radius:2px;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:border-color 0.2s,color 0.2s}
-.discord-badge:hover{border-color:var(--gold);color:var(--gold)}
-.discord-dot{width:8px;height:8px;background:#5865F2;border-radius:50%}
-.header-right{text-align:right}
-.counter-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
-.counter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
-.layout{display:grid;grid-template-columns:210px 1fr 190px;height:calc(100vh - 72px)}
-@media(max-width:1100px) and (min-width:901px){
-  .layout{grid-template-columns:180px 1fr 170px}
-  .form-section{padding:0.85rem}
-  .form-group{margin-bottom:0.6rem}
-  .clubs-section{padding:0.85rem 1rem}
+:root{
+  --black:#0a0908;
+  --black-2:#111110;
+  --white:#f5f3ef;
+  --gold:#b8923b;          /* or moutarde, plus mat, plus authentique */
+  --gold-bright:#d4ae54;   /* version légère pour hover */
+  --gold-dark:#6b5320;
+  --gold-deep:#2d2412;     /* fond doré très sombre */
+  --surface:#141413;
+  --surface2:#1c1c1a;
+  --border:#2a2825;
+  --muted:#73706a;
+  --red:#c84038;
+  --cream:#e8e1d0;
 }
-.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.form-section{padding:1.25rem;border-bottom:1px solid var(--border)}
-.form-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
+
+/* PATTERN GRAIN VINTAGE EN FOND */
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:0.04;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/><feColorMatrix values='0 0 0 0 0.7 0 0 0 0 0.65 0 0 0 0 0.5 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* BANNIERE LATINE TRIBUNE EN HAUT */
+.tribune-banner{
+  background:linear-gradient(180deg, var(--gold-deep) 0%, var(--black) 100%);
+  border-bottom:1px solid var(--gold-dark);
+  padding:0.4rem 1rem;
+  text-align:center;
+  font-family:'Oswald',sans-serif;
+  font-size:0.7rem;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:var(--gold);
+  position:relative;
+  z-index:1001;
+}
+.tribune-banner span{
+  display:inline-block;
+  padding:0 0.8rem;
+  position:relative;
+}
+.tribune-banner span::before,
+.tribune-banner span::after{
+  content:'■';
+  color:var(--gold);
+  font-size:0.5rem;
+  margin:0 0.6rem;
+  vertical-align:middle;
+  opacity:0.5;
+}
+
+header{
+  padding:0.85rem 1.25rem;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--black);
+  position:sticky;
+  top:0;
+  z-index:1000;
+  flex-wrap:wrap;
+  gap:0.5rem;
+  /* DOUBLE BORDURE STYLE BILLET DE MATCH */
+  box-shadow:inset 0 -3px 0 var(--black), inset 0 -4px 0 var(--gold-dark);
+}
+
+.logo-wrap{display:flex;align-items:center;gap:0.85rem}
+.logo-emblem{
+  width:42px;
+  height:42px;
+  border:2px solid var(--gold);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;
+  color:var(--gold);
+  letter-spacing:0;
+  position:relative;
+  flex-shrink:0;
+  background:radial-gradient(circle, var(--gold-deep) 0%, transparent 70%);
+}
+.logo-emblem::after{
+  content:'';
+  position:absolute;
+  inset:-4px;
+  border:1px solid var(--gold-dark);
+  border-radius:50%;
+  opacity:0.5;
+}
+
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.85rem;letter-spacing:0.05em;line-height:1}
+.logo span{color:var(--gold)}
+.logo-sub{
+  font-size:0.62rem;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:-2px;
+  font-family:'Oswald',sans-serif;
+}
+
+.discord-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:transparent;
+  border:1px solid var(--gold-dark);
+  padding:0.45rem 1rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.7rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--cream);
+  text-decoration:none;
+  transition:border-color 0.2s, color 0.2s, background 0.2s;
+  position:relative;
+}
+.discord-badge::before, .discord-badge::after{
+  content:'';
+  position:absolute;
+  width:6px;
+  height:6px;
+  border:1px solid var(--gold);
+}
+.discord-badge::before{top:-3px;left:-3px;border-right:none;border-bottom:none}
+.discord-badge::after{bottom:-3px;right:-3px;border-left:none;border-top:none}
+.discord-badge:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-deep)}
+.discord-dot{width:7px;height:7px;background:#5865F2;border-radius:50%;box-shadow:0 0 6px #5865F2}
+
+.header-right{text-align:right;display:flex;gap:1.5rem;align-items:center}
+.header-stat{text-align:center;position:relative;padding:0 0.4rem}
+.header-stat::after{
+  content:'';
+  position:absolute;
+  right:-0.75rem;
+  top:25%;
+  bottom:25%;
+  width:1px;
+  background:var(--border);
+}
+.header-stat:last-child::after{display:none}
+.counter-label{
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-family:'Oswald',sans-serif;
+}
+.counter{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.9rem;
+  color:var(--gold);
+  line-height:1;
+  text-shadow:0 0 8px rgba(184,146,59,0.2);
+}
+
+/* SAISON BADGE STYLE 80s */
+.season-badge{
+  position:absolute;
+  top:0.5rem;
+  right:50%;
+  transform:translateX(50%);
+  font-family:'Oswald',sans-serif;
+  font-size:0.55rem;
+  letter-spacing:0.3em;
+  color:var(--gold-dark);
+  text-transform:uppercase;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.layout{display:grid;grid-template-columns:260px 1fr 240px;height:calc(100vh - 110px);min-height:600px;position:relative;z-index:2}
+
+.sidebar{
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+/* Cocarde haut gauche */
+.sidebar::before{
+  content:'';
+  position:absolute;
+  top:8px;
+  left:8px;
+  width:14px;
+  height:14px;
+  border-top:2px solid var(--gold);
+  border-left:2px solid var(--gold);
+  z-index:5;
+}
+.sidebar::after{
+  content:'';
+  position:absolute;
+  bottom:8px;
+  left:8px;
+  width:14px;
+  height:14px;
+  border-bottom:2px solid var(--gold-dark);
+  border-left:2px solid var(--gold-dark);
+  z-index:5;
+}
+
+.form-section{
+  padding:1.5rem 1.25rem 1.25rem;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+
+.form-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.15rem;
+  letter-spacing:0.18em;
+  color:var(--gold);
+  margin-bottom:1rem;
+  padding-bottom:0.6rem;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.form-title::after{
+  content:'';
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  width:30px;
+  height:2px;
+  background:var(--gold);
+}
+
 .form-group{margin-bottom:0.85rem;position:relative}
-.form-group label{display:block;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.35rem}
-.form-group input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.55rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;border-radius:2px;transition:border-color 0.2s}
-.form-group input:focus{border-color:var(--gold)}
+.form-group label{
+  display:block;
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:0.35rem;
+  font-family:'Oswald',sans-serif;
+}
+.form-group input{
+  width:100%;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--white);
+  padding:0.6rem 0.75rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.82rem;
+  outline:none;
+  transition:border-color 0.2s, background 0.2s;
+}
+.form-group input:focus{border-color:var(--gold);background:var(--black-2)}
 .form-group input::placeholder{color:var(--muted)}
-.btn-add{width:100%;padding:0.7rem;background:var(--gold);color:var(--black);border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.15em;cursor:pointer;border-radius:2px;transition:background 0.2s,transform 0.1s}
-.btn-add:hover{background:#e8c06a}
+.form-group input.club-validated{border-color:var(--gold);background:var(--gold-deep)}
+.form-group input.club-custom{border-color:#7a5fb0;background:#1a1622}
+.help-text{font-size:0.68rem;color:var(--muted);margin-top:0.3rem;line-height:1.4}
+.help-text.warning{color:#d4a574}
+
+.btn-add{
+  width:100%;
+  padding:0.85rem;
+  background:var(--gold);
+  color:var(--black);
+  border:none;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;
+  letter-spacing:0.2em;
+  cursor:pointer;
+  transition:background 0.2s, transform 0.1s;
+  position:relative;
+  overflow:hidden;
+}
+.btn-add::before, .btn-add::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  width:8px;
+  height:1px;
+  background:var(--black);
+  transform:translateY(-50%);
+  opacity:0.4;
+}
+.btn-add::before{left:1rem}
+.btn-add::after{right:1rem}
+.btn-add:hover{background:var(--gold-bright)}
 .btn-add:active{transform:scale(0.98)}
 .btn-add:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+
 .members-section{flex:1;overflow-y:auto;padding:1rem 1.25rem}
-.section-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem}
-.member-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
-.member-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.section-label{
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:0.75rem;
+  font-family:'Oswald',sans-serif;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.section-label::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--border);
+  margin-left:0.5rem;
+}
+
+.member-item{
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  padding:0.55rem 0;
+  border-bottom:1px solid var(--border);
+}
+.member-dot{
+  width:6px;
+  height:6px;
+  background:var(--gold);
+  flex-shrink:0;
+  box-shadow:0 0 4px var(--gold);
+}
 .member-info{flex:1;min-width:0}
 .member-pseudo{font-size:0.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.member-location{font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:0.2rem 0.4rem;display:none;transition:color 0.15s;flex-shrink:0}
+.member-location{font-size:0.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.btn-edit,.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:0.2rem 0.4rem;display:none;flex-shrink:0}
+.btn-edit:hover{color:var(--gold)}
 .btn-del:hover{color:var(--red)}
-body.admin-mode .btn-del{display:block}
-#map{z-index:1}
-.right-panel{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.clubs-section{padding:1.25rem;flex:1;overflow-y:auto}
-.clubs-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
-.club-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
-.club-rank{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--muted);width:18px;text-align:center;flex-shrink:0}
-.club-rank.top1{color:var(--gold)}
+body.admin-mode .btn-edit,body.admin-mode .btn-del{display:block}
+
+#map{z-index:1;position:relative}
+#map::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:5;
+  border:1px solid var(--gold-deep);
+}
+
+.right-panel{
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+.right-panel::before{
+  content:'';
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:14px;
+  height:14px;
+  border-top:2px solid var(--gold);
+  border-right:2px solid var(--gold);
+  z-index:5;
+}
+.right-panel::after{
+  content:'';
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  width:14px;
+  height:14px;
+  border-bottom:2px solid var(--gold-dark);
+  border-right:2px solid var(--gold-dark);
+  z-index:5;
+}
+
+.clubs-section{padding:1.5rem 1.25rem 1rem;flex:1;overflow-y:auto}
+.clubs-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.15rem;
+  letter-spacing:0.18em;
+  color:var(--gold);
+  margin-bottom:1rem;
+  padding-bottom:0.6rem;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.clubs-title::after{
+  content:'';
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  width:30px;
+  height:2px;
+  background:var(--gold);
+}
+
+.club-item{
+  display:flex;
+  align-items:center;
+  gap:0.65rem;
+  padding:0.55rem 0;
+  border-bottom:1px solid var(--border);
+}
+.club-rank{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1rem;
+  color:var(--muted);
+  width:24px;
+  text-align:center;
+  flex-shrink:0;
+}
+.club-rank.top1{color:var(--gold);text-shadow:0 0 6px rgba(184,146,59,0.4)}
 .club-rank.top2{color:#aaa}
 .club-rank.top3{color:#cd7f32}
-.club-name{flex:1;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.club-count{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold);flex-shrink:0}
-.club-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
-.club-logo-placeholder{width:22px;height:22px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;color:var(--muted)}
-.casual-strip{padding:0.85rem 1.25rem;border-top:1px solid var(--border);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.8}
-.casual-strip a{color:var(--gold);text-decoration:none}
-.search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-top:none;z-index:100;max-height:160px;overflow-y:auto}
-.search-result-item{padding:0.45rem 0.75rem;font-size:0.8rem;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s}
-.search-result-item:hover{background:var(--surface2);color:var(--gold)}
-.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid var(--gold);color:var(--white);padding:0.6rem 1rem;font-size:0.82rem;border-radius:2px;z-index:9999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none}
-.toast.show{opacity:1;transform:translateY(0)}
-.empty-state{text-align:center;padding:2rem 0.5rem;color:var(--muted);font-size:0.78rem;line-height:1.7}
-.admin-btn{position:fixed;bottom:0.5rem;left:0.5rem;background:rgba(10,10,10,0.7);border:1px solid #222;color:#333;padding:0.2rem 0.5rem;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s;backdrop-filter:blur(4px)}
-.admin-btn:hover{border-color:var(--gold);color:var(--gold)}
-body.admin-mode .admin-btn{border-color:var(--red);color:var(--red);background:rgba(226,75,74,0.1)}
-.leaflet-container{background:#0d0d0d}
-.leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--white);box-shadow:0 8px 24px rgba(0,0,0,0.7)}
-.leaflet-popup-tip{background:var(--surface)}
-.leaflet-popup-content{margin:10px 14px;font-family:'DM Sans',sans-serif}
-.popup-pseudo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.05em;color:var(--gold)}
-.popup-city{font-size:0.75rem;color:var(--muted);margin-top:2px}
-.popup-club{font-size:0.8rem;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
-.share-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.9rem;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
-.share-btn:hover{border-color:var(--gold);color:var(--gold)}
-.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:none;align-items:center;justify-content:center}
-.share-overlay.open{display:flex}
-.share-modal{background:#0f0f0f;border:1px solid var(--border);width:360px;max-width:90vw;overflow:hidden;position:relative}
-.share-close{position:absolute;top:0.75rem;right:0.75rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;line-height:1;padding:0.2rem 0.4rem;transition:color 0.2s}
-.share-close:hover{color:var(--white)}
-.share-card{padding:2rem;background:#0f0f0f}
-.share-card-inner{border:1px solid #2a2a2a;padding:1.5rem;background:#111;position:relative;overflow:hidden}
-.share-card-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a84c,transparent)}
-.share-card-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.08em;line-height:1;margin-bottom:0.15rem}
-.share-card-title span{color:var(--gold)}
-.share-card-sub{font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem}
-.share-card-divider{height:1px;background:var(--border);margin:1rem 0}
-.share-card-cta{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
-.share-card-url{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold);letter-spacing:0.05em;word-break:break-all}
-.share-card-badge{position:absolute;top:1rem;right:1rem;background:var(--gold);color:#0a0a0a;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:0.1em;padding:0.2rem 0.5rem;border-radius:1px}
-.share-actions{padding:0 1.5rem 1.5rem;display:flex;flex-direction:column;gap:0.5rem}
-.share-action-btn{width:100%;padding:0.65rem;border:1px solid var(--border);background:none;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px;transition:all 0.2s;text-align:center}
-.share-action-btn:hover{border-color:var(--gold);color:var(--gold)}
-.share-action-btn.primary{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
-.share-action-btn.primary:hover{background:#e8c06a}
-.share-hint{font-size:0.65rem;color:var(--muted);text-align:center;padding:0 1.5rem 1rem;letter-spacing:0.05em}
-.edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9100;display:none;align-items:center;justify-content:center}
-.edit-overlay.open{display:flex}
-.edit-modal{background:#0f0f0f;border:1px solid var(--border);width:320px;max-width:92vw;padding:1.5rem;position:relative}
-.edit-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:var(--gold);margin-bottom:1.25rem}
-.edit-field{margin-bottom:0.85rem}
-.edit-field label{display:block;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem}
-.edit-field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.5rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;border-radius:2px}
-.edit-field input:focus{border-color:var(--gold)}
-.edit-actions{display:flex;gap:0.5rem;margin-top:1.25rem}
-.edit-save{flex:1;padding:0.6rem;background:var(--gold);color:#0a0a0a;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px}
-.edit-cancel{flex:1;padding:0.6rem;background:none;color:var(--muted);border:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px}
-.btn-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:0.2rem 0.3rem;display:none;transition:color 0.15s;flex-shrink:0}
-.btn-edit:hover{color:var(--gold)}
-body.admin-mode .btn-edit{display:block}
 
-
-@media(max-width:900px){
-  .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;height:auto}
-  .sidebar{border-right:none;border-bottom:1px solid var(--border)}
-  .right-panel{border-left:none;border-top:1px solid var(--border);flex-direction:row;flex-wrap:wrap}
-  .clubs-section{flex:1;min-width:200px}
-  .casual-strip{width:100%;border-top:1px solid var(--border)}
-  #map{height:55vh;min-height:300px}
-  header{padding:0.85rem 1rem}
-  .logo{font-size:1.4rem}
-  .counter{font-size:1.4rem}
-  .discord-badge{display:none}
-  .members-section{max-height:200px}
+.club-emblem{
+  width:30px;
+  height:30px;
+  border:1.5px solid var(--gold-dark);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.65rem;
+  color:var(--gold);
+  flex-shrink:0;
+  background:var(--gold-deep);
+  letter-spacing:0;
 }
-@media(max-width:600px){
-  header{padding:0.6rem 0.75rem;flex-wrap:wrap;gap:0.5rem}
-  .logo{font-size:1.2rem}
-  .logo-sub{font-size:0.55rem}
-  .counter{font-size:1.3rem}
-  .counter-label{font-size:0.55rem}
-  .share-btn{font-size:0.72rem;padding:0.3rem 0.6rem}
-  #map{height:42vh;min-height:240px}
-  .right-panel{flex-direction:column}
-  .clubs-section{max-height:160px;overflow-y:auto;padding:0.85rem 1rem}
-  .clubs-title{font-size:0.85rem;margin-bottom:0.6rem}
-  .club-item{padding:0.35rem 0}
-  .form-section{padding:1rem}
-  .form-group{margin-bottom:0.65rem}
-  .form-group input{padding:0.45rem 0.6rem;font-size:0.78rem}
-  .btn-add{padding:0.6rem;font-size:0.85rem}
-  .members-section{padding:0.75rem 1rem;max-height:130px}
-  .member-pseudo{font-size:0.78rem}
-  .member-location{font-size:0.68rem}
-  .admin-btn{bottom:0.3rem;left:0.3rem;font-size:0.5rem;padding:0.15rem 0.4rem}
-  .toast{bottom:1rem;right:0.5rem;left:0.5rem;text-align:center;font-size:0.75rem}
-  .casual-strip{padding:0.6rem 1rem;font-size:0.62rem}
-  .share-modal{width:95vw}
-  .share-card{padding:1.25rem}
-  .share-card-title{font-size:1.6rem}
+.club-emblem.unlisted{
+  border-color:var(--border);
+  color:var(--muted);
+  background:var(--surface2);
+}
+
+.club-name{flex:1;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.club-name-sub{font-size:0.65rem;color:var(--muted);font-weight:400;margin-top:1px}
+.club-count{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;
+  color:var(--gold);
+  flex-shrink:0;
+  min-width:20px;
+  text-align:right;
+}
+
+.casual-strip{
+  padding:0.85rem 1.25rem;
+  border-top:1px solid var(--border);
+  font-family:'Oswald',sans-serif;
+  font-size:0.65rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  line-height:1.6;
+  background:var(--black-2);
+}
+.casual-strip a{color:var(--gold);text-decoration:none}
+.casual-strip a:hover{color:var(--gold-bright)}
+
+.search-results{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:var(--surface);
+  border:1px solid var(--gold-dark);
+  border-top:none;
+  z-index:100;
+  max-height:240px;
+  overflow-y:auto;
+  box-shadow:0 4px 12px rgba(0,0,0,0.7);
+}
+.search-result-item{
+  padding:0.55rem 0.75rem;
+  font-size:0.8rem;
+  cursor:pointer;
+  border-bottom:1px solid var(--border);
+  transition:background 0.15s;
+}
+.search-result-item:hover,.search-result-item.active{background:var(--gold-deep);color:var(--gold)}
+.search-result-item .meta{font-size:0.68rem;color:var(--muted);margin-top:2px}
+.search-result-item.add-custom{
+  background:#1a1622;
+  color:#a890d8;
+  font-weight:500;
+  border-top:2px solid #5a4a8a;
+}
+.search-result-item.add-custom:hover{background:#251f33;color:#c9b3e8}
+.search-no-results{padding:0.6rem 0.75rem;font-size:0.78rem;color:var(--muted);font-style:italic}
+
+.toast{
+  position:fixed;
+  bottom:2rem;
+  right:2rem;
+  background:var(--surface);
+  border:1px solid var(--gold);
+  color:var(--white);
+  padding:0.7rem 1.1rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.78rem;
+  letter-spacing:0.05em;
+  z-index:9999;
+  opacity:0;
+  transform:translateY(8px);
+  transition:all 0.25s;
+  pointer-events:none;
+  max-width:90vw;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+.empty-state{text-align:center;padding:2rem 0.5rem;color:var(--muted);font-size:0.78rem;line-height:1.7;font-style:italic}
+
+.admin-btn{
+  position:fixed;
+  bottom:0.5rem;
+  left:0.5rem;
+  background:rgba(10,10,10,0.7);
+  border:1px solid #222;
+  color:#333;
+  padding:0.2rem 0.5rem;
+  font-size:0.55rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  z-index:9999;
+  transition:all 0.2s;
+  backdrop-filter:blur(4px);
+  font-family:'Oswald',sans-serif;
+}
+.admin-btn:hover{border-color:var(--gold);color:var(--gold)}
+body.admin-mode .admin-btn{border-color:var(--red);color:var(--red);background:rgba(200,64,56,0.1)}
+
+.leaflet-container{background:#0d0d0c}
+.leaflet-popup-content-wrapper{
+  background:var(--surface);
+  border:1px solid var(--gold-dark);
+  border-radius:0;
+  color:var(--white);
+  box-shadow:0 8px 24px rgba(0,0,0,0.7);
+}
+.leaflet-popup-tip{background:var(--surface);border:1px solid var(--gold-dark)}
+.leaflet-popup-content{margin:0.7rem 0.95rem;font-family:'DM Sans',sans-serif;font-size:0.85rem}
+.leaflet-popup-close-button{color:var(--muted)!important}
+.popup-pseudo{font-weight:600;color:var(--gold);font-size:0.95rem;font-family:'Oswald',sans-serif;letter-spacing:0.03em}
+.popup-club{font-size:0.75rem;color:var(--cream);margin-top:3px}
+.popup-city{font-size:0.7rem;color:var(--muted);margin-top:2px}
+
+.edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:10000;display:none;align-items:center;justify-content:center;padding:1rem}
+.edit-overlay.show{display:flex}
+.edit-modal{background:var(--surface);border:1px solid var(--gold-dark);padding:1.5rem;width:100%;max-width:420px;position:relative}
+.edit-modal::before, .edit-modal::after{
+  content:'';
+  position:absolute;
+  width:14px;
+  height:14px;
+}
+.edit-modal::before{top:-1px;left:-1px;border-top:2px solid var(--gold);border-left:2px solid var(--gold)}
+.edit-modal::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold)}
+.edit-modal h3{font-family:'Bebas Neue',sans-serif;color:var(--gold);font-size:1.15rem;letter-spacing:0.15em;margin-bottom:1rem}
+.edit-field{margin-bottom:1rem;position:relative}
+.edit-field label{display:block;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.35rem;font-family:'Oswald',sans-serif}
+.edit-field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.55rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none}
+.edit-field input:focus{border-color:var(--gold)}
+.edit-actions{display:flex;gap:0.5rem;margin-top:1rem}
+.edit-cancel,.edit-save{flex:1;padding:0.7rem;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.18em;cursor:pointer;transition:opacity 0.2s}
+.edit-cancel{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.edit-save{background:var(--gold);color:var(--black)}
+.edit-cancel:hover,.edit-save:hover{opacity:0.85}
+.share-close{position:absolute;top:0.75rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;z-index:10}
+.share-close:hover{color:var(--white)}
+
+/* SCROLLBAR */
+*::-webkit-scrollbar{width:6px;height:6px}
+*::-webkit-scrollbar-track{background:var(--black)}
+*::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:0}
+*::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+/* RESPONSIVE — Tablette */
+@media(max-width:1100px) and (min-width:769px){
+  .layout{grid-template-columns:220px 1fr 220px}
+  .form-section,.clubs-section{padding:1rem}
+}
+
+/* RESPONSIVE — Mobile */
+@media(max-width:768px){
+  .tribune-banner{font-size:0.62rem;letter-spacing:0.25em;padding:0.35rem 0.5rem}
+  header{padding:0.7rem 1rem}
+  .logo{font-size:1.5rem}
+  .logo-emblem{width:36px;height:36px;font-size:0.85rem}
+  .logo-sub{font-size:0.58rem}
+  .header-right{gap:1rem}
+  .counter{font-size:1.5rem}
+  .discord-badge{padding:0.35rem 0.7rem;font-size:0.65rem}
+
+  .layout{grid-template-columns:1fr;height:auto;min-height:0}
+  .sidebar,.right-panel{border-right:none;border-left:none;border-bottom:1px solid var(--border);overflow:visible}
+  .sidebar::before,.sidebar::after,.right-panel::before,.right-panel::after{display:none}
+  #map{height:60vh;min-height:400px;order:-1}
+  .members-section{max-height:300px}
+  .clubs-section{padding:1rem 1.25rem}
+
+  .sidebar{order:1}
+  .right-panel{order:2}
+
+  .toast{bottom:1rem;right:1rem;left:1rem;font-size:0.78rem}
+}
+
+@media(max-width:400px){
+  .header-right{flex-direction:column;gap:0.3rem;align-items:flex-end}
+  .header-stat{display:flex;gap:0.4rem;align-items:baseline;padding:0}
+  .header-stat::after{display:none}
+  .counter{font-size:1.1rem}
 }
 </style>
 </head>
 <body>
+
+<div class="tribune-banner">
+  <span>Casuals d'Europe · Liberté pour les ultras</span>
+</div>
+
 <header>
-  <div>
-    <div class="logo">CASUAL <span>MAP</span></div>
-    <div class="logo-sub">Casual Division</div>
+  <div class="logo-wrap">
+    <div class="logo-emblem">CD</div>
+    <div>
+      <div class="logo">CASUAL <span>DIVISION</span></div>
+      <div class="logo-sub">— LA CASUAL MAP —</div>
+    </div>
   </div>
-  <a class="discord-badge" href="https://discord.gg/hbKPnjCWtZ" target="_blank">
-    <span class="discord-dot"></span>Rejoindre Casual Division
+  <a href="https://discord.gg/9MyKkBg6" target="_blank" class="discord-badge">
+    <span class="discord-dot"></span>
+    <span>Rejoindre Discord</span>
   </a>
-  <button class="share-btn" onclick="openShare()">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-    Partager
-  </button>
-  <div style="display:flex;gap:1.5rem;align-items:center">
-    <div style="text-align:center">
-      <div class="counter" id="total-counter">...</div>
+  <div class="header-right">
+    <div class="header-stat">
+      <div class="counter" id="total-counter">…</div>
       <div class="counter-label">Membres</div>
     </div>
-    <div style="text-align:center">
+    <div class="header-stat">
       <div class="counter" id="stat-clubs">0</div>
       <div class="counter-label">Clubs</div>
     </div>
   </div>
 </header>
+
 <div class="layout">
   <div class="sidebar">
     <div class="form-section">
@@ -195,18 +679,20 @@ body.admin-mode .btn-edit{display:block}
         <input type="text" id="input-pseudo" placeholder="ton_pseudo" maxlength="32"/>
       </div>
       <div class="form-group">
-        <label>Ville du club *</label>
-        <input type="text" id="input-city" placeholder="Ex: Manchester, Paris, Lyon..." autocomplete="off"/>
-        <div class="search-results" id="city-results" style="display:none"></div>
+        <label>Nom du club *</label>
+        <input type="text" id="input-club" placeholder="Ex : PSG, Marseille, Manchester..." maxlength="50" autocomplete="off"/>
+        <div class="search-results" id="club-results" style="display:none"></div>
+        <div class="help-text" id="club-help">Tape les premières lettres et choisis dans la liste.</div>
       </div>
       <div class="form-group">
-        <label>Nom du club *</label>
-        <input type="text" id="input-club" placeholder="Ex: PSG, Lyle FC, Man City..." maxlength="50"/>
+        <label>Ville *</label>
+        <input type="text" id="input-city" placeholder="Auto-rempli avec ton club" maxlength="100" autocomplete="off"/>
+        <div class="search-results" id="city-results" style="display:none"></div>
       </div>
-      <button class="btn-add" id="btn-add" onclick="addMember()">AJOUTER MON MARQUEUR</button>
+      <button class="btn-add" id="btn-add" onclick="addMember()">Ajouter mon marqueur</button>
     </div>
     <div class="members-section">
-      <div class="section-label">Membres — <span id="member-count">0</span></div>
+      <div class="section-label">Derniers membres · <span id="member-count">0</span></div>
       <div id="members-list"><div class="empty-state">Chargement...</div></div>
     </div>
   </div>
@@ -214,60 +700,40 @@ body.admin-mode .btn-edit{display:block}
   <div class="right-panel">
     <div class="clubs-section">
       <div class="clubs-title">Top Clubs</div>
-      <div id="clubs-list"><div class="empty-state">Chargement...</div></div>
+      <div id="clubs-list"><div class="empty-state">Aucun club<br>pour l'instant</div></div>
     </div>
     <div class="casual-strip">
-      <a href="https://casuhall.fr" target="_blank" style="display:flex;align-items:center;gap:0.6rem">
-        <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADTANMDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIBQYBAwQCCf/EAEoQAAEDBAEDAwEEBgMKDwEAAAEAAgMEBQYRBxIhMQgTQSIUFVFhIzJCcYGRCTNiFiQ3UnKCoaKz0xgmNDlDVFZjdHV2hJKUtMP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8ApkiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIpi9JfFbeUeTY6e5Rk2G1NFXcv+8G/oh/zz5/shy4m42t909QmS2OSaO04jaLzOblXHTIaOlErtMBP7R10MaNkn4Oig0vjvjfN+Qax1NiWPVlyDDqWZrQyGP/KkdpoP5b2vby3xheeMaujt2R3OzyXWoYZH0FHUmaWnZ8GTsA3fwNknyrKcnepvFsGxWPCeFLMIWQxe1FcJqYxQwjwXRscA6R/z1OGt9/qVPLxcq+8XSpul1rJ62uqpDLPPM8ufI4+SSfKDyIiICIiAiIg9NrpWVtxp6SSsp6Nk0gYZ5yRHHv8AacQCQPxOlJeZ+n7lLGLULxNj4utqMYlFbaZ21cZYe4d9H1dOu+9aUVqc/Tp6jck4tcyzXGOS94uT/wAjc/UtNvy6Fx8D8WHsfy8oIqwbEL9mt6ksuOUf2y4NppakQBwDntjb1ODd+Xa8D5WDkY+OR0cjHMe0lrmuGiCPIIV58MuvFV659xrkvjSqiEtf71Hf7WIvamgMsZDKn2z8demvLdj6g78Sop9ffHtHivJNHk9ppxBR5FG+SdjBpraphHWR+HUHNd+/qKCtiLkgg6III+CuEBERAREQEREBERAREQFtPGGB3/kTI5LDjsDZauOjmq3dXZobG3et/Bcelo/NwWrK5X9GpaaZ0uZX13epjFNSM/Jjut7v5lrf5IPf/R53exWXjzOJrjXUtDVUdW2prHTODTHTti7PcPPSHdf8f3r1YJ6jeBsZsNTHFary+ulr562pkkt7HyVdQ95Jm6urQ3vsCR0jt8d9k454l46xu1ZVdc6rrZC27XeerqaWorGxRx0jZXPghlBIPT4kLPBPSCD06UDeqPlnjW90bsP41wuwMpI36nvTbbHG93Sf1YNNBA/F57n4HyQ8XqL9SD+ULbJYrfiFtt9sLgRU1cbZ6zt8tdrUf+bs/mq/IiAiIgIiICIiAiIgtr6c+CsCyy10WS4ry7co8lpNSuZSU7IZKOT8DG8lzm/G99Lgtr9X+J5rfMn4vjyB1JXWD7xgt9dUUkTmgVE0zGue9p30tewN0NkA9Q34VK7PcK+13KGttlwqLfVRu/R1EEro3x/mHN7hXCsuD+oaa2WTLn5tQ8h4+AypfbIrk54q4dg6aXtaDINbad7a4D5CDR/6QDAKTGOR7fk9rpo6eiv1ORLHG3pa2oi6WuIA7AFpYf3hyrSrjeujJKbPb/g/HuM089Ve5ZPtDoHxFj4nThrY43b8O8lw+NDaq/ylh1dgGe3XELjMyept0jWOlY0tbIHNDg4A99EOCDWUREBERAREQEREBERBt3DOOwZZyvi+OVUfu0tfc4YqhmyOqLqBkGx/ZDlZzjHG8r4R9VN0w3FqF91sN2t8lcyB5PU6maHGPTvAe2T9Hs9j1d9b7Vj4ZyOLEOVcYyWpJbS0FyikndreourT/wDVJV8vUPyTR8dXDGs2xyzRZRe75TutlBDFMdPpyRKXs6AS4l3tgAedoIh5L4CxnGMTvPJfM2aXGqvdc987qS19EbZKqTZELC8OL+/bemgAE+AqfHW+3hS56mL3yzf79b7pyhb5bQKmN77ZbiBGyGIEbIj2XDZ1tzu51+XaIkBERAREQEREBERAREQFMvpy5szzjWsfbbLRTZBZXkzT2ktc7o/GSMtBMZ8b7EH5HyoaW1cU5xd+Os7t2V2Z/wCmpJP0sROmzxH9eN35EfyOj8ILj8WZhi/OnP8AZMxo8fqLLd8WpJWVcFTI17qhkjHNY4aA/q3ucO/f9IPwUGevk0x9Q9Z9nLDILdSifp8h/SfP59PT/DSt7j02IchWyDl/jptI3JIKCeIFrAHyOdGT9mqWjROn9DgfPYEHR71Wxriy4cgcTZ/zpyBWTzXCalqai2s/qw+SMfVK4D9kFvQ1vjsfwCCtqIiAiIgIiICIiAiIgtp6P8DxvlPg3M8PvcEX2mK4sqKOqAHu0sj4dMkafOtsOx4I2FK/p3xaxcZcPUGYciSw0lfZft8LJqp2xSsM7muEYP7TvbaB09yOw8lVj9M/IN54VySlya92W4vxHIoTBLKyP6ZOh5AkjJ+lzmODgW73ou/JT3e+MKX1CcxnLai53CDAILZRy0zG7jdVSSMLy1gPZnnbjrfcD52Aqlz1yLWcocl3HKJ2vipXEQ0FO479mnb2Y3957uP5uKlLhb0o37PsJpMrueS01gpa9pfRQmlM8kjN6a931NDQ748nWj8qG+X249FybkFNidIylsdNWvp6KNj3PBjj+jq6nEk9RaXdz8q5fNlzZj/pQ41u+pWw0NZZah7YDpxayPqIHjv2QVvu/p9ySzc6Wfi+63KmiN42+kucUTnxPjDXEu6dg7BYQW77fjpbXzH6VLjx3x1dMwdmNNc2W/2y+mjoXRlwc9rD9XWda6t+FKGH8p49zb6pcFuFitd0oo7HQV75hWtjBJcz6SOhzu2z8/it/wCSZTkPB3M1EXe46jrqyNrT+z7cUMgH+jaCuXDnpNvudYNRZVdMnprDDcWe7RQGlM73sP6rnfU0N6vIHc60vHj/AKV8jreWrrx/dMgpLfJRW5txp61lO6WOqhdIGAgbBad7BB8EfuKn3hq4Wfmj082GxWS9/dGU4oaWSPt1GmqqftFI5n7cTwO4/MjyF4/ThfeSLt6j8nt/KDYW3qz2H7Kz2YGxsdEahjw5paNOad7BQQDifpvrMgxHN8gZldPA3FK+vonwmjc41JpWdRcD1fT1eNd9LJ5P6ZILViWH32jzqKu/ukudFb2sFCA2A1DSS7qEh6ukjWtDf5KeeGP8EvOP/qK/f7JVf4k5EyS+5dxdgtZLTMsdjvsD6WGGEMLnul7vef2j9Tv/AJFBtNw9K9bScwWzjs5lTPkr7TLchV/YXAMDH9PR09fffne1hcL9Otfk3NOU8bxZNBTnHofckr3Uhc2U7YAAzq7frn5P6qvZcsHFXzXaeQfvVrDQWea3fYfa2ZOt/V19W+2vGtfxUV8GwmH1Oc2XV7P0UL6ZnV/mlxH+qEFZOfvTzW8T0Viq5smgu0d2rDSD26Qxe0dAg93He+/8lj/UhwZU8NMsbqjIobx96mcAR0pi9v2+jztx3vr/ANCsJ6m6tmSemDj7JAfcc+6UMvX511xvDv8ASsP/AEmH9Vgv+VXf/wAEENngOqHp1PMP90sHs+wJfu77Ker+v9nXX1a/PwoVV33/APNuO/8ABN//AHhUgQWstvCtytvGln5g4Zyq7Sg00dbXWl0pZI/2yDLG1zNB/S5rx0OHcDsT4MoeqzLMZwX02R4XZqtgqr5AyKjpg8e42BzxLJI4fDdEt/Mu/eod9LXM1w4bpWWPPLTc2Yjem/bbfVCAn2nEaL2fD43aGwO4I3ruVK2CcL4/mvNmYco5VCyqxuKuDrTSzDUU/wCiY8yvB/6NoOg3wTvfjRCh6LLZnXQXPML1cqaKOGCruE88UcbQ1rGukc4AAdgADoALEoCIiAiIgIiICIiC63olqMa5G4Uv/E2UU8VWyjndOyF5HUIZe4fH8tcyTqOx4Lx+KynJ/I9ZwzxlauFMfpK65ZtLbxS0tRBCelkT3vYyRuu7pC0dmgdj89tGt/p8xblGonrM64qmiludhka2opGSgTvjeCf6t3aRjukgt3vY7DfdWv8ATdWVHLOZjlLLbTR0mR4/Sy2KWnZE5hgl6w8SdDyS13Q97f4uCCiWcYrfcMyKWwZJSCkucUcck0HuNeWdbQ8AlpI3ojYV+L7jdw5B9NvGNJjlNDcmxVVnqahrntDRDE3UpPV2Ou4I8+eypb6kMhhynnLLbzTTNmppLg6KCRp7OjiAjaR+RDAf4rjjzmfkvAbS+04vlFRR29xc4Uz42SsY4+S0Paen+HZBf37nslJ6nLNHabdQUclLilZNOymgbHr3KmBrC4NA89L9b/ArpoKPDLvh/LFrwu/Pu1bcpq590jc7q+y1kkBj6G/SO36Px38HuqDWnmbk+15Tccoo8vrG3m5RNiqqqSOOVz2NO2tAe0hrR+DQAunD+W+RMRnu02O5NPQSXif7RXubBE/35PqPUepp1+s7xryguBx3xpRW/jHjbPOK7FFBks0tvfdaqOqcPfpHDVU14c7pIJ7kAbBHbuFJslZbYvVdDRiSJtdPhb+ob+pwbWNLR/LrP7tr8/OP+auTcDtRtOM5TUUlv6nObTPijljY5x2S0Paenv37aG1hJ+Qc1nzkZxLktwdkbXBza/3NSDQ1oa7Buu3TrWu2kF9cXxy64LxBzHNk8UVDHX3S83CleZWkSQSxfo3dj22e2j3VGuAf8N2F/wDnVL/tGr2Z9zbyfnVk+5MlyqoqrcekyU8cUcLZSDsF/Q0dXfR0e2wtIsV1uFjvVHebVUupq+imbPTzNaCY5GnbXaIIOj+IQfpJkT3j1kYvGHu6DiNUS3fbfvfgurieCigzDm653Gb7NRvvXt1E/jojjpGuc7+AeSqMVHN/Kc+XU2WS5bO69UtI6jhqvs0G2Qud1OZ09HSdnvsja+Y+a+UI6O+UjMsnbDfpJJbm0U0P98OfGI3kno2Nsa0fTrwgt9y3bMUPo2pqbCbrJebFa6mkdRVcjupzwysa12z0t8dTh4HhdHru44zXkBmIjD7DPdvsRq/tPtyMb7fX7XTvqI89Lv5Km9ByjnlDgbsEpchmjxxxJND7MRb3f7n6xb1frDflbX/wlub/APt7U/8A0qb/AHaCzllxXIL56CRidqtslVe3wOgbSNc0OMkdcetuyddul3z8Kkec4hkeEXz7kym1y2y4e02b2ZHNceh29HbSR8FbjYefuXrFbGW21ZpUU1Ix8kjYxSwO0573PedmMnu5zj/FahneY5LnN9+/Mruj7ncfabD7z42MPQ3ehpgA+T8ILl+mi32HmT0n1WA3eOCSrtD5qWJ5AMlM9xMkEzfkd3EfmGuH4rE8+87w2TBncNYbR1tTk7KVlouU8cJ6YS1gZK2IDu97u42BobJ7lYqbj7LeCuSMNyLjO4z1Fhy2eloKmlnAkDXyaJjf4Dhrqc13YjRH75UvlkxrgHjbKeRbi2mq81uss8ra2QB0jqmdzjHDFvwxuwTryGuJ+AA/O6WN8UjopWOY9hLXNcNFpHkEL5X3NJJNM+aVxfI9xc5x8knuSvhAREQEREBERAREQSd6auUZuKeSqa9yNkltNUz7Lc4GeXQkg9QHy5pAcPx7j5VyOfKmKq4TyjkLiS+Qx1V0poH189vLSamFpLXH8WyBjyCeztN18L87acxCojNQ17oQ8e4GHTi3fcAnwdK3WNencss9k5N4dys5FR6bVG0XJojNSzxJAXtPSHFvUwhwHz3Qax6h+GLRxn6eMRrY6dkt/qrg111rD3c50kLnCJv4MaRoD5OyfKrQroesrIG8jZDg3EeMU9QLtUzx1U8dQx0f2cyM6Y2P2PLWl7nfgAqr8rYbWcf8g3fEK6YTzW6YMEwb0iVpaHNeB8baQdINXWZwe2094zC02ur6vs9VVxxShp0S0nuAfhYZdlNNNTVEdRTyvimjcHsex2nNcO4II8FBNj+JbHX+5X+zfLHTuqIgyCRrJv0ZMbXluiXHu/ez4HkHuumt4bt1NNC01N4PXOGOiLIg8M9yRuwd9P6rA7f4Hx8KMjmGVku3kd1PVKJnf30/u8a07z57D+QXH91+Vdv+MV07SmYf30/tId/V589z/NBJ9bxrjdq5Bx7H54a2upqmmqX1D2ucDI5pd0Odru1oHT1EfgSvTFxTjE9VTPlNxofsrIX3ClfK15d1zSR6Dh/aa1ux+O/KiJ+TZE+5Q3J98uDq2AERTmocXsB8gHexvZXogzHJIbbPQNus5in6Opzz1SAMk9xoa892jr+rsfKDfsx41sdiulmMUtzq4666tgmpIY+pwie52mxn5cA3Xc7PlbLV8OY3cYHCj+2WuVtU5zHMl99ktPqHWurRBIeSN9xvR3pQjV5DfqttO2qvNfMKaUywB87j7bydlze/Y7+V3vy7KXvc9+Q3Quc7rJ+1P2Xbad+f7Lf5BBIGZcWWizYdc73S3O4STUwbLFHLGwNMZdE3pdrv1fpPjt2USLO3PMMluVm+6K671U9G6Z00jHP7yvcQdvPl2uka34+FgkBZrHMWv+RUV2rLLbZq2G0Uv2uuMY2YouoNLtfOt77fAJ+FhVcP+jYo6SeoziSYNkkdDSwujcNgxky72PwPhBus3M9iq/SvZMttwpK7JrLLR0tPbpAZHMuLWmNu2DTiCzreNeR+ewq9+omPm/Jcfos55Spm2u2e8Ke30D3Ng054JJZBsu3pvdzu+gPjSspxBiHGPDmP3TIstuVlo66O8VVTE2edrpKRnU5kMbY9kmQR9wAOoe44fiqp+qDmKp5czdtTTMmpsftwdFbaaTs4g66pXgftO0O3wAB+OwiNERAREQEREBERAREQFK3APOeWcR10kVvay5WSpf11NsncQ0u8dbHDux+vnuD8g9tRSvdYLtX2K9Ud5tcwhraOVs0LywOAcD22CCCPyI0gufx9zLhvLXqLw+6ux6THb5boZ4IZamoa8VrZI3t9rehpzS7qafnbh5IWjetfE6vKfU/arBjUEc94u1sgaYuoN28GTRcfj6GjufgKTuLebuHOVLJT2nkW02Wx5BGWkuqImxQvkbrpkhn7GN2+4BIIPglez7kxCg9WuP5pjuY2/Iqq5wSQV9Cbgyeop/0Ptsnj0TtvYAtHcAkga3oKD11LUUNbPRVkL4KmnkdFNE8acx7TpzSPxBBC6VZ31w8cCn57s89lZFE7MPbb0Hs0VXW2Nzj+APVGT+ZcoAz7Er7g+VVuNZHROpLhSP6XNPdr2/svYf2mkdwUGBREQEREBERARdlPDNUTNhp4pJpXfqsY0ucf3AKY/SPxMOUeR2/ecTjj1oDam4nXaU7+iHf9og7/ALLXfkg6/RxhUea862iKrp/et9qBuVU1zQ5pEeugOB7aMhZ+8bU+YXiGb4t6pORX8ZUtI20GFoqI6lvTTNnnYJI27+Oh7nP+nem/Tr6gsHw/cqDjT1P8n1NHj9ZNj8Xv0zG2+AvMcvuNkZBGwfrOcQ5oaPGtnQBI+rzzX6ibFDfLpTcTutVqqZ31bJaizzOdTtPl0jwQHnQG3OHx+AAQY3mDgPAuOcNr8v5Jzu83jI6973wQUYigNXVO249nB7i3qO3O7aHxvQNTFsGe5nk2dX+S+ZVdqi5Vr+wdIdNjb/isaOzW/kAtfQEREBERAREQEREBERAREQct1sb3r50rc+nzjH075jQUlRbs2yKmyaLUhhmro6KpgkGjuIBunaPhzSfz0qirlpLSCCQR3BHwg/QX1K8Wzz2vH87qeRIYrniLmvppL0WRQVQbIHtD3MHaUkNBcBp3bsPK+PVnitj5Q4AHIVFHTx3W0UorIZo5WSbi7e7CXtJDh3LgQfIGvJVOOKKXDciyeKj5NzK52azs0WPiidMXu3rp6u/tjX7XSVc3Bn+lnEbROyy5ZaRRVDeiqgqbtLLHUAjuJIXu6Xfxag/PZFNnOWTcH1OaT0+DYGZLU1oa+upq6WlMkmzsxMcHNDNa8t7/AJBaOJuK3gF1uzKF2u7W1tM8b/eYgg0tFIFmsvH+SXWCzWU5lT11S7ph3TQ1gJ8nbWFh0BskjwBte+/8eY3iVBHcb9klRfaWWZ0LJccgbLTte0n6HzyEBsmhvo6T28EjugjBdlPDLUVEdPBG6SWV4YxjRsucToAfxW4+5xV/1TND/wC5pv8AdruteS4Nj94p7pZcQuNdU0srJqd11um2Nka4OaSyFjN9x4LtILdcfcVY1wJw1c8uySGOuzKst74m6b7j45pWFrKWBvkuJIDnDue/7IWlen/Mqjgnh+90t8w+8z5NXVpnp6KCmcXBnttawzuAIhAO/pP1d/HdaHY/VpyRFndPkF+jtt1t8Qcz7rbTtijYHEfVG/Re1412JJ7bBUq3D1wWoUT/ALvwCtNVr6BPXtDAfz0wnSDz4T6ucBxvGGUJ49utFcw98tTHTvjcyWocdySOke4PLnHZJIJ+FDXOvqPzbk6OS1REWDH3Eg0FLIS6Yb7e7J2L/wDJADfyK03mfky68oZKL3dbTZ7a9jSxjKClEZI/tv7uefzJ7fGloqAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIg2sZLS2jEGWXG2TU9ZXxn75r3gNllGzqnjI7tiA0XfLye/YAHx4Zk9TjlZK0wsrrVWNEVxt0xPtVUW/B/xXDy147tPcfIOARB7b422Nu9ULNJUvt3uE0xqWhsvR8BwB1seO3leJEQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQf//Z" alt="Casu'Hall" style="height:28px;width:auto;opacity:0.85;mix-blend-mode:screen"/>
-        <span>casuhall.fr — Les meilleures pièces casual d'occasion →</span>
+      <a href="https://casuhall.fr" target="_blank">
+        casuhall.fr · Pièces casual d'occasion →
       </a>
     </div>
   </div>
 </div>
+
 <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
 <div class="toast" id="toast"></div>
+
 <div class="edit-overlay" id="edit-overlay" onclick="if(event.target===this)closeEdit()">
   <div class="edit-modal">
     <button class="share-close" onclick="closeEdit()">✕</button>
-    <h3>MODIFIER LE MEMBRE</h3>
+    <h3>Modifier le membre</h3>
     <input type="hidden" id="edit-id"/>
     <div class="edit-field">
       <label>Pseudo Discord</label>
       <input type="text" id="edit-pseudo" maxlength="32" disabled style="opacity:0.5"/>
     </div>
     <div class="edit-field">
-      <label>Nom du club</label>
+      <label>Club</label>
       <input type="text" id="edit-club" maxlength="50"/>
     </div>
     <div class="edit-field">
-      <label>Ville du club</label>
+      <label>Ville</label>
       <input type="text" id="edit-city" maxlength="100"/>
     </div>
     <div class="edit-actions">
-      <button class="edit-cancel" onclick="closeEdit()">ANNULER</button>
-      <button class="edit-save" onclick="saveMember()">ENREGISTRER</button>
+      <button class="edit-cancel" onclick="closeEdit()">Annuler</button>
+      <button class="edit-save" onclick="saveMember()">Enregistrer</button>
     </div>
-  </div>
-</div>
-
-<div class="share-overlay" id="share-overlay" onclick="if(event.target===this)closeShare()">
-  <div class="share-modal">
-    <button class="share-close" onclick="closeShare()">✕</button>
-    <div class="share-card">
-      <div class="share-card-inner">
-        <div class="share-card-badge">LIVE</div>
-        <div class="share-card-title">CASUAL <span>MAP</span></div>
-        <div class="share-card-sub">Casual Division — Europe</div>
-        <div class="share-card-divider"></div>
-        <div class="share-card-cta">Ajoute ton marqueur sur la carte</div>
-        <div class="share-card-url">xxvc5xx.github.io/casual-division-vip/map.html</div>
-      </div>
-    </div>
-    <div class="share-actions">
-      <button class="share-action-btn primary" onclick="copyLink()">COPIER LE LIEN</button>
-      <button class="share-action-btn" onclick="shareInstagram()">PARTAGER EN STORY INSTAGRAM</button>
-    </div>
-    <div class="share-hint">Fais une capture d'écran de la card pour la partager en story</div>
   </div>
 </div>
 
@@ -275,194 +741,820 @@ body.admin-mode .btn-edit{display:block}
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ============================================================
+// BASE DE DONNEES CLUBS (sans divisions affichées)
+// Format: [nom_officiel, ville, pays, [aliases]]
+// ============================================================
+const CLUBS_DB = [
+  // FRANCE
+  ["Paris Saint-Germain","Paris","France",["PSG","Paris SG","Paris","Les Parisiens"]],
+  ["Olympique de Marseille","Marseille","France",["OM","Marseille","L'OM","Les Phocéens"]],
+  ["Olympique Lyonnais","Lyon","France",["OL","Lyon","Les Gones","Gones"]],
+  ["AS Monaco","Monaco","Monaco",["ASM","Monaco","Les Monégasques"]],
+  ["RC Lens","Lens","France",["RCL","Lens","Racing Club de Lens","Sang et Or","Les Sang et Or"]],
+  ["LOSC Lille","Lille","France",["LOSC","Lille","Lille OSC","Les Dogues","Dogues"]],
+  ["Stade Rennais FC","Rennes","France",["SRFC","Rennes","Stade Rennais","Les Rouge et Noir"]],
+  ["OGC Nice","Nice","France",["OGCN","Nice","Les Aiglons","Aiglons"]],
+  ["RC Strasbourg Alsace","Strasbourg","France",["RCSA","Strasbourg","Racing Club de Strasbourg","Les Alsaciens"]],
+  ["Stade de Reims","Reims","France",["SDR","Reims","Les Rouges et Blancs"]],
+  ["Montpellier HSC","Montpellier","France",["MHSC","Montpellier","La Paillade","Les Pailladins"]],
+  ["FC Nantes","Nantes","France",["FCN","Nantes","Les Canaris","Canaris"]],
+  ["Toulouse FC","Toulouse","France",["TFC","Toulouse","Les Violets"]],
+  ["Stade Brestois 29","Brest","France",["SB29","Brest","Stade Brestois","Les Pirates","Brestois"]],
+  ["Le Havre AC","Le Havre","France",["HAC","Le Havre","Havre AC","Les Ciel et Marine"]],
+  ["AJ Auxerre","Auxerre","France",["AJA","Auxerre","Les Abbés","L'AJA"]],
+  ["AS Saint-Étienne","Saint-Étienne","France",["ASSE","Saint-Etienne","Saint Etienne","Les Verts","Verts"]],
+  ["Angers SCO","Angers","France",["SCO","Angers","SCO Angers","Les Noir et Blanc"]],
+  ["SM Caen","Caen","France",["SMC","Caen","Stade Malherbe","Les Normands","Malherbe"]],
+  ["Grenoble Foot 38","Grenoble","France",["GF38","Grenoble","Les Grenoblois"]],
+  ["Amiens SC","Amiens","France",["ASC","Amiens","Les Licornes","Licornes"]],
+  ["FC Metz","Metz","France",["FCM","Metz","Les Grenats","Grenats"]],
+  ["Pau FC","Pau","France",["PFC Pau","Pau","Les Pyrénéens"]],
+  ["USL Dunkerque","Dunkerque","France",["USDK","Dunkerque","USL Dunkerque","Dunkirk","Les Maritimes"]],
+  ["EA Guingamp","Guingamp","France",["EAG","Guingamp","En Avant Guingamp","Les Bretons rouges"]],
+  ["Stade Lavallois","Laval","France",["SL","Laval","Stade Lavallois","Les Tangos","Tangos"]],
+  ["Valenciennes FC","Valenciennes","France",["VAFC","Valenciennes","Les Athéniens"]],
+  ["Rodez Aveyron Football","Rodez","France",["RAF","Rodez","Rodez AF","Les Ruthénois"]],
+  ["Paris FC","Paris","France",["PFC","Paris FC","Les Parisiens du PFC"]],
+  ["ESTAC Troyes","Troyes","France",["ESTAC","Troyes","Troyes AC","Les Champenois"]],
+  ["Dijon FCO","Dijon","France",["DFCO","Dijon","Les Rouges","Les Dijonnais"]],
+  ["Girondins de Bordeaux","Bordeaux","France",["FCGB","Girondins","Bordeaux","Marine et Blanc"]],
+  ["AC Ajaccio","Ajaccio","France",["ACA","Ajaccio","AC Ajaccio","Les Ajacciens"]],
+  ["Clermont Foot 63","Clermont-Ferrand","France",["CF63","Clermont","Les Lanciers"]],
+  ["USL Concarneau","Concarneau","France",["USL Concarneau","Concarneau","Les Thoniers"]],
+  ["SC Bastia","Bastia","France",["SCB","Bastia","SC Bastia","Les Corses","Les Bleus de Bastia"]],
+  ["Red Star FC","Saint-Ouen","France",["Red Star","RSFC","Les Audoniens"]],
+  ["FC Villefranche-Beaujolais","Villefranche-sur-Saône","France",["FCVB","Villefranche"]],
+  ["FC Martigues","Martigues","France",["FCM Martigues","Martigues","Les Martégaux"]],
+  ["Chambéry Savoie Football","Chambéry","France",["CSF","Chambéry"]],
+  ["FC Annecy","Annecy","France",["FCA","Annecy","Les Hauts-Savoyards"]],
+  ["AC Avignon","Avignon","France",["AC Avignon","Avignon","Les Avignonnais"]],
+  ["AS Béziers","Béziers","France",["ASBH","AS Béziers","Béziers","Les Biterrois"]],
+  ["Bergerac Périgord FC","Bergerac","France",["BPFC","Bergerac"]],
+  ["FC Versailles","Versailles","France",["FCV","Versailles","Versailles 78","Les Versaillais"]],
+  ["SO Cholet","Cholet","France",["SOC","SO Cholet","Cholet","Les Maugesons"]],
+  ["FC Limonest","Limonest","France",["Limonest","FC Limonest","Limonest Saint-Didier"]],
+  ["SAS Épinal","Épinal","France",["SAS Epinal","Epinal","Épinal","Les Loups"]],
+  ["Tours FC","Tours","France",["TFC Tours","Tours FC","Les Ciel et Rouge"]],
+  ["Le Mans FC","Le Mans","France",["LMFC","Le Mans","Les Ciels et Blancs"]],
+  ["Chamois Niortais","Niort","France",["DSFC","Niort","Chamois Niortais","Les Chamois"]],
+  ["Nîmes Olympique","Nîmes","France",["NO","Nîmes","Les Crocodiles"]],
+  ["US Quevilly-Rouen Métropole","Rouen","France",["QRM","Quevilly Rouen","Les Rouge et Blanc"]],
+  ["FC Rouen","Rouen","France",["FCR","Rouen","Les Diables Rouges"]],
+  ["AS Cherbourg","Cherbourg","France",["SC Cherbourg","Cherbourg","Les Vikings"]],
+  ["Stade Briochin","Saint-Brieuc","France",["SB","Briochin"]],
+  ["FC Saint-Malo","Saint-Malo","France",["Saint-Malo","FC Saint-Malo"]],
+  ["US Orléans","Orléans","France",["USO","Orléans","Les Orléanais"]],
+  ["C'Chartres Football","Chartres","France",["Chartres","C'Chartres Football"]],
+  ["US Créteil","Créteil","France",["USR Créteil","Créteil"]],
+  ["US Boulogne CO","Boulogne-sur-Mer","France",["USBO","Boulogne","Les Hammers"]],
+  ["AS Nancy-Lorraine","Nancy","France",["ASNL","Nancy","Les Chardons"]],
+  ["FC Mulhouse","Mulhouse","France",["FCM Mulhouse","Mulhouse"]],
+  ["FC Colmar","Colmar","France",["Colmar","FC Colmar"]],
+  ["Racing Besançon","Besançon","France",["RCB","Besançon","Racing Besançon"]],
+  ["SC Toulon","Toulon","France",["SC Toulon","Toulon","Sporting Club Toulon"]],
+  ["FC Hyères","Hyères","France",["FC Hyères","Hyères","Les Canaris Varois"]],
+  ["SC Grasse","Grasse","France",["SC Grasse","Grasse"]],
+  ["AS Cannes","Cannes","France",["AS Cannes","Cannes","Les Cannois"]],
+  ["Olympique d'Alès","Alès","France",["Alès","Olympique d'Alès"]],
+  ["Aviron Bayonnais FC","Bayonne","France",["Bayonne","Aviron Bayonnais"]],
+  ["LB Châteauroux","Châteauroux","France",["LBC","Châteauroux","LB Châteauroux"]],
+  ["CA Brive Football","Brive","France",["Brive","CA Brive"]],
+  ["CS Sedan-Ardennes","Sedan","France",["CS Sedan","Sedan","CSSA"]],
+  ["Angoulême CFC","Angoulême","France",["ACFC","Angoulême"]],
+  ["US Granville","Granville","France",["USG","Granville","Les Mousquetaires"]],
+  ["FC Évreux","Évreux","France",["FCE","Évreux","Les Rouges et Bleus"]],
+  ["US Dieppe","Dieppe","France",["Dieppe","US Dieppe"]],
+  ["AC Bobigny","Bobigny","France",["AC Bobigny","Bobigny"]],
+  ["AS Bondy","Bondy","France",["Bondy","AS Bondy"]],
+  ["AC Poissy","Poissy","France",["Poissy","AC Poissy"]],
+  ["RC Arras","Arras","France",["Arras","RC Arras"]],
+  ["AS Tourcoing","Tourcoing","France",["Tourcoing","AS Tourcoing"]],
+  ["SC Roubaix","Roubaix","France",["Roubaix","SC Roubaix"]],
+  ["Vannes OC","Vannes","France",["VFC","Vannes","Vannes FC"]],
+  ["FC Quimper","Quimper","France",["Quimper","AS Quimper"]],
+  ["Biarritz Olympique","Biarritz","France",["BOFC","Biarritz","Biarritz Olympique"]],
+  ["FC Bourges 18","Bourges","France",["Bourges","FC Bourges"]],
+  ["AS Vichy","Vichy","France",["Vichy","AS Vichy"]],
+  ["FC Sète","Sète","France",["Sète","FC Sète"]],
+
+  // ANGLETERRE
+  ["Arsenal FC","Londres","Angleterre",["Arsenal","Gunners","The Arsenal","AFC"]],
+  ["Chelsea FC","Londres","Angleterre",["Chelsea","Blues","The Blues","CFC"]],
+  ["Liverpool FC","Liverpool","Angleterre",["Liverpool","Reds","The Reds","LFC"]],
+  ["Manchester City","Manchester","Angleterre",["Man City","City","MCFC","Cityzens"]],
+  ["Manchester United","Manchester","Angleterre",["MUFC","Man Utd","Man United","Red Devils"]],
+  ["Tottenham Hotspur","Londres","Angleterre",["Spurs","THFC","Tottenham"]],
+  ["Newcastle United","Newcastle","Angleterre",["NUFC","Newcastle","Magpies","Toon"]],
+  ["Aston Villa","Birmingham","Angleterre",["AVFC","Villa","The Villa","Villans"]],
+  ["West Ham United","Londres","Angleterre",["WHU","West Ham","Hammers","Irons"]],
+  ["Brighton & Hove Albion","Brighton","Angleterre",["Brighton","BHAFC","Seagulls","Albion"]],
+  ["Brentford FC","Londres","Angleterre",["Brentford","BFC","The Bees"]],
+  ["Fulham FC","Londres","Angleterre",["Fulham","FFC","Cottagers"]],
+  ["Crystal Palace","Londres","Angleterre",["CPFC","Palace","Eagles"]],
+  ["Wolverhampton Wanderers","Wolverhampton","Angleterre",["Wolves","WWFC","Wanderers"]],
+  ["Everton FC","Liverpool","Angleterre",["Everton","EFC","Toffees"]],
+  ["Leicester City","Leicester","Angleterre",["LCFC","Leicester","Foxes"]],
+  ["Nottingham Forest","Nottingham","Angleterre",["NFFC","Forest","The Forest"]],
+  ["AFC Bournemouth","Bournemouth","Angleterre",["AFCB","Bournemouth","The Cherries","Cherries"]],
+  ["Southampton FC","Southampton","Angleterre",["Saints","SFC","Southampton"]],
+  ["Ipswich Town","Ipswich","Angleterre",["Ipswich","ITFC","Tractor Boys"]],
+  ["Sunderland AFC","Sunderland","Angleterre",["SAFC","Sunderland","Black Cats"]],
+  ["Sheffield United","Sheffield","Angleterre",["SUFC","Sheffield Utd","Blades"]],
+  ["Leeds United","Leeds","Angleterre",["LUFC","Leeds","Whites","Peacocks"]],
+  ["Burnley FC","Burnley","Angleterre",["BFC","Burnley","Clarets"]],
+  ["Middlesbrough","Middlesbrough","Angleterre",["Boro","MFC"]],
+  ["Watford FC","Watford","Angleterre",["WFC","Watford","Hornets"]],
+  ["Queens Park Rangers","Londres","Angleterre",["QPR","Rangers"]],
+  ["Stoke City","Stoke-on-Trent","Angleterre",["SCFC","Stoke","Potters"]],
+  ["Blackburn Rovers","Blackburn","Angleterre",["BRFC","Blackburn","Rovers"]],
+  ["Derby County","Derby","Angleterre",["DCFC","Derby","Rams"]],
+  ["Norwich City","Norwich","Angleterre",["NCFC","Norwich","Canaries"]],
+  ["Hull City","Hull","Angleterre",["HCAFC","Hull","Tigers"]],
+  ["Preston North End","Preston","Angleterre",["PNE","Preston","Lilywhites"]],
+  ["Bristol City","Bristol","Angleterre",["BCFC","Bristol City","Robins"]],
+  ["Coventry City","Coventry","Angleterre",["Coventry","Sky Blues"]],
+  ["Millwall FC","Londres","Angleterre",["Millwall","The Lions","Lions"]],
+  ["Cardiff City","Cardiff","Angleterre",["Cardiff","Bluebirds"]],
+  ["West Bromwich Albion","West Bromwich","Angleterre",["WBA","West Brom","Baggies","Throstles"]],
+  ["Luton Town","Luton","Angleterre",["LTFC","Luton","Hatters"]],
+  ["Swansea City","Swansea","Angleterre",["Swansea","Swans","Jacks"]],
+  ["Plymouth Argyle","Plymouth","Angleterre",["PAFC","Plymouth","Pilgrims"]],
+  ["Portsmouth FC","Portsmouth","Angleterre",["PFC Portsmouth","Pompey"]],
+  ["Oxford United","Oxford","Angleterre",["OUFC","Oxford"]],
+  ["Sheffield Wednesday","Sheffield","Angleterre",["SWFC","Wednesday","Owls"]],
+
+  // ESPAGNE
+  ["FC Barcelona","Barcelone","Espagne",["Barça","Barca","FCB","FC Barcelone","Blaugrana","Culés"]],
+  ["Real Madrid CF","Madrid","Espagne",["Real Madrid","RM","RMCF","Merengues","Los Blancos"]],
+  ["Atlético de Madrid","Madrid","Espagne",["Atletico","Atleti","ATM","Colchoneros"]],
+  ["Sevilla FC","Séville","Espagne",["Sevilla","SFC","Nervionenses"]],
+  ["Real Sociedad","San Sebastián","Espagne",["Real Sociedad","RSO","La Real","Txuri-Urdin"]],
+  ["Athletic Club","Bilbao","Espagne",["Athletic Bilbao","Los Leones","Leones"]],
+  ["Villarreal CF","Villarreal","Espagne",["Yellow Submarine","Villarreal","VCF"]],
+  ["Real Betis","Séville","Espagne",["Betis","RBB","Verdiblancos","Béticos"]],
+  ["RC Celta de Vigo","Vigo","Espagne",["Celta Vigo","Celta","RCCV"]],
+  ["Girona FC","Gérone","Espagne",["Girona","GFC"]],
+  ["Getafe CF","Getafe","Espagne",["Getafe","Azulones"]],
+  ["Rayo Vallecano","Madrid","Espagne",["Rayo","RVDM","Franjirrojos"]],
+  ["CA Osasuna","Pampelune","Espagne",["Osasuna","CAO","Rojillos"]],
+  ["Real Valladolid","Valladolid","Espagne",["Valladolid","RVD","Pucelanos"]],
+  ["Deportivo Alavés","Vitoria-Gasteiz","Espagne",["Alavés","Babazorros"]],
+  ["Valencia CF","Valence","Espagne",["Valencia","VCF","Murciélagos","Che"]],
+  ["RCD Mallorca","Palma","Espagne",["Mallorca","RCD Mallorca"]],
+  ["CD Leganés","Leganés","Espagne",["Leganés","Pepineros"]],
+  ["RCD Espanyol","Barcelone","Espagne",["Espanyol","Periquitos"]],
+  ["UD Las Palmas","Las Palmas","Espagne",["Las Palmas","Amarillos"]],
+  ["Racing de Santander","Santander","Espagne",["Racing Santander","Racing"]],
+  ["Real Oviedo","Oviedo","Espagne",["Oviedo","Carbayones"]],
+  ["Sporting de Gijón","Gijón","Espagne",["Sporting Gijón","RSG"]],
+  ["SD Eibar","Eibar","Espagne",["Eibar"]],
+  ["Real Zaragoza","Saragosse","Espagne",["Zaragoza","RZD","Maños"]],
+  ["UD Almería","Almería","Espagne",["Almería","Indianos"]],
+  ["Elche CF","Elche","Espagne",["Elche","ECF","Franjiverdes"]],
+  ["Granada CF","Grenade","Espagne",["Granada","GCF"]],
+  ["Córdoba CF","Cordoue","Espagne",["Córdoba","CCF","Cordoba"]],
+  ["Levante UD","Valence","Espagne",["Levante","LUD","Granotes"]],
+  ["Málaga CF","Malaga","Espagne",["Málaga","MCF","Boquerones","Malaga"]],
+  ["CD Tenerife","Santa Cruz de Tenerife","Espagne",["Tenerife"]],
+  ["Real Murcia","Murcie","Espagne",["Murcia","Real Murcia"]],
+
+  // ITALIE
+  ["Juventus FC","Turin","Italie",["Juve","Juventus","Bianconeri","Vecchia Signora"]],
+  ["AC Milan","Milan","Italie",["Milan","ACM","Rossoneri","Diavolo"]],
+  ["Inter Milan","Milan","Italie",["Inter","FCInter","FCIM","Nerazzurri","Beneamata"]],
+  ["SSC Napoli","Naples","Italie",["Napoli","SSCN","Partenopei"]],
+  ["AS Roma","Rome","Italie",["Roma","ASR","Giallorossi","Lupi"]],
+  ["SS Lazio","Rome","Italie",["Lazio","SSL","Biancocelesti","Aquile"]],
+  ["Atalanta BC","Bergame","Italie",["Atalanta","ATA","La Dea"]],
+  ["ACF Fiorentina","Florence","Italie",["Fiorentina","Viola","La Viola"]],
+  ["Bologna FC","Bologne","Italie",["Bologna","BFC","Rossoblu"]],
+  ["Torino FC","Turin","Italie",["Torino","TFC","Granata","Toro"]],
+  ["Cagliari Calcio","Cagliari","Italie",["Cagliari","Rossoblù sardi"]],
+  ["Hellas Verona","Vérone","Italie",["Verona","HVF","Hellas Verona"]],
+  ["Udinese Calcio","Udine","Italie",["Udinese","UC"]],
+  ["Genoa CFC","Gênes","Italie",["Genoa","GCFC","Grifone"]],
+  ["Como 1907","Côme","Italie",["Como","Lariani"]],
+  ["Parma Calcio","Parme","Italie",["Parma","Crociati"]],
+  ["US Lecce","Lecce","Italie",["Lecce","Salentini"]],
+  ["Venezia FC","Venise","Italie",["Venezia","VFC","Lagunari"]],
+  ["Empoli FC","Empoli","Italie",["Empoli","EFC","Azzurri toscani"]],
+  ["AC Monza","Monza","Italie",["Monza","Biancorossi"]],
+  ["SSC Bari","Bari","Italie",["Bari","SSC Bari","Galletti"]],
+  ["Brescia Calcio","Brescia","Italie",["Brescia","Rondinelle"]],
+  ["UC Sampdoria","Gênes","Italie",["Sampdoria","Samp","Blucerchiati"]],
+  ["US Cremonese","Crémone","Italie",["Cremonese","Grigiorossi"]],
+  ["US Palermo","Palerme","Italie",["Palermo","Rosanero"]],
+  ["AC Pisa 1909","Pise","Italie",["Pisa","AC Pisa"]],
+  ["Spezia Calcio","La Spezia","Italie",["Spezia","Aquilotti"]],
+  ["AC Reggiana","Reggio d'Émilie","Italie",["Reggiana","Granata emiliani"]],
+  ["US Sassuolo","Sassuolo","Italie",["Sassuolo","Neroverdi"]],
+  ["US Salernitana","Salerne","Italie",["Salernitana","Cavalluccio marino"]],
+  ["Frosinone Calcio","Frosinone","Italie",["Frosinone"]],
+  ["Modena FC","Modène","Italie",["Modena","Canarini"]],
+  ["Catanzaro","Catanzaro","Italie",["Catanzaro","Aquile"]],
+  ["Cesena FC","Cesena","Italie",["Cesena","AC Cesena"]],
+
+  // ALLEMAGNE
+  ["Bayern München","Munich","Allemagne",["Bayern Munich","FCB Bayern","FC Bayern","Rekordmeister"]],
+  ["Borussia Dortmund","Dortmund","Allemagne",["BVB","Dortmund","Schwarzgelben"]],
+  ["Bayer 04 Leverkusen","Leverkusen","Allemagne",["Leverkusen","B04","Werkself"]],
+  ["RB Leipzig","Leipzig","Allemagne",["Leipzig","RBL","Roten Bullen"]],
+  ["Eintracht Frankfurt","Francfort","Allemagne",["Frankfurt","SGE","Adler","Eagles"]],
+  ["VfL Wolfsburg","Wolfsburg","Allemagne",["Wolfsburg","WOB","Wölfe","Wolves"]],
+  ["Borussia Mönchengladbach","Mönchengladbach","Allemagne",["Gladbach","BMG","Fohlen","Foals"]],
+  ["TSG Hoffenheim","Sinsheim","Allemagne",["Hoffenheim","TSG"]],
+  ["SC Freiburg","Fribourg","Allemagne",["Freiburg","SCF"]],
+  ["Union Berlin","Berlin","Allemagne",["FC Union Berlin","Eisern Union"]],
+  ["VfB Stuttgart","Stuttgart","Allemagne",["Stuttgart","VFB","Schwaben"]],
+  ["Werder Bremen","Brême","Allemagne",["Bremen","SVW","Werder"]],
+  ["FC Augsburg","Augsbourg","Allemagne",["Augsburg","FCA"]],
+  ["Mainz 05","Mayence","Allemagne",["Mainz","FSV Mainz","M05"]],
+  ["FC Heidenheim","Heidenheim","Allemagne",["Heidenheim","FCH"]],
+  ["Holstein Kiel","Kiel","Allemagne",["Kiel","KSV Holstein","Störche"]],
+  ["Hamburger SV","Hambourg","Allemagne",["HSV","Hamburg","Dinosaurier"]],
+  ["FC St. Pauli","Hambourg","Allemagne",["St.Pauli","St Pauli","FCSP"]],
+  ["Hertha BSC","Berlin","Allemagne",["Hertha","BSC","Alte Dame"]],
+  ["Hannover 96","Hanovre","Allemagne",["Hannover","H96"]],
+  ["Schalke 04","Gelsenkirchen","Allemagne",["Schalke","S04","Königsblauen"]],
+  ["FC Kaiserslautern","Kaiserslautern","Allemagne",["Kaiserslautern","FCK","Roten Teufel","Betze"]],
+  ["1. FC Nürnberg","Nuremberg","Allemagne",["Nürnberg","FCN","Der Club"]],
+  ["Karlsruher SC","Karlsruhe","Allemagne",["KSC","Karlsruhe"]],
+  ["Fortuna Düsseldorf","Düsseldorf","Allemagne",["F95","Fortuna","Düsseldorf"]],
+  ["Eintracht Braunschweig","Brunswick","Allemagne",["Braunschweig","BTSV"]],
+  ["1. FC Köln","Cologne","Allemagne",["Köln","FC Köln","Cologne","Geißböcke"]],
+  ["SC Paderborn","Paderborn","Allemagne",["Paderborn 07","SCP"]],
+  ["1. FC Magdeburg","Magdebourg","Allemagne",["Magdeburg","FCM Magdeburg"]],
+  ["Darmstadt 98","Darmstadt","Allemagne",["Darmstadt","SVD","Lilien"]],
+
+  // PORTUGAL
+  ["SL Benfica","Lisbonne","Portugal",["Benfica","SLB","Encarnados","Águias"]],
+  ["FC Porto","Porto","Portugal",["Porto","FCP","Dragões","Portistas"]],
+  ["Sporting CP","Lisbonne","Portugal",["Sporting","SCP","Leões"]],
+  ["SC Braga","Braga","Portugal",["Braga","SCB","Arsenalistas"]],
+  ["Vitória SC","Guimarães","Portugal",["Vitória Guimarães","VSC"]],
+  ["Casa Pia AC","Lisbonne","Portugal",["Casa Pia","CPAC"]],
+  ["Rio Ave FC","Vila do Conde","Portugal",["Rio Ave","RAFC"]],
+  ["Moreirense FC","Moreira de Cónegos","Portugal",["Moreirense","MFC"]],
+  ["Gil Vicente FC","Barcelos","Portugal",["Gil Vicente","GVFC"]],
+  ["FC Famalicão","Famalicão","Portugal",["Famalicão","Famalicoenses"]],
+  ["Boavista FC","Porto","Portugal",["Boavista","BFC Porto","Axadrezados","Panteras"]],
+  ["SC Farense","Faro","Portugal",["Farense"]],
+  ["FC Arouca","Arouca","Portugal",["Arouca"]],
+  ["Estoril Praia","Estoril","Portugal",["Estoril","GDE"]],
+  ["CD Nacional","Funchal","Portugal",["Nacional","Nacionalistas"]],
+  ["CD Santa Clara","Ponta Delgada","Portugal",["Santa Clara","CDSC"]],
+  ["Estrela da Amadora","Amadora","Portugal",["Estrela Amadora"]],
+
+  // PAYS-BAS
+  ["AFC Ajax","Amsterdam","Pays-Bas",["Ajax","AFC","Ajacieden","Godenzonen"]],
+  ["PSV Eindhoven","Eindhoven","Pays-Bas",["PSV","PSVE","Boeren"]],
+  ["Feyenoord","Rotterdam","Pays-Bas",["FEY","Legioen"]],
+  ["AZ Alkmaar","Alkmaar","Pays-Bas",["AZ","Kaaskoppen"]],
+  ["FC Utrecht","Utrecht","Pays-Bas",["Utrecht","FCU"]],
+  ["SC Heerenveen","Heerenveen","Pays-Bas",["Heerenveen","SCH"]],
+  ["SBV Vitesse","Arnhem","Pays-Bas",["Vitesse"]],
+  ["NEC Nijmegen","Nimègue","Pays-Bas",["NEC","Nijmegen"]],
+  ["FC Groningen","Groningue","Pays-Bas",["Groningen","FCG"]],
+  ["FC Twente","Enschede","Pays-Bas",["Twente","FCT","Tukkers"]],
+  ["RKC Waalwijk","Waalwijk","Pays-Bas",["RKC","Waalwijk"]],
+  ["Sparta Rotterdam","Rotterdam","Pays-Bas",["Sparta","SRT"]],
+  ["Go Ahead Eagles","Deventer","Pays-Bas",["GAE","Sprinkhanen"]],
+  ["Almere City FC","Almere","Pays-Bas",["Almere City","ACFC Almere"]],
+  ["Heracles Almelo","Almelo","Pays-Bas",["Heracles","HAC Almelo"]],
+  ["PEC Zwolle","Zwolle","Pays-Bas",["PEC","Blauwvingers"]],
+  ["Willem II","Tilbourg","Pays-Bas",["Willem II Tilburg"]],
+  ["Fortuna Sittard","Sittard","Pays-Bas",["Fortuna","FSS"]],
+  ["FC Den Bosch","Bois-le-Duc","Pays-Bas",["Den Bosch","FDB"]],
+  ["FC Eindhoven","Eindhoven","Pays-Bas",["FCE Eindhoven"]],
+  ["Roda JC Kerkrade","Kerkrade","Pays-Bas",["Roda JC","Mijnwerkers"]],
+  ["MVV Maastricht","Maastricht","Pays-Bas",["MVV"]],
+  ["FC Volendam","Volendam","Pays-Bas",["Volendam","FCV","Visboeren"]],
+  ["NAC Breda","Breda","Pays-Bas",["NAC","Breda"]],
+  ["ADO Den Haag","La Haye","Pays-Bas",["ADO","Den Haag","Hagenaars"]],
+  ["SC Cambuur","Leeuwarden","Pays-Bas",["Cambuur"]],
+  ["VVV-Venlo","Venlo","Pays-Bas",["VVV","Venlo"]],
+  ["SBV Excelsior","Rotterdam","Pays-Bas",["Excelsior","Kralingers"]],
+  ["De Graafschap","Doetinchem","Pays-Bas",["Superboeren"]],
+
+  // BELGIQUE
+  ["RSC Anderlecht","Bruxelles","Belgique",["Anderlecht","RSCA","Mauves"]],
+  ["Club Brugge KV","Bruges","Belgique",["Club Brugge","CBKV","Blauw-Zwart"]],
+  ["KAA Gent","Gand","Belgique",["Gent","La Gantoise","Buffalos"]],
+  ["Standard de Liège","Liège","Belgique",["Standard","RSCL","Les Rouches","Liège"]],
+  ["KRC Genk","Genk","Belgique",["Genk","Racing Genk"]],
+  ["Royal Antwerp FC","Anvers","Belgique",["Antwerp","RAFC","Great Old"]],
+  ["Sporting Charleroi","Charleroi","Belgique",["Charleroi","RCSC","Zèbres"]],
+  ["Union Saint-Gilloise","Bruxelles","Belgique",["Union SG","USG"]],
+  ["Cercle Brugge","Bruges","Belgique",["Cercle","Groen-Zwart"]],
+  ["KVC Westerlo","Westerlo","Belgique",["Westerlo"]],
+  ["OH Leuven","Louvain","Belgique",["OHL","Leuven","Leuvenaars"]],
+  ["KV Kortrijk","Courtrai","Belgique",["Kortrijk","Kerels"]],
+  ["FCV Dender EH","Denderleeuw","Belgique",["Dender"]],
+  ["VV Sint-Truiden","Saint-Trond","Belgique",["STVV","Sint-Truiden","Kanaries"]],
+  ["KV Mechelen","Malines","Belgique",["Mechelen","Malinwa"]],
+  ["Beerschot VA","Anvers","Belgique",["Beerschot","KFCO Beerschot"]],
+
+  // ECOSSE
+  ["Celtic FC","Glasgow","Écosse",["Celtic","CFC","Bhoys","Hoops"]],
+  ["Rangers FC","Glasgow","Écosse",["Rangers","RFC","Gers","Light Blues"]],
+  ["Heart of Midlothian","Édimbourg","Écosse",["Hearts","HMFC","Jambos"]],
+  ["Hibernian FC","Édimbourg","Écosse",["Hibs","HFC","Hibees"]],
+  ["Aberdeen FC","Aberdeen","Écosse",["Aberdeen","Dons"]],
+  ["Dundee United","Dundee","Écosse",["DUFC","Tangerines","Arabs"]],
+  ["Dundee FC","Dundee","Écosse",["DFC","Dark Blues","Dee"]],
+  ["Motherwell FC","Motherwell","Écosse",["Motherwell","Steelmen","Well"]],
+  ["St Mirren FC","Paisley","Écosse",["St Mirren","SMFC","Buddies"]],
+  ["Kilmarnock FC","Kilmarnock","Écosse",["Kilmarnock","Killie"]],
+  ["St Johnstone FC","Perth","Écosse",["St Johnstone","Saints Perth"]],
+  ["Ross County FC","Dingwall","Écosse",["Ross County","RCFC","Staggies"]],
+  ["Partick Thistle","Glasgow","Écosse",["Partick","PTFC","Jags"]],
+  ["Falkirk FC","Falkirk","Écosse",["Falkirk","Bairns"]],
+  ["Dunfermline Athletic","Dunfermline","Écosse",["Dunfermline","DAFC","Pars"]],
+  ["Inverness CT","Inverness","Écosse",["ICT","Inverness","Caley Thistle"]],
+  ["Queen's Park FC","Glasgow","Écosse",["Queen's Park","Spiders"]],
+  ["Livingston FC","Livingston","Écosse",["Livingston","Livi","Lions"]],
+  ["Hamilton Academical","Hamilton","Écosse",["Hamilton Accies","HAFC"]],
+  ["Raith Rovers","Kirkcaldy","Écosse",["Raith","RRFC"]],
+  ["Greenock Morton","Greenock","Écosse",["Morton","GMFC","Ton"]]
+];
+
+// Index normalisé : aliases en minuscules → nom officiel
+const CLUB_INDEX = {};
+const CLUB_BY_NAME = {};
+CLUBS_DB.forEach(([name, city, country, aliases]) => {
+  CLUB_BY_NAME[name.toLowerCase()] = {name, city, country, aliases};
+  CLUB_INDEX[name.toLowerCase()] = name;
+  aliases.forEach(a => CLUB_INDEX[a.toLowerCase()] = name);
+});
+
+function normalizeClubName(rawName) {
+  if (!rawName) return null;
+  const key = rawName.trim().toLowerCase();
+  return CLUB_INDEX[key] || null;
+}
+
+function searchClubs(query, limit = 8) {
+  if (!query || query.length < 2) return [];
+  const q = query.toLowerCase().trim();
+  const results = [];
+  const seen = new Set();
+
+  CLUBS_DB.forEach(([name, city, country, aliases]) => {
+    if (name.toLowerCase().startsWith(q) && !seen.has(name)) {
+      results.push({name, city, country});
+      seen.add(name);
+    }
+  });
+
+  if (results.length < limit) {
+    CLUBS_DB.forEach(([name, city, country, aliases]) => {
+      if (seen.has(name)) return;
+      if (aliases.some(a => a.toLowerCase().startsWith(q))) {
+        results.push({name, city, country});
+        seen.add(name);
+      }
+    });
+  }
+
+  if (results.length < limit) {
+    CLUBS_DB.forEach(([name, city, country, aliases]) => {
+      if (seen.has(name)) return;
+      if (name.toLowerCase().includes(q) || aliases.some(a => a.toLowerCase().includes(q))) {
+        results.push({name, city, country});
+        seen.add(name);
+      }
+    });
+  }
+
+  return results.slice(0, limit);
+}
+
+// Génère des initiales à partir du nom du club
+function getInitials(name){
+  const words = name.split(/[\s\-]+/).filter(w => w.length > 1 && !/^(fc|cf|sc|ac|as|us|sv|rc|kv|vfb|vfl|tsg|sd|ud|cd|of|the|de|la|le|el|du|d')$/i.test(w));
+  if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  // Fallback : premières lettres significatives
+  return name.replace(/[^A-Za-z]/g,'').slice(0, 2).toUpperCase();
+}
+
+// ============================================================
+// SUPABASE & ETAT
+// ============================================================
 const SUPABASE_URL='https://emiveacfwbhhpcdghanv.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaXZlYWNmd2JoaHBjZGdoYW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjQ1NTgsImV4cCI6MjA5MjEwMDU1OH0.zZ6eWTPVXMhUp1VQbpUI-J5L_t0osI9ipLTSoLeQQRY';
 const ADMIN_CODE='VC5';
 
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let members=[];
-let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false;
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let members = [];
+let map, clusterGroup, selectedCity = null, selectedClub = null;
+let isAdmin = false, customClubMode = false;
+let citySearchTimeout = null;
 
 async function loadData(){
-  const{data,error}=await sb.from('members').select('*');
-  if(!error&&data){members=data;}
+  const {data, error} = await sb.from('members').select('*');
+  if (!error && data) members = data;
   renderAll();
 }
 
 function initMap(){
-  map=L.map('map',{center:[48.5,10],zoom:5,attributionControl:false});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
-  clusterGroup=L.markerClusterGroup({
-    iconCreateFunction:function(c){
-      return L.divIcon({html:'<div style="background:#c9a84c;color:#0a0a0a;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #8a6f2e;box-shadow:0 0 8px rgba(201,168,76,0.5)">'+c.getChildCount()+'</div>',iconSize:[34,34],className:''});
-    },maxClusterRadius:15
+  map = L.map('map', {center:[48.5,10], zoom:5, attributionControl:false});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:18}).addTo(map);
+  clusterGroup = L.markerClusterGroup({
+    iconCreateFunction: function(c){
+      return L.divIcon({
+        html: '<div style="background:#b8923b;color:#0a0908;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #6b5320;box-shadow:0 0 8px rgba(184,146,59,0.4)">' + c.getChildCount() + '</div>',
+        iconSize:[34,34], className:''
+      });
+    },
+    maxClusterRadius: 15
   });
   map.addLayer(clusterGroup);
 
-  // Frontières pays en doré subtil
   fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
-    .then(r=>r.json())
-    .then(data=>{
-      L.geoJSON(data,{
-        style:{color:'#c0c8d8',weight:1.5,opacity:0.55,fillOpacity:0}
-      }).addTo(map);
+    .then(r => r.json())
+    .then(data => {
+      L.geoJSON(data, {style:{color:'#a89870',weight:1.2,opacity:0.4,fillOpacity:0}}).addTo(map);
     }).catch(()=>{});
 
   loadData();
 }
 
-const goldIcon=L.divIcon({html:'<div style="width:14px;height:14px;background:#c9a84c;border-radius:50%;border:2px solid #8a6f2e;box-shadow:0 0 6px rgba(201,168,76,0.6)"></div>',iconSize:[14,14],iconAnchor:[7,7],className:''});
+const goldIcon = L.divIcon({
+  html: '<div style="width:14px;height:14px;background:#b8923b;border-radius:50%;border:2px solid #6b5320;box-shadow:0 0 6px rgba(184,146,59,0.5)"></div>',
+  iconSize:[14,14], iconAnchor:[7,7], className:''
+});
 
 function renderAll(){
   clusterGroup.clearLayers();
-  const filtered=members;
+  const filtered = members;
 
-  // Stats
-  const clubs=new Set(members.filter(m=>m.club).map(m=>m.club.trim()));
-  document.getElementById('stat-clubs').textContent=clubs.size;
-  document.getElementById('total-counter').textContent=filtered.length;
-  document.getElementById('member-count').textContent=filtered.length;
+  const normalizedClubs = new Set();
+  members.forEach(m => {
+    if (m.club) {
+      const norm = normalizeClubName(m.club) || m.club.trim();
+      normalizedClubs.add(norm.toLowerCase());
+    }
+  });
+  document.getElementById('stat-clubs').textContent = normalizedClubs.size;
+  document.getElementById('total-counter').textContent = filtered.length;
+  document.getElementById('member-count').textContent = filtered.length;
 
-  const list=document.getElementById('members-list');
-  if(!filtered.length){list.innerHTML='<div class="empty-state">Aucun membre<br>pour ce pays</div>';}
-  else{list.innerHTML=filtered.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${m.club?esc(m.club)+' · ':''} ${esc(m.city)}</div></div><button class="btn-edit" onclick="editMember(${m.id})">✏️</button><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
+  const list = document.getElementById('members-list');
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-state">Aucun membre<br>pour l\'instant</div>';
+  } else {
+    list.innerHTML = filtered.map(m => {
+      const normClub = m.club ? (normalizeClubName(m.club) || m.club) : '';
+      return `<div class="member-item">
+        <div class="member-dot"></div>
+        <div class="member-info">
+          <div class="member-pseudo">${esc(m.pseudo)}</div>
+          <div class="member-location">${normClub ? esc(normClub) + ' · ' : ''}${esc(m.city)}</div>
+        </div>
+        <button class="btn-edit" onclick="editMember(${m.id})">✏️</button>
+        <button class="btn-del" onclick="deleteMember(${m.id})">✕</button>
+      </div>`;
+    }).join('');
+  }
 
-  filtered.forEach(m=>{
-    const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
-    mk.bindPopup(`<div class="popup-pseudo">${m.club?esc(m.club):esc(m.pseudo)}</div>${m.club?'<div style="font-size:0.72rem;color:#666;margin-top:2px">'+esc(m.pseudo)+'</div>':''}<div class="popup-city">📍 ${esc(m.city)}</div>`);
+  filtered.forEach(m => {
+    const mk = L.marker([m.lat, m.lng], {icon: goldIcon});
+    const normClub = m.club ? (normalizeClubName(m.club) || m.club) : '';
+    mk.bindPopup(
+      `<div class="popup-pseudo">${esc(m.pseudo)}</div>` +
+      (normClub ? '<div class="popup-club">' + esc(normClub) + '</div>' : '') +
+      `<div class="popup-city">📍 ${esc(m.city)}</div>`
+    );
     clusterGroup.addLayer(mk);
   });
   renderClubs(filtered);
 }
 
 function renderClubs(src){
-  const list=(src&&src.length!==undefined)?src:members;
-  const counts={};
-  list.forEach(m=>{if(m.club){const k=m.club.trim();counts[k]=(counts[k]||0)+1;}});
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const cl=document.getElementById('clubs-list');
-  if(!sorted.length){cl.innerHTML='<div class="empty-state">Aucun club<br>pour l\'instant</div>';return;}
-  cl.innerHTML=sorted.map(([name,count],i)=>{
-    const initials=name.split(' ').filter(w=>w.length>2).map(w=>w[0].toUpperCase()).slice(0,2).join('')||name.slice(0,2).toUpperCase();
-    return `<div class="club-item"><div class="club-logo-placeholder">${initials}</div><div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`;
+  const list = (src && src.length !== undefined) ? src : members;
+  const counts = {};
+  const meta = {};
+
+  list.forEach(m => {
+    if (!m.club) return;
+    const normalized = normalizeClubName(m.club) || m.club.trim();
+    counts[normalized] = (counts[normalized] || 0) + 1;
+    if (!meta[normalized]) {
+      const dbInfo = CLUB_BY_NAME[normalized.toLowerCase()];
+      meta[normalized] = dbInfo ? {country: dbInfo.country, official: true}
+                                 : {country: '', official: false};
+    }
+  });
+
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 10);
+  const cl = document.getElementById('clubs-list');
+  if (!sorted.length) {
+    cl.innerHTML = '<div class="empty-state">Aucun club<br>pour l\'instant</div>';
+    return;
+  }
+
+  cl.innerHTML = sorted.map(([name, count], i) => {
+    const m = meta[name];
+    const initials = getInitials(name);
+    const emblemClass = m.official ? 'club-emblem' : 'club-emblem unlisted';
+    const subtitle = m.country ? `<div class="club-name-sub">${esc(m.country)}</div>` : '';
+    return `<div class="club-item">
+      <div class="${emblemClass}">${esc(initials)}</div>
+      <div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div>
+      <div class="club-name">${esc(name)}${subtitle}</div>
+      <div class="club-count">${count}</div>
+    </div>`;
   }).join('');
 }
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-function toast(msg,err){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.borderColor=err?'#e24b4a':'#c9a84c';
-  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+function toast(msg, err){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderColor = err ? '#c84038' : '#b8923b';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-async function addMember(){
-  const pseudo=document.getElementById('input-pseudo').value.trim();
-  const club=document.getElementById('input-club').value.trim();
-  if(!pseudo){toast('Entre ton pseudo Discord',true);return;}
-  if(!selectedCity){toast('Sélectionne la ville du club dans la liste',true);return;}
-  if(!club){toast('Entre le nom de ton club',true);return;}
-  const btn=document.getElementById('btn-add');
-  btn.disabled=true;btn.textContent='ENREGISTREMENT...';
-  try{
-    const existing=members.find(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
-    const entry={pseudo,city:selectedCity.name,lat:selectedCity.lat,lng:selectedCity.lng,club:club||''};
-    if(existing){
-      await sb.from('members').update(entry).eq('id',existing.id);
-      toast('Marqueur mis à jour !');
-    }else{
-      await sb.from('members').insert(entry);
-      toast('Bienvenue sur la Casual Map ! 🍋');
+// ============================================================
+// AUTOCOMPLETE CLUB
+// ============================================================
+function setupClubAutocomplete(){
+  const input = document.getElementById('input-club');
+  const results = document.getElementById('club-results');
+  const help = document.getElementById('club-help');
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    selectedClub = null;
+    input.classList.remove('club-validated', 'club-custom');
+
+    if (q.length < 2) {
+      results.style.display = 'none';
+      help.textContent = 'Tape les premières lettres et choisis dans la liste.';
+      help.className = 'help-text';
+      return;
     }
-    await loadData();
-    document.getElementById('input-pseudo').value='';
-    document.getElementById('input-city').value='';
-    document.getElementById('input-club').value='';
-    selectedCity=null;
-    const m=members.find(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
-    if(m)map.flyTo([m.lat,m.lng],8,{duration:1.5});
-  }catch(e){toast('Erreur — réessaie',true);}
-  btn.disabled=false;btn.textContent='AJOUTER MON MARQUEUR';
+
+    const found = searchClubs(q, 8);
+    results.innerHTML = '';
+
+    if (found.length) {
+      found.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        div.innerHTML = `<div>${esc(c.name)}</div><div class="meta">${esc(c.city)} · ${esc(c.country)}</div>`;
+        div.onclick = () => selectClub(c);
+        results.appendChild(div);
+      });
+    } else {
+      const noRes = document.createElement('div');
+      noRes.className = 'search-no-results';
+      noRes.textContent = `Aucun club trouvé pour "${q}"`;
+      results.appendChild(noRes);
+    }
+
+    const addCustom = document.createElement('div');
+    addCustom.className = 'search-result-item add-custom';
+    addCustom.innerHTML = `+ Ajouter "${esc(q)}" comme club non listé`;
+    addCustom.onclick = () => activateCustomClub(q);
+    results.appendChild(addCustom);
+
+    results.style.display = 'block';
+  });
+
+  document.addEventListener('click', e => {
+    if (!input.contains(e.target) && !results.contains(e.target)) {
+      results.style.display = 'none';
+    }
+  });
 }
 
-async function deleteMember(id){
-  if(!isAdmin)return;
-  await sb.from('members').delete().eq('id',id);
-  await loadData();
-  toast('Marqueur supprimé');
+function selectClub(club){
+  const input = document.getElementById('input-club');
+  const help = document.getElementById('club-help');
+  const cityInput = document.getElementById('input-city');
+
+  input.value = club.name;
+  input.classList.add('club-validated');
+  input.classList.remove('club-custom');
+  selectedClub = club;
+  customClubMode = false;
+
+  cityInput.value = club.city;
+  geocodeCity(club.city, club.country);
+
+  document.getElementById('club-results').style.display = 'none';
+  help.textContent = `✓ Club validé — ${club.country}`;
+  help.className = 'help-text';
 }
 
-function toggleAdmin(){
-  if(isAdmin){isAdmin=false;document.body.classList.remove('admin-mode');toast('Mode admin désactivé');return;}
-  const code=prompt('Code admin :');
-  if(code===ADMIN_CODE){isAdmin=true;document.body.classList.add('admin-mode');toast('Mode admin activé');}
-  else if(code!==null){toast('Code incorrect',true);}
+function activateCustomClub(name){
+  const input = document.getElementById('input-club');
+  const help = document.getElementById('club-help');
+
+  input.value = name;
+  input.classList.add('club-custom');
+  input.classList.remove('club-validated');
+  selectedClub = null;
+  customClubMode = true;
+
+  document.getElementById('club-results').style.display = 'none';
+  help.innerHTML = '⚠️ Club non listé — pense à entrer la ville manuellement';
+  help.className = 'help-text warning';
+
+  document.getElementById('input-city').focus();
 }
 
-async function searchCity(q){
-  if(q.length<2){document.getElementById('city-results').style.display='none';return;}
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6&accept-language=fr`);
-    const data=await r.json();
-    const el=document.getElementById('city-results');
-    if(!data.length){el.style.display='none';return;}
-    el.style.display='block';
-    el.innerHTML=data.map(d=>{
-      const name=d.display_name.split(',').slice(0,2).join(',').trim();
-      return `<div class="search-result-item" onclick="selectCity('${name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}',${d.lat},${d.lon})">${name}</div>`;
-    }).join('');
-  }catch(e){}
-}
-
-function selectCity(name,lat,lng){
-  selectedCity={name,lat:parseFloat(lat),lng:parseFloat(lng)};
-  document.getElementById('input-city').value=name;
-  document.getElementById('city-results').style.display='none';
-}
-
-document.getElementById('input-city').addEventListener('input',function(){clearTimeout(searchTimeout);searchTimeout=setTimeout(()=>searchCity(this.value),350);});
-document.addEventListener('click',e=>{if(!e.target.closest('.form-group'))document.getElementById('city-results').style.display='none';});
-document.getElementById('input-club').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
-document.getElementById('input-pseudo').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
-
-function editMember(id){
-  const m=members.find(x=>x.id===id);
-  if(!m)return;
-  document.getElementById('edit-id').value=id;
-  document.getElementById('edit-pseudo').value=m.pseudo;
-  document.getElementById('edit-club').value=m.club||'';
-  document.getElementById('edit-city').value=m.city||'';
-  document.getElementById('edit-overlay').classList.add('open');
-}
-function closeEdit(){document.getElementById('edit-overlay').classList.remove('open')}
-async function saveMember(){
-  const id=parseInt(document.getElementById('edit-id').value);
-  const club=document.getElementById('edit-club').value.trim();
-  const city=document.getElementById('edit-city').value.trim();
-  if(!club||!city){toast('Club et ville obligatoires',true);return;}
-  await sb.from('members').update({club,city}).eq('id',id);
-  closeEdit();
-  await loadData();
-  toast('Membre mis à jour ✓');
-}
-
-function openShare(){document.getElementById('share-overlay').classList.add('open')}
-function closeShare(){document.getElementById('share-overlay').classList.remove('open')}
-function copyLink(){
-  navigator.clipboard.writeText('https://xxvc5xx.github.io/casual-division-vip/map.html');
-  toast('Lien copié ! 🍋');
-  closeShare();
-}
-function shareInstagram(){
-  if(navigator.share){
-    navigator.share({title:'Casual Map — Casual Division',url:'https://xxvc5xx.github.io/casual-division-vip/map.html'});
-  } else {
-    copyLink();
-    toast('Lien copié — colle-le dans ta story !');
+async function geocodeCity(city, country){
+  if (!city) return;
+  try {
+    const q = encodeURIComponent(`${city}, ${country || ''}`.trim().replace(/^,/, ''));
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`);
+    const d = await r.json();
+    if (d && d.length) {
+      selectedCity = {name: city, lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon)};
+    }
+  } catch(e) {
+    console.warn('Geocoding error:', e);
   }
 }
 
-initMap();
+function setupCityAutocomplete(){
+  const input = document.getElementById('input-city');
+  const results = document.getElementById('city-results');
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    selectedCity = null;
+
+    if (q.length < 2) {
+      results.style.display = 'none';
+      return;
+    }
+
+    clearTimeout(citySearchTimeout);
+    citySearchTimeout = setTimeout(async () => {
+      try {
+        const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&addressdetails=1`);
+        const d = await r.json();
+        results.innerHTML = '';
+        if (!d.length) {
+          results.style.display = 'none';
+          return;
+        }
+        d.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'search-result-item';
+          const name = item.address.city || item.address.town || item.address.village || item.display_name.split(',')[0];
+          const country = item.address.country || '';
+          div.innerHTML = `<div>${esc(name)}</div><div class="meta">${esc(country)}</div>`;
+          div.onclick = () => {
+            input.value = name;
+            selectedCity = {name, lat: parseFloat(item.lat), lng: parseFloat(item.lon)};
+            results.style.display = 'none';
+          };
+          results.appendChild(div);
+        });
+        results.style.display = 'block';
+      } catch(e) {
+        console.warn(e);
+      }
+    }, 350);
+  });
+
+  document.addEventListener('click', e => {
+    if (!input.contains(e.target) && !results.contains(e.target)) {
+      results.style.display = 'none';
+    }
+  });
+}
+
+async function addMember(){
+  const pseudo = document.getElementById('input-pseudo').value.trim();
+  const club = document.getElementById('input-club').value.trim();
+
+  if (!pseudo) { toast('Entre ton pseudo Discord', true); return; }
+  if (!club) { toast('Entre le nom de ton club', true); return; }
+
+  if (!selectedClub && !customClubMode) {
+    toast('Choisis un club dans la liste, ou clique sur "Ajouter comme club non listé"', true);
+    return;
+  }
+
+  if (!selectedCity) {
+    toast('Sélectionne la ville dans la liste', true);
+    return;
+  }
+
+  const btn = document.getElementById('btn-add');
+  btn.disabled = true;
+  btn.textContent = 'Enregistrement...';
+
+  try {
+    const existing = members.find(m => m.pseudo.toLowerCase() === pseudo.toLowerCase());
+    const entry = {
+      pseudo,
+      city: selectedCity.name,
+      lat: selectedCity.lat,
+      lng: selectedCity.lng,
+      club: selectedClub ? selectedClub.name : club
+    };
+    if (existing) {
+      await sb.from('members').update(entry).eq('id', existing.id);
+      toast('Marqueur mis à jour !');
+    } else {
+      await sb.from('members').insert(entry);
+      toast('Bienvenue sur la Casual Map');
+    }
+    await loadData();
+    document.getElementById('input-pseudo').value = '';
+    document.getElementById('input-city').value = '';
+    document.getElementById('input-club').value = '';
+    document.getElementById('input-club').classList.remove('club-validated', 'club-custom');
+    document.getElementById('club-help').textContent = 'Tape les premières lettres et choisis dans la liste.';
+    document.getElementById('club-help').className = 'help-text';
+    selectedCity = null;
+    selectedClub = null;
+    customClubMode = false;
+  } catch(e) {
+    toast('Erreur — réessaie', true);
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Ajouter mon marqueur';
+  }
+}
+
+async function deleteMember(id){
+  if (!isAdmin) return;
+  if (!confirm('Supprimer ce membre ?')) return;
+  await sb.from('members').delete().eq('id', id);
+  await loadData();
+  toast('Membre supprimé');
+}
+
+function editMember(id){
+  const m = members.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('edit-id').value = m.id;
+  document.getElementById('edit-pseudo').value = m.pseudo;
+  document.getElementById('edit-club').value = m.club || '';
+  document.getElementById('edit-city').value = m.city || '';
+  document.getElementById('edit-overlay').classList.add('show');
+}
+
+function closeEdit(){
+  document.getElementById('edit-overlay').classList.remove('show');
+}
+
+async function saveMember(){
+  const id = parseInt(document.getElementById('edit-id').value);
+  const club = document.getElementById('edit-club').value.trim();
+  const city = document.getElementById('edit-city').value.trim();
+
+  let lat, lng;
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`);
+    const d = await r.json();
+    if (d.length) { lat = parseFloat(d[0].lat); lng = parseFloat(d[0].lon); }
+  } catch(e) {}
+
+  const normClub = normalizeClubName(club) || club;
+  const update = {club: normClub, city};
+  if (lat && lng) { update.lat = lat; update.lng = lng; }
+
+  await sb.from('members').update(update).eq('id', id);
+  closeEdit();
+  await loadData();
+  toast('Membre modifié');
+}
+
+function toggleAdmin(){
+  if (isAdmin) {
+    isAdmin = false;
+    document.body.classList.remove('admin-mode');
+    toast('Mode admin désactivé');
+  } else {
+    const code = prompt('Code admin :');
+    if (code === ADMIN_CODE) {
+      isAdmin = true;
+      document.body.classList.add('admin-mode');
+      toast('Mode admin activé');
+    } else if (code !== null) {
+      toast('Code incorrect', true);
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initMap();
+  setupClubAutocomplete();
+  setupCityAutocomplete();
+});
 </script>
 </body>
 </html>
