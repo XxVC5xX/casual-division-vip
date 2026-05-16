@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendeurs Fiables — Casual Division</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#0a0908;--white:#f5f3ef;--cream:#e8e1d0;
+  --gold:#b8923b;--gold-light:#d4ae54;--gold-deep:#2d2412;--gold-dark:#6b5320;
+  --surface:#141413;--surface2:#1c1c1a;--border:#2a2825;--muted:#73706a;
+  --red:#c84038;--green:#4a9d6f;--purple:#7a5fb0;
+}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.03;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/><feColorMatrix values='0 0 0 0 0.7 0 0 0 0 0.65 0 0 0 0 0.5 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+.tribune-banner{background:linear-gradient(180deg,var(--gold-deep) 0%,var(--black) 100%);border-bottom:1px solid var(--gold-dark);padding:0.4rem 1rem;text-align:center;font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);position:relative;z-index:10}
+.tribune-banner span::before,.tribune-banner span::after{content:'■';color:var(--gold);font-size:0.5rem;margin:0 0.6rem;vertical-align:middle;opacity:0.5}
+
+header{padding:1rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--black);position:sticky;top:0;z-index:100;box-shadow:inset 0 -3px 0 var(--black),inset 0 -4px 0 var(--gold-dark);flex-wrap:wrap;gap:0.75rem}
+.logo-wrap{display:flex;align-items:center;gap:0.85rem}
+.logo-emblem{width:42px;height:42px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);background:radial-gradient(circle,var(--gold-deep) 0%,transparent 70%);position:relative;flex-shrink:0}
+.logo-emblem::after{content:'';position:absolute;inset:-4px;border:1px solid var(--gold-dark);border-radius:50%;opacity:0.5}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.85rem;letter-spacing:0.05em;line-height:1}
+.logo span{color:var(--gold)}
+.logo-sub{font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);font-family:'Oswald',sans-serif}
+.header-right{display:flex;gap:1.5rem;align-items:center}
+.header-stat{text-align:center}
+.counter{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--gold);line-height:1}
+.counter-label{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);font-family:'Oswald',sans-serif}
+.discord-btn{display:inline-flex;align-items:center;gap:0.5rem;background:transparent;border:1px solid var(--gold-dark);padding:0.45rem 1rem;font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream);text-decoration:none;transition:all 0.2s;position:relative}
+.discord-btn::before,.discord-btn::after{content:'';position:absolute;width:6px;height:6px;border:1px solid var(--gold)}
+.discord-btn::before{top:-3px;left:-3px;border-right:none;border-bottom:none}
+.discord-btn::after{bottom:-3px;right:-3px;border-left:none;border-top:none}
+.discord-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-deep)}
+.discord-dot{width:7px;height:7px;background:#5865F2;border-radius:50%}
+.admin-btn-header{background:none;border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.8rem;font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+.admin-btn-header:hover{border-color:var(--gold);color:var(--gold)}
+body.admin-mode .admin-btn-header{border-color:var(--red);color:var(--red)}
+
+main{max-width:900px;margin:0 auto;padding:2rem 1.25rem;position:relative;z-index:1}
+
+.hero{text-align:center;margin-bottom:2.5rem}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:0.1em;color:var(--white);line-height:1;margin-bottom:0.5rem}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:2rem}
+.search-wrap{position:relative;max-width:480px;margin:0 auto}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--gold-dark);color:var(--white);padding:0.9rem 1rem 0.9rem 3rem;font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color 0.2s}
+.search-input:focus{border-color:var(--gold)}
+.search-input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--gold);font-size:1.1rem;z-index:2}
+.search-clear{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;z-index:2;display:none}
+.search-clear.show{display:block}
+
+.filters{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
+.filter-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.85rem;font-family:'Oswald',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-deep)}
+
+.stats-bar{display:flex;gap:1px;margin-bottom:2rem;background:var(--border);border:1px solid var(--border);overflow:hidden}
+.stat-block{flex:1;padding:0.85rem;background:var(--surface);text-align:center}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
+.stat-label{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);font-family:'Oswald',sans-serif;margin-top:2px}
+
+.vendors-grid{display:flex;flex-direction:column;gap:1px;background:var(--border)}
+.no-results{text-align:center;padding:3rem;color:var(--muted);font-style:italic;font-size:0.9rem;background:var(--surface)}
+
+.vendor-card{background:var(--surface);padding:1.25rem 1.5rem;cursor:pointer;transition:background 0.15s;display:flex;align-items:center;gap:1.25rem;position:relative}
+.vendor-card:hover{background:var(--surface2)}
+.vendor-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background 0.15s}
+.vendor-card:hover::before,.vendor-card.expanded::before{background:var(--gold)}
+.vendor-emblem{width:48px;height:48px;border-radius:50%;border:2px solid var(--gold-dark);background:var(--gold-deep);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);flex-shrink:0}
+.vendor-emblem.or{border-color:var(--gold);box-shadow:0 0 8px rgba(184,146,59,0.3)}
+.vendor-emblem.banni{border-color:var(--red);color:var(--red)}
+.vendor-emblem.suspendu{border-color:var(--muted)}
+.vendor-main{flex:1;min-width:0}
+.vendor-pseudo{font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;letter-spacing:0.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vendor-meta{display:flex;align-items:center;gap:0.75rem;margin-top:0.3rem;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.6rem;font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600}
+.badge-fiable{background:rgba(74,157,111,0.15);color:var(--green);border:1px solid var(--green)}
+.badge-or{background:rgba(184,146,59,0.15);color:var(--gold);border:1px solid var(--gold)}
+.badge-nouveau{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.badge-suspendu{background:rgba(200,64,56,0.1);color:#e8a08a;border:1px solid #e8a08a}
+.badge-banni{background:rgba(200,64,56,0.2);color:var(--red);border:1px solid var(--red)}
+.vendor-specialite{font-size:0.75rem;color:var(--muted)}
+.vendor-right{text-align:right;flex-shrink:0}
+.note-num{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);line-height:1}
+.nb-avis{font-size:0.68rem;color:var(--muted);font-family:'Oswald',sans-serif;letter-spacing:0.08em}
+.chevron{font-size:0.8rem;color:var(--muted);margin-left:0.75rem;transition:transform 0.2s}
+.vendor-card.expanded .chevron{transform:rotate(180deg)}
+.admin-actions-card{display:none;gap:0.5rem;margin-left:0.5rem}
+body.admin-mode .admin-actions-card{display:flex}
+.btn-admin-sm{background:none;border:1px solid var(--border);color:var(--muted);padding:0.3rem 0.6rem;font-size:0.7rem;cursor:pointer;font-family:'Oswald',sans-serif;letter-spacing:0.08em;transition:all 0.15s}
+.btn-edit-v:hover{border-color:var(--gold);color:var(--gold)}
+.btn-del-v:hover{border-color:var(--red);color:var(--red)}
+
+.reviews-panel{background:var(--black);border-top:1px solid var(--border);display:none;padding:1.25rem 1.5rem 1.25rem 4.75rem}
+.reviews-panel.show{display:block}
+.reviews-panel-title{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+.reviews-panel-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-add-review{background:var(--gold);border:none;color:var(--black);padding:0.4rem 1rem;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.15em;cursor:pointer;display:none;transition:opacity 0.2s}
+body.admin-mode .btn-add-review{display:block}
+.btn-add-review:hover{opacity:0.85}
+.review-item{padding:0.85rem 0;border-bottom:1px solid var(--border);position:relative}
+.review-item:last-child{border-bottom:none}
+.review-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.4rem;flex-wrap:wrap}
+.review-acheteur{font-weight:600;font-size:0.85rem}
+.stars-small{color:var(--gold);font-size:0.8rem;letter-spacing:-1px}
+.review-date{font-size:0.68rem;color:var(--muted);margin-left:auto}
+.review-comment{font-size:0.82rem;color:var(--cream);line-height:1.5;font-style:italic;margin-bottom:0.4rem}
+.review-article{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.7rem;color:var(--muted);background:var(--surface);padding:0.25rem 0.6rem;border:1px solid var(--border)}
+.review-article span{color:var(--gold)}
+.verified-tag{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:0.3rem}
+.no-reviews{font-size:0.82rem;color:var(--muted);font-style:italic;padding:0.5rem 0}
+.btn-del-review{position:absolute;top:0.85rem;right:0;background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;display:none;padding:0.2rem 0.4rem;transition:color 0.15s}
+.btn-del-review:hover{color:var(--red)}
+body.admin-mode .btn-del-review{display:block}
+
+/* ─── MODALES ─────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--gold-dark);padding:1.75rem;width:100%;max-width:460px;position:relative}
+.modal::before,.modal::after{content:'';position:absolute;width:14px;height:14px}
+.modal::before{top:-1px;left:-1px;border-top:2px solid var(--gold);border-left:2px solid var(--gold)}
+.modal::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold)}
+.modal-title{font-family:'Bebas Neue',sans-serif;color:var(--gold);font-size:1.2rem;letter-spacing:0.15em;margin-bottom:1.25rem}
+.modal-close{position:absolute;top:0.75rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+.modal-close:hover{color:var(--white)}
+.field{margin-bottom:0.9rem}
+.field label{display:block;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.35rem;font-family:'Oswald',sans-serif}
+.field input,.field select,.field textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.6rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s;resize:none}
+.field input:focus,.field select,.field textarea:focus{border-color:var(--gold)}
+.field select{cursor:pointer}
+.field select option{background:var(--surface2)}
+.stars-picker{display:flex;gap:0.4rem;margin-top:0.3rem}
+.star-btn{background:none;border:none;font-size:1.5rem;color:var(--muted);cursor:pointer;transition:color 0.15s;padding:0}
+.star-btn.active{color:var(--gold)}
+.modal-actions{display:flex;gap:0.5rem;margin-top:1.25rem}
+.btn-cancel{flex:1;padding:0.7rem;background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.15em;cursor:pointer;transition:opacity 0.2s}
+.btn-save{flex:1;padding:0.7rem;background:var(--gold);color:var(--black);border:none;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.15em;cursor:pointer;transition:opacity 0.2s}
+.btn-cancel:hover,.btn-save:hover{opacity:0.85}
+
+/* ADMIN LOGIN */
+.admin-login-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:2000;display:none;align-items:center;justify-content:center}
+.admin-login-overlay.show{display:flex}
+.admin-login-box{background:var(--surface);border:1px solid var(--gold-dark);padding:2rem;width:100%;max-width:360px;text-align:center;position:relative}
+.admin-login-box::before{content:'';position:absolute;top:-1px;left:-1px;width:14px;height:14px;border-top:2px solid var(--gold);border-left:2px solid var(--gold)}
+.admin-login-box::after{content:'';position:absolute;bottom:-1px;right:-1px;width:14px;height:14px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold)}
+.admin-login-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.15em;color:var(--gold);margin-bottom:1.25rem}
+.admin-login-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.75rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;text-align:center;letter-spacing:0.2em;margin-bottom:1rem;transition:border-color 0.2s}
+.admin-login-input:focus{border-color:var(--gold)}
+.admin-login-btn{width:100%;padding:0.8rem;background:var(--gold);color:var(--black);border:none;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.2em;cursor:pointer;transition:opacity 0.2s}
+.admin-login-btn:hover{opacity:0.85}
+.admin-login-error{color:var(--red);font-size:0.78rem;margin-top:0.5rem;display:none}
+.admin-bar{display:none;background:var(--gold-deep);border-bottom:1px solid var(--gold-dark);padding:0.5rem 2rem;position:sticky;top:73px;z-index:99;align-items:center;justify-content:space-between}
+body.admin-mode .admin-bar{display:flex}
+.admin-bar-label{font-family:'Oswald',sans-serif;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold)}
+.btn-add-vendor{background:var(--gold);border:none;color:var(--black);padding:0.45rem 1.25rem;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.15em;cursor:pointer;transition:opacity 0.2s}
+.btn-add-vendor:hover{opacity:0.85}
+.btn-logout{background:none;border:1px solid var(--red);color:var(--red);padding:0.35rem 0.85rem;font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+.btn-logout:hover{background:var(--red);color:var(--white)}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid var(--gold);color:var(--white);padding:0.7rem 1.1rem;font-family:'Oswald',sans-serif;font-size:0.78rem;letter-spacing:0.05em;z-index:9999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.err{border-color:var(--red)}
+
+*::-webkit-scrollbar{width:6px}
+*::-webkit-scrollbar-track{background:var(--black)}
+*::-webkit-scrollbar-thumb{background:var(--gold-dark)}
+*::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+footer{text-align:center;padding:2rem 1rem;border-top:1px solid var(--border);margin-top:3rem;font-family:'Oswald',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);line-height:2;position:relative;z-index:1}
+footer a{color:var(--gold);text-decoration:none}
+.footer-disclaimer{max-width:600px;margin:0 auto 1rem;font-size:0.62rem;color:var(--muted);opacity:0.7;letter-spacing:0.08em;line-height:1.6;text-transform:none;font-family:'DM Sans',sans-serif}
+
+@media(max-width:600px){
+  header{padding:0.75rem 1rem}
+  .logo{font-size:1.5rem}
+  .hero-title{font-size:2.2rem}
+  .vendor-card{padding:1rem}
+  .reviews-panel{padding:1rem}
+  .stats-bar{flex-wrap:wrap}
+  .stat-block{min-width:calc(50% - 1px)}
+  .discord-btn{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="tribune-banner">
+  <span>Casuals d'Europe · Liberté pour les ultras</span>
+</div>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-emblem">CD</div>
+    <div>
+      <div class="logo">CASUAL <span>DIVISION</span></div>
+      <div class="logo-sub">— VENDEURS FIABLES —</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-stat">
+      <div class="counter" id="stat-total">0</div>
+      <div class="counter-label">Vendeurs</div>
+    </div>
+    <div class="header-stat">
+      <div class="counter" id="stat-avis">0</div>
+      <div class="counter-label">Avis</div>
+    </div>
+    <a href="https://discord.gg/9MyKkBg6" target="_blank" class="discord-btn">
+      <span class="discord-dot"></span>
+      <span>Discord</span>
+    </a>
+    <button class="admin-btn-header" onclick="showAdminLogin()">⚙ Admin</button>
+  </div>
+</header>
+
+<!-- BARRE ADMIN -->
+<div class="admin-bar">
+  <span class="admin-bar-label">⚙ Mode Admin — El Cinco</span>
+  <div style="display:flex;gap:0.5rem;align-items:center">
+    <button class="btn-add-vendor" onclick="openVendorModal()">+ Ajouter un vendeur</button>
+    <button class="btn-logout" onclick="logout()">Déconnexion</button>
+  </div>
+</div>
+
+<main>
+  <div class="hero">
+    <div class="hero-title">VENDEURS <span>FIABLES</span></div>
+    <div class="hero-sub">Vérifiés par El Cinco · Communauté Casual Division</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="Rechercher un pseudo Discord..." oninput="handleSearch()" autocomplete="off"/>
+      <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('tous',this)">Tous</button>
+    <button class="filter-btn" onclick="setFilter('or',this)">🏆 Vendeur d'Or</button>
+    <button class="filter-btn" onclick="setFilter('fiable',this)">✅ Vendeur Fiable</button>
+    <button class="filter-btn" onclick="setFilter('nouveau',this)">🆕 Nouveau</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block"><div class="stat-num" id="s-or">0</div><div class="stat-label">🏆 Vendeurs d'Or</div></div>
+    <div class="stat-block"><div class="stat-num" id="s-fiable">0</div><div class="stat-label">✅ Vendeurs Fiables</div></div>
+    <div class="stat-block"><div class="stat-num" id="s-total-avis">0</div><div class="stat-label">Avis publiés</div></div>
+    <div class="stat-block"><div class="stat-num" id="s-note">—</div><div class="stat-label">Note moyenne</div></div>
+  </div>
+
+  <div class="vendors-grid" id="vendors-grid">
+    <div class="no-results">Chargement...</div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-disclaimer">Les badges et avis affichés sont des informations communautaires basées sur des retours membres vérifiés par El Cinco. Ils n'engagent en aucun cas la responsabilité de Casual Division ou de son administrateur. Vérifiez toujours vous-mêmes avant tout achat ou échange.</div>
+  <a href="index.html">Page VIP</a> · <a href="map.html">Casual Map</a> · <a href="https://casuhall.fr" target="_blank">casuhall.fr</a><br>
+  © 2024-2026 Casual Division · Casu'Hall
+</footer>
+
+<!-- MODALES -->
+<!-- Login admin -->
+<div class="admin-login-overlay" id="admin-login-overlay">
+  <div class="admin-login-box">
+    <div class="admin-login-title">ACCÈS ADMIN</div>
+    <input type="password" class="admin-login-input" id="admin-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdmin()"/>
+    <button class="admin-login-btn" onclick="checkAdmin()">CONNEXION</button>
+    <div class="admin-login-error" id="admin-error">Code incorrect</div>
+    <button class="modal-close" onclick="closeAdminLogin()" style="top:0.75rem;right:1rem;position:absolute">✕</button>
+  </div>
+</div>
+
+<!-- Modal vendeur (ajout/edit) -->
+<div class="overlay" id="vendor-overlay" onclick="if(event.target===this)closeVendorModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeVendorModal()">✕</button>
+    <div class="modal-title" id="vendor-modal-title">AJOUTER UN VENDEUR</div>
+    <input type="hidden" id="vendor-edit-id"/>
+    <div class="field">
+      <label>Pseudo Discord *</label>
+      <input type="text" id="v-pseudo" placeholder="PseudoExemple" maxlength="50"/>
+    </div>
+    <div class="field">
+      <label>Badge *</label>
+      <select id="v-badge">
+        <option value="nouveau">🆕 En observation</option>
+        <option value="fiable">✅ Vendeur Fiable</option>
+        <option value="or">🏆 Vendeur d'Or</option>
+        <option value="suspendu">⚠️ Suspendu</option>
+        <option value="banni">🚫 Banni</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Spécialité (optionnel)</label>
+      <input type="text" id="v-specialite" placeholder="Stone Island, Lyle & Scott..." maxlength="80"/>
+    </div>
+    <div class="field">
+      <label>Membre depuis (optionnel)</label>
+      <input type="text" id="v-depuis" placeholder="Mai 2025" maxlength="30"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeVendorModal()">ANNULER</button>
+      <button class="btn-save" onclick="saveVendor()">ENREGISTRER</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal avis -->
+<div class="overlay" id="review-overlay" onclick="if(event.target===this)closeReviewModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeReviewModal()">✕</button>
+    <div class="modal-title">AJOUTER UN AVIS</div>
+    <input type="hidden" id="review-vendor-id"/>
+    <div class="field">
+      <label>Pseudo de l'acheteur *</label>
+      <input type="text" id="r-acheteur" placeholder="PseudoAcheteur" maxlength="50"/>
+    </div>
+    <div class="field">
+      <label>Note *</label>
+      <div class="stars-picker" id="stars-picker">
+        <button class="star-btn" onclick="setNote(1)">★</button>
+        <button class="star-btn" onclick="setNote(2)">★</button>
+        <button class="star-btn" onclick="setNote(3)">★</button>
+        <button class="star-btn" onclick="setNote(4)">★</button>
+        <button class="star-btn" onclick="setNote(5)">★</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Commentaire</label>
+      <textarea id="r-commentaire" rows="3" placeholder="Transaction parfaite, envoi rapide..." maxlength="400"></textarea>
+    </div>
+    <div class="field">
+      <label>Article</label>
+      <input type="text" id="r-article" placeholder="Veste Lyle & Scott Navy L" maxlength="80"/>
+    </div>
+    <div class="field">
+      <label>Prix (€)</label>
+      <input type="text" id="r-prix" placeholder="65" maxlength="10"/>
+    </div>
+    <div class="field">
+      <label>Moyen d'envoi</label>
+      <select id="r-envoi">
+        <option value="">— Sélectionner —</option>
+        <option value="Stick Mondial Relay">Stick Mondial Relay</option>
+        <option value="Vinted">Vinted</option>
+        <option value="Main propre">Main propre</option>
+        <option value="Colissimo">Colissimo</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeReviewModal()">ANNULER</button>
+      <button class="btn-save" onclick="saveReview()">PUBLIER L'AVIS</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://emiveacfwbhhpcdghanv.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaXZlYWNmd2JoaHBjZGdoYW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjQ1NTgsImV4cCI6MjA5MjEwMDU1OH0.zZ6eWTPVXMhUp1VQbpUI-J5L_t0osI9ipLTSoLeQQRY';
+// Hash SHA-256 du code admin — le vrai code n'est jamais dans le source
+const ADMIN_HASH='cee371696aae5dead989b7f2b9b925029e0d49d33691b46dcc39357ccb7f26ac';
+
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let allVendors=[],allReviews=[],currentFilter='tous',expandedId=null,currentNote=0;
+
+// ─── HASH ────────────────────────────────────
+async function sha256(str){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ─── ADMIN AUTH ──────────────────────────────
+function showAdminLogin(){document.getElementById('admin-login-overlay').classList.add('show');setTimeout(()=>document.getElementById('admin-pw').focus(),100)}
+function closeAdminLogin(){document.getElementById('admin-login-overlay').classList.remove('show');document.getElementById('admin-pw').value='';document.getElementById('admin-error').style.display='none'}
+async function checkAdmin(){
+  const pw=document.getElementById('admin-pw').value.trim();
+  const h=await sha256(pw);
+  if(h===ADMIN_HASH){
+    document.body.classList.add('admin-mode');
+    closeAdminLogin();
+    toast('Mode admin activé — Bienvenue El Cinco');
+    render();
+  } else {
+    document.getElementById('admin-error').style.display='block';
+    document.getElementById('admin-pw').value='';
+  }
+}
+function logout(){document.body.classList.remove('admin-mode');toast('Déconnecté');render()}
+
+// ─── INIT ────────────────────────────────────
+async function init(){
+  const[{data:vendors},{data:reviews}]=await Promise.all([
+    sb.from('vendors').select('*').order('badge',{ascending:false}).order('note_moyenne',{ascending:false}),
+    sb.from('reviews').select('*').order('created_at',{ascending:false})
+  ]);
+  allVendors=vendors||[];
+  allReviews=reviews||[];
+  updateStats();
+  render();
+}
+
+// ─── STATS ───────────────────────────────────
+function updateStats(){
+  const or=allVendors.filter(v=>v.badge==='or').length;
+  const fiable=allVendors.filter(v=>v.badge==='fiable').length;
+  const notes=allReviews.filter(r=>r.note).map(r=>r.note);
+  const moy=notes.length?(notes.reduce((a,b)=>a+b,0)/notes.length).toFixed(1):'—';
+  document.getElementById('stat-total').textContent=allVendors.length;
+  document.getElementById('stat-avis').textContent=allReviews.length;
+  document.getElementById('s-or').textContent=or;
+  document.getElementById('s-fiable').textContent=fiable;
+  document.getElementById('s-total-avis').textContent=allReviews.length;
+  document.getElementById('s-note').textContent=moy!=='—'?moy+'/5':'—';
+}
+
+// ─── RENDER ──────────────────────────────────
+function render(){
+  const q=document.getElementById('search-input').value.trim().toLowerCase();
+  let filtered=[...allVendors];
+  if(currentFilter!=='tous')filtered=filtered.filter(v=>v.badge===currentFilter);
+  if(q)filtered=filtered.filter(v=>v.pseudo.toLowerCase().includes(q));
+  const grid=document.getElementById('vendors-grid');
+  if(!filtered.length){grid.innerHTML='<div class="no-results">Aucun vendeur trouvé</div>';return}
+  grid.innerHTML=filtered.map(v=>{
+    const reviews=allReviews.filter(r=>r.vendor_id===v.id);
+    const isExp=expandedId===v.id;
+    return`<div>${vendorCard(v,reviews,isExp)}${reviewsPanel(v,reviews,isExp)}</div>`;
+  }).join('');
+}
+
+function vendorCard(v,reviews,isExp){
+  const init=getInitials(v.pseudo);
+  const ec=v.badge==='or'?'vendor-emblem or':v.badge==='banni'?'vendor-emblem banni':v.badge==='suspendu'?'vendor-emblem suspendu':'vendor-emblem';
+  return`<div class="vendor-card${isExp?' expanded':''}" onclick="toggleExpand(${v.id})">
+    <div class="${ec}">${esc(init)}</div>
+    <div class="vendor-main">
+      <div class="vendor-pseudo">@${esc(v.pseudo)}</div>
+      <div class="vendor-meta">
+        ${badgeTag(v.badge)}
+        ${v.specialite?`<span class="vendor-specialite">${esc(v.specialite)}</span>`:''}
+      </div>
+    </div>
+    <div class="vendor-right">
+      ${v.note_moyenne>0?`<div class="note-num">${Number(v.note_moyenne).toFixed(1)}</div><div class="nb-avis">${v.nb_avis} avis</div>`:`<div class="nb-avis">${reviews.length?reviews.length+' avis':'Aucun avis'}</div>`}
+    </div>
+    <div class="admin-actions-card" onclick="event.stopPropagation()">
+      <button class="btn-admin-sm btn-edit-v" onclick="openEditVendor(${v.id})">✏ Modifier</button>
+      <button class="btn-admin-sm btn-del-v" onclick="deleteVendor(${v.id})">✕ Supprimer</button>
+    </div>
+    <span class="chevron">▼</span>
+  </div>`;
+}
+
+function reviewsPanel(v,reviews,isExp){
+  const rHtml=reviews.length?reviews.map(r=>`
+    <div class="review-item">
+      <button class="btn-del-review" onclick="deleteReview(${r.id},${v.id})">✕</button>
+      <div class="review-header">
+        <span class="review-acheteur">@${esc(r.pseudo_acheteur)}</span>
+        <span class="stars-small">${starsRaw(r.note)}</span>
+        <span class="review-date">${formatDate(r.created_at)}</span>
+      </div>
+      ${r.commentaire?`<div class="review-comment">"${esc(r.commentaire)}"</div>`:''}
+      <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+        ${r.article?`<div class="review-article">📦 ${esc(r.article)}${r.prix?`<span>· ${esc(r.prix)}€</span>`:''}${r.moyen_envoi?`<span>· ${esc(r.moyen_envoi)}</span>`:''}</div>`:''}
+        <div class="verified-tag">✓ Vérifié El Cinco</div>
+      </div>
+    </div>`).join(''):'<div class="no-reviews">Aucun avis — DM El Cinco après ta transaction !</div>';
+  return`<div class="reviews-panel${isExp?' show':''}">
+    <div class="reviews-panel-title" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:0.5rem">Avis membres · ${reviews.length} avis <span style="flex:1;height:1px;background:var(--border);display:inline-block;min-width:20px"></span></span>
+      <button class="btn-add-review" onclick="openReviewModal(${v.id})">+ Ajouter un avis</button>
+    </div>
+    ${rHtml}
+  </div>`;
+}
+
+// ─── VENDOR CRUD ─────────────────────────────
+function openVendorModal(id){
+  document.getElementById('vendor-edit-id').value='';
+  document.getElementById('vendor-modal-title').textContent='AJOUTER UN VENDEUR';
+  document.getElementById('v-pseudo').value='';
+  document.getElementById('v-badge').value='nouveau';
+  document.getElementById('v-specialite').value='';
+  document.getElementById('v-depuis').value='';
+  document.getElementById('vendor-overlay').classList.add('show');
+}
+function openEditVendor(id){
+  const v=allVendors.find(x=>x.id===id);
+  if(!v)return;
+  document.getElementById('vendor-edit-id').value=id;
+  document.getElementById('vendor-modal-title').textContent='MODIFIER LE VENDEUR';
+  document.getElementById('v-pseudo').value=v.pseudo;
+  document.getElementById('v-badge').value=v.badge;
+  document.getElementById('v-specialite').value=v.specialite||'';
+  document.getElementById('v-depuis').value=v.membre_depuis||'';
+  document.getElementById('vendor-overlay').classList.add('show');
+}
+function closeVendorModal(){document.getElementById('vendor-overlay').classList.remove('show')}
+async function saveVendor(){
+  const editId=document.getElementById('vendor-edit-id').value;
+  const pseudo=document.getElementById('v-pseudo').value.trim();
+  const badge=document.getElementById('v-badge').value;
+  const specialite=document.getElementById('v-specialite').value.trim();
+  const depuis=document.getElementById('v-depuis').value.trim();
+  if(!pseudo){toast('Pseudo obligatoire',true);return}
+  const data={pseudo,badge,specialite:specialite||null,membre_depuis:depuis||null};
+  let err;
+  if(editId){
+    ({error:err}=await sb.from('vendors').update(data).eq('id',editId));
+  } else {
+    ({error:err}=await sb.from('vendors').insert(data));
+  }
+  if(err){toast('Erreur : '+err.message,true);return}
+  closeVendorModal();
+  toast(editId?'Vendeur modifié ✓':'Vendeur ajouté ✓');
+  await init();
+}
+async function deleteVendor(id){
+  if(!confirm('Supprimer ce vendeur et tous ses avis ?'))return;
+  const{error}=await sb.from('vendors').delete().eq('id',id);
+  if(error){toast('Erreur suppression',true);return}
+  if(expandedId===id)expandedId=null;
+  toast('Vendeur supprimé');
+  await init();
+}
+
+// ─── REVIEW CRUD ─────────────────────────────
+function openReviewModal(vendorId){
+  document.getElementById('review-vendor-id').value=vendorId;
+  document.getElementById('r-acheteur').value='';
+  document.getElementById('r-commentaire').value='';
+  document.getElementById('r-article').value='';
+  document.getElementById('r-prix').value='';
+  document.getElementById('r-envoi').value='';
+  currentNote=0;
+  renderStars();
+  document.getElementById('review-overlay').classList.add('show');
+}
+function closeReviewModal(){document.getElementById('review-overlay').classList.remove('show')}
+function setNote(n){currentNote=n;renderStars()}
+function renderStars(){
+  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('active',i<currentNote));
+}
+async function saveReview(){
+  const vendorId=parseInt(document.getElementById('review-vendor-id').value);
+  const acheteur=document.getElementById('r-acheteur').value.trim();
+  const commentaire=document.getElementById('r-commentaire').value.trim();
+  const article=document.getElementById('r-article').value.trim();
+  const prix=document.getElementById('r-prix').value.trim();
+  const envoi=document.getElementById('r-envoi').value;
+  if(!acheteur){toast('Pseudo acheteur obligatoire',true);return}
+  if(!currentNote){toast('Note obligatoire',true);return}
+  const{error}=await sb.from('reviews').insert({
+    vendor_id:vendorId,pseudo_acheteur:acheteur,
+    note:currentNote,commentaire:commentaire||null,
+    article:article||null,prix:prix||null,moyen_envoi:envoi||null
+  });
+  if(error){toast('Erreur : '+error.message,true);return}
+  // Recalcul note moyenne
+  await recalcNote(vendorId);
+  closeReviewModal();
+  toast('Avis publié ✓');
+  await init();
+}
+async function deleteReview(reviewId,vendorId){
+  if(!confirm('Supprimer cet avis ?'))return;
+  const{error}=await sb.from('reviews').delete().eq('id',reviewId);
+  if(error){toast('Erreur suppression',true);return}
+  await recalcNote(vendorId);
+  toast('Avis supprimé');
+  await init();
+}
+async function recalcNote(vendorId){
+  const{data}=await sb.from('reviews').select('note').eq('vendor_id',vendorId);
+  const notes=(data||[]).filter(r=>r.note).map(r=>r.note);
+  const moy=notes.length?parseFloat((notes.reduce((a,b)=>a+b,0)/notes.length).toFixed(1)):0;
+  await sb.from('vendors').update({note_moyenne:moy,nb_avis:notes.length}).eq('id',vendorId);
+}
+
+// ─── HELPERS ─────────────────────────────────
+function getInitials(p){return p.replace(/[^a-zA-Z]/g,'').slice(0,2).toUpperCase()||'??'}
+function badgeTag(b){
+  const m={or:['badge-or',"🏆 Vendeur d'Or"],fiable:['badge-fiable','✅ Vendeur Fiable'],nouveau:['badge-nouveau','🆕 En observation'],suspendu:['badge-suspendu','⚠️ Suspendu'],banni:['badge-banni','🚫 Banni']};
+  const[cls,label]=m[b]||['badge-nouveau',b];
+  return`<span class="badge ${cls}">${label}</span>`;
+}
+function starsRaw(n){n=Math.round(n||0);return'★'.repeat(n)+'☆'.repeat(5-n)}
+function formatDate(ts){if(!ts)return'';const d=new Date(ts);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(err?' err':'');
+  void t.offsetWidth;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+function toggleExpand(id){expandedId=expandedId===id?null:id;render()}
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');render();
+}
+function handleSearch(){
+  const v=document.getElementById('search-input').value;
+  document.getElementById('search-clear').classList.toggle('show',v.length>0);render();
+}
+function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-clear').classList.remove('show');render()}
+
+init();
+</script>
+</body>
+</html>
