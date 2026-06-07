@@ -60,7 +60,7 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
     </div>
     <div class="price-box">
       <div class="payment-label" id="t-payment">PAIEMENT UNIQUE</div>
-      <div class="price">19.99€</div>
+      <div class="price">4.99€</div>
       <div class="lifetime" id="t-lifetime">ACCÈS PERMANENT — SANS ABONNEMENT</div>
     </div>
     <div id="t-activation-box" style="border:1px solid #D4AF37;padding:12px 16px;margin-bottom:1rem;background:#1a1400;text-align:center;">
@@ -85,20 +85,24 @@ body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; jus
 const langs = {
   fr: {
     title: "ACCÈS VIP — PERMANENT",
-    sub: "Casu avant tout le monde.",
+    sub: "Les meilleures affaires casual. Avant tout le monde.",
     section: "CE QUE TU OBTIENS",
     items: [
-      ["Bot Vinted ultra-actif", "scan automatique plusieurs fois par jour, les meilleures affaires directement dans ton Discord avant tout le monde"],
-      ["Alertes sur les TRÈS BONNES AFFAIRES", "quand une pièce est en dessous du prix du marché, tu es notifié en priorité absolue"],
-      ["Liste exclusive des meilleurs vendeurs Vinted casual", "vendeurs vérifiés, fiables, spécialisés casual"],
-      ["Marques surveillées :", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, et bien d'autres à venir..."],
-      ["Priorité aux pièces noir & marine", "les plus recherchées"],
+      ["Bot Vinted actif 24h/24", "scan automatique toutes les 2 minutes — les meilleures affaires dans ton Discord avant que tout le monde les voie"],
+      ["Alertes deals prioritaires", "dès qu'une pièce passe sous le prix du marché, tu reçois une notification immédiate en DM"],
+      ["Personnalisation complète via /mon-flux", "configure tes marques, tailles, couleurs, budget — le bot filtre exactement selon tes critères"],
+      ["Marques surveillées", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) et d'autres à venir"],
+      ["Liste exclusive des meilleurs vendeurs casual", "vendeurs vérifiés et fiables, mis à jour par la communauté"],
+      ["Accès au salon #trouvailles-vip", "poste tes coups, suis les achats de la communauté"],
       ["Accès au chat membres exclusif", ""]
     ],
     payment: "PAIEMENT UNIQUE",
     lifetime: "ACCÈS PERMANENT — SANS ABONNEMENT",
     cta: "REJOINDRE MAINTENANT →",
-    legalTitle: "CONDITIONS D'UTILISATION", activationLabel: "DÉLAI D'ACTIVATION", activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.", cguText: "J'ai lu et j'accepte les <a href='#legal' style='color:#8B6914;text-decoration:underline;'>conditions d'utilisation</a> de Casual Division by Casu'Hall",
+    legalTitle: "CONDITIONS D'UTILISATION",
+    activationLabel: "DÉLAI D'ACTIVATION",
+    activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.",
+    cguText: "J'ai lu et j'accepte les <a href='#legal' style='color:#8B6914;text-decoration:underline;'>conditions d'utilisation</a> de Casual Division by Casu'Hall",
     legal: `
       <p>1. Après validation du paiement, l'accès VIP est activé manuellement sous 12h maximum.</p>
       <p>2. L'accès est strictement personnel et non transférable.</p>
@@ -113,20 +117,24 @@ const langs = {
   },
   en: {
     title: "VIP ACCESS — PERMANENT",
-    sub: "Casu before everyone else.",
+    sub: "The best casual deals. Before everyone else.",
     section: "WHAT YOU GET",
     items: [
-      ["Ultra-active Vinted Bot", "automatic scan multiple times a day, the best deals delivered directly to your Discord"],
-      ["Alerts on GREAT DEALS", "when an item drops below market price, you're notified first"],
-      ["Exclusive list of the best casual Vinted sellers", "verified, reliable sellers specialised in casual wear"],
-      ["Monitored brands:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, and many more to come..."],
-      ["Priority on black & navy items", "the most sought-after pieces"],
+      ["24/7 active Vinted bot", "automatic scan every 2 minutes — the best deals in your Discord before anyone else sees them"],
+      ["Priority deal alerts", "as soon as an item drops below market price, you get an instant DM notification"],
+      ["Full personalisation via /mon-flux", "set your brands, sizes, colours and budget — the bot filters exactly to your criteria"],
+      ["Monitored brands", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) and more to come"],
+      ["Exclusive list of the best casual sellers", "verified, reliable sellers updated by the community"],
+      ["Access to #trouvailles-vip channel", "share your finds, follow community purchases"],
       ["Access to exclusive members chat", ""]
     ],
     payment: "ONE-TIME PAYMENT",
     lifetime: "PERMANENT ACCESS — NO SUBSCRIPTION",
     cta: "JOIN NOW →",
-    legalTitle: "TERMS OF USE", activationLabel: "ACTIVATION DELAY", activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum. Access is permanent for as long as the service operates.", cguText: "I have read and accept the <a href='#legal' style='color:#8B6914;text-decoration:underline;'>terms of use</a> of Casual Division by Casu'Hall",
+    legalTitle: "TERMS OF USE",
+    activationLabel: "ACTIVATION DELAY",
+    activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum.",
+    cguText: "I have read and accept the <a href='#legal' style='color:#8B6914;text-decoration:underline;'>terms of use</a> of Casual Division by Casu'Hall",
     legal: `
       <p>1. After payment confirmation, VIP access is activated manually within 12 hours maximum.</p>
       <p>2. Access is strictly personal and non-transferable.</p>
@@ -140,20 +148,24 @@ const langs = {
   },
   de: {
     title: "VIP-ZUGANG — PERMANENT",
-    sub: "Casu vor allen anderen.",
+    sub: "Die besten Casual-Deals. Vor allen anderen.",
     section: "WAS DU BEKOMMST",
     items: [
-      ["Ultra-aktiver Vinted-Bot", "automatischer Scan mehrmals täglich, die besten Angebote direkt in deinen Discord"],
-      ["Alarme bei TOP-ANGEBOTEN", "wenn ein Artikel unter dem Marktpreis liegt, wirst du sofort benachrichtigt"],
-      ["Exklusive Liste der besten Casual-Vinted-Verkäufer", "geprüfte, zuverlässige Verkäufer spezialisiert auf Casual-Mode"],
-      ["Überwachte Marken:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum und viele weitere..."],
-      ["Priorität für schwarze & marine Teile", "die meistgesuchten Stücke"],
+      ["24/7 aktiver Vinted-Bot", "automatischer Scan alle 2 Minuten — die besten Angebote in deinem Discord, bevor sie alle sehen"],
+      ["Prioritäts-Deal-Alarme", "sobald ein Artikel unter den Marktpreis fällt, bekommst du sofort eine DM-Benachrichtigung"],
+      ["Vollständige Personalisierung via /mon-flux", "stelle Marken, Größen, Farben und Budget ein — der Bot filtert genau nach deinen Kriterien"],
+      ["Überwachte Marken", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) und weitere"],
+      ["Exklusive Liste der besten Casual-Verkäufer", "geprüfte, zuverlässige Verkäufer, von der Community aktualisiert"],
+      ["Zugang zum #trouvailles-vip Kanal", "teile deine Funde, verfolge Community-Käufe"],
       ["Zugang zum exklusiven Mitglieder-Chat", ""]
     ],
     payment: "EINMALIGE ZAHLUNG",
     lifetime: "PERMANENTER ZUGANG — KEIN ABO",
     cta: "JETZT BEITRETEN →",
-    legalTitle: "NUTZUNGSBEDINGUNGEN", activationLabel: "AKTIVIERUNGSZEIT", activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.", cguText: "Ich habe die <a href='#legal' style='color:#8B6914;text-decoration:underline;'>Nutzungsbedingungen</a> von Casual Division by Casu'Hall gelesen und akzeptiere sie.",
+    legalTitle: "NUTZUNGSBEDINGUNGEN",
+    activationLabel: "AKTIVIERUNGSZEIT",
+    activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.",
+    cguText: "Ich habe die <a href='#legal' style='color:#8B6914;text-decoration:underline;'>Nutzungsbedingungen</a> von Casual Division by Casu'Hall gelesen und akzeptiere sie.",
     legal: `
       <p>1. Nach Zahlungsbestätigung wird der VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.</p>
       <p>2. Der Zugang ist streng persönlich und nicht übertragbar.</p>
@@ -167,20 +179,24 @@ const langs = {
   },
   es: {
     title: "ACCESO VIP — PERMANENTE",
-    sub: "Casu antes que nadie.",
+    sub: "Las mejores ofertas casual. Antes que nadie.",
     section: "LO QUE OBTIENES",
     items: [
-      ["Bot Vinted ultra-activo", "escaneo automático varias veces al día, las mejores ofertas directamente en tu Discord"],
-      ["Alertas de GRANDES OFERTAS", "cuando una pieza está por debajo del precio de mercado, eres notificado con prioridad absoluta"],
-      ["Lista exclusiva de los mejores vendedores Vinted casual", "vendedores verificados, fiables, especializados en casual"],
-      ["Marcas vigiladas:", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, y muchas más por venir..."],
-      ["Prioridad en piezas negras y azul marino", "las más buscadas"],
+      ["Bot Vinted activo 24/7", "escaneo automático cada 2 minutos — las mejores ofertas en tu Discord antes que nadie"],
+      ["Alertas de deals prioritarias", "en cuanto una pieza baja del precio de mercado, recibes una notificación inmediata por DM"],
+      ["Personalización completa vía /mon-flux", "configura tus marcas, tallas, colores y presupuesto — el bot filtra exactamente según tus criterios"],
+      ["Marcas vigiladas", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) y más por venir"],
+      ["Lista exclusiva de los mejores vendedores casual", "vendedores verificados y fiables, actualizados por la comunidad"],
+      ["Acceso al canal #trouvailles-vip", "publica tus hallazgos, sigue las compras de la comunidad"],
       ["Acceso al chat exclusivo de miembros", ""]
     ],
     payment: "PAGO ÚNICO",
     lifetime: "ACCESO PERMANENTE — SIN SUSCRIPCIÓN",
     cta: "UNIRSE AHORA →",
-    legalTitle: "CONDICIONES DE USO", activationLabel: "PLAZO DE ACTIVACIÓN", activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.", cguText: "He leído y acepto las <a href='#legal' style='color:#8B6914;text-decoration:underline;'>condiciones de uso</a> de Casual Division by Casu'Hall",
+    legalTitle: "CONDICIONES DE USO",
+    activationLabel: "PLAZO DE ACTIVACIÓN",
+    activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.",
+    cguText: "He leído y acepto las <a href='#legal' style='color:#8B6914;text-decoration:underline;'>condiciones de uso</a> de Casual Division by Casu'Hall",
     legal: `
       <p>1. Tras la confirmación del pago, el acceso VIP se activa manualmente en un máximo de 12 horas.</p>
       <p>2. El acceso es estrictamente personal e intransferible.</p>
