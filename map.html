@@ -389,7 +389,10 @@ async function deleteMember(id){
   if(!isAdmin)return;
   const res = await fetch('https://emiveacfwbhhpcdghanv.supabase.co/functions/v1/delete-member', {
     method:'POST',
-    headers:{'Content-Type':'application/json'},
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer ' + SUPABASE_KEY
+    },
     body:JSON.stringify({id,code:ADMIN_CODE})
   });
   if(res.ok){await loadData();toast('Marqueur supprimé');}
