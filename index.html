@@ -1,255 +1,302 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casual Division — Accès VIP</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Casual Elite · Casual Division</title>
+<meta name="description" content="Le bot de la Casual Division scanne Vinted jour et nuit et t'envoie les pièces casual sous la cote, sur Discord. 4,99 € une fois, à vie.">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Casual Elite · les pièces casual de Vinted, avant tout le monde">
+<meta property="og:description" content="Lyle & Scott, Fred Perry, Weekend Offender… sous la cote, direct sur ton Discord. 4,99 € une fois, à vie.">
+<meta property="og:image" content="https://xxvc5xx.github.io/casual-division-vip/assets/img/og.jpg">
+<meta property="og:url" content="https://xxvc5xx.github.io/casual-division-vip/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0a0a0a; min-height: 100vh; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; font-family: 'Garamond', 'Georgia', serif; }
-.card { max-width: 560px; width: 100%; }
-.lang-btns { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.5rem; }
-.lang-btns button { padding: 6px 14px; font-size: 11px; letter-spacing: 2px; cursor: pointer; font-family: Georgia, serif; border: 1px solid #8B6914; background: #1a1a1a; color: #D4AF37; }
-.lang-btns button.active { background: #D4AF37; color: #0a0a0a; border-color: #D4AF37; }
-.box { border: 1px solid #8B6914; padding: 2.5rem; position: relative; background: #0f0f0f; }
-.bar-top, .bar-bot { position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #8B6914, #D4AF37, #8B6914); }
-.bar-top { top: 0; } .bar-bot { bottom: 0; }
-.header { text-align: center; margin-bottom: 2rem; }
-.brand { font-size: 11px; color: #8B6914; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.8rem; }
-.vip-title { font-size: 22px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 0.5rem; }
-.divider { width: 50px; height: 1px; background: #D4AF37; margin: 0 auto 1.2rem; }
-.subtitle { font-size: 13px; color: #999; font-style: italic; line-height: 1.7; }
-.benefits { border-top: 0.5px solid #2a2a2a; border-bottom: 0.5px solid #2a2a2a; padding: 1.5rem 0; margin-bottom: 1.5rem; }
-.section-title { font-size: 9px; color: #D4AF37; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1.2rem; }
-.item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
-.item:last-child { margin-bottom: 0; }
-.dot { color: #D4AF37; font-size: 8px; margin-top: 5px; flex-shrink: 0; }
-.item-text { color: #ccc; font-size: 13px; line-height: 1.6; }
-.item-text strong { color: #fff; font-weight: bold; }
-.price-box { text-align: center; padding: 1.2rem; margin-bottom: 1.5rem; }
-.payment-label { font-size: 9px; color: #8B6914; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 6px; }
-.price { font-size: 42px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 4px; }
-.lifetime { font-size: 9px; color: #555; letter-spacing: 3px; text-transform: uppercase; }
-.cta { display: block; text-align: center; background: #D4AF37; color: #0a0a0a; padding: 15px; font-size: 13px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; text-decoration: none; margin-bottom: 1.5rem; }
-.legal-box { border-top: 0.5px solid #2a2a2a; padding-top: 1.2rem; }
-.legal-title { font-size: 9px; color: #8B6914; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.8rem; }
-.legal-text { font-size: 10px; color: #444; line-height: 1.8; letter-spacing: 0.3px; font-family: sans-serif; }
-.legal-text p { margin-bottom: 0.5rem; }
+/* ---------- ouverture ---------- */
+.hero{position:relative;min-height:100svh;display:grid;align-content:end;padding:120px var(--pad) clamp(28px,5vw,56px);overflow:hidden;isolation:isolate}
+.hero .photo{position:absolute;inset:0;z-index:-1;overflow:hidden}
+.hero .photo picture{display:block;width:100%;height:100%}.hero .photo img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;animation:recul 2.6s var(--ease) both}
+.hero .photo::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.05) 32%,rgba(0,0,0,.35) 58%,#000 96%)}
+@keyframes recul{from{transform:scale(1.14);filter:brightness(.4)}to{transform:scale(1);filter:brightness(1)}}
+.hero h1{font-size:clamp(58px,17.5vw,212px);max-width:var(--max)}
+.hero h1 .w{display:block;overflow:hidden;padding:.02em 0 .03em}
+.hero h1 .i{display:inline-block;transform:translateY(108%);font-variation-settings:"wdth" 125;animation:monte 1.15s var(--ease) var(--d) forwards}
+@keyframes monte{to{transform:none;font-variation-settings:"wdth" 75}}
+@media (min-width:900px){.hero h1{font-size:min(10vw,21vh)}.hero h1 .ln{display:block}.hero h1 .w{display:inline-block;vertical-align:top}}
+.hero .bas{display:grid;gap:22px;margin-top:clamp(22px,4vw,40px);max-width:var(--max);opacity:0;animation:apparait .8s ease 1.05s forwards}
+@media (min-width:900px){.hero .bas{grid-template-columns:1fr auto;align-items:end}}
+.hero .actions{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+@keyframes apparait{to{opacity:1}}
+
+/* ---------- chiffres ---------- */
+.chiffres{display:grid;grid-template-columns:repeat(3,1fr);max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+.chiffres div{padding:clamp(26px,4vw,44px) 0;border-right:1px solid var(--trait);padding-right:12px}
+.chiffres div+div{padding-left:clamp(12px,3vw,32px)}
+.chiffres div:last-child{border-right:0}
+.chiffres b{display:block;font-size:clamp(34px,7.5vw,84px);font-weight:840;font-variation-settings:"wdth" 75;line-height:1;letter-spacing:-.01em}
+.chiffres span{display:block;margin-top:8px;font-size:clamp(13px,1.6vw,15px);color:var(--gris);line-height:1.35}
+
+/* ---------- le DM ---------- */
+.dm{display:grid;gap:clamp(36px,6vw,80px);align-items:center}
+@media (min-width:900px){.dm{grid-template-columns:1fr 1fr}}
+.discord{background:#313338;color:#dbdee1;border-radius:14px;padding:18px 18px 20px;font-family:"gg sans","Noto Sans",system-ui,sans-serif;font-variation-settings:normal;box-shadow:0 40px 90px rgba(255,255,255,.04)}
+.discord .qui{display:flex;gap:12px;align-items:center}
+.discord .qui img{width:42px;height:42px;border-radius:50%;background:#000;object-fit:contain;padding:4px}
+.discord .qui b{color:#fff;font-size:15px;font-weight:600}
+.discord .qui em{font-style:normal;font-size:10px;font-weight:700;background:#5865f2;color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px}
+.discord .qui small{color:#949ba4;font-size:12px;margin-left:6px}
+.discord .emb{margin:10px 0 0 54px;background:#2b2d31;border-left:4px solid #f2f3f5;border-radius:4px;padding:12px 14px 14px;max-width:430px}
+.discord .emb .t{color:#fff;font-weight:700;font-size:15px}
+.discord .emb .d{font-size:14px;margin-top:4px}
+.discord .emb .ch{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:12px;font-size:13.5px}
+.discord .emb .ch b{display:block;color:#fff;font-size:13px}
+.discord .emb .ch .prix{font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.discord .emb img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px;margin-top:12px}
+@media (max-width:520px){.discord .emb{margin-left:0}}
+
+/* ---------- avantages ---------- */
+.avantages{display:grid;gap:0}
+@media (min-width:760px){.avantages{grid-template-columns:1fr 1fr;column-gap:56px}}
+.avantages div{border-top:1px solid var(--trait);padding:26px 0 30px}
+.avantages h3{font-size:clamp(24px,3vw,32px);font-weight:780;font-variation-settings:"wdth" 86;line-height:1.05;margin-bottom:10px}
+.avantages p{color:#cfcfcf;max-width:30em}
+
+/* ---------- pépites ---------- */
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:min(72vw,320px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:0 var(--pad) 10px;margin:0 calc(var(--pad) * -1);scroll-padding-inline:var(--pad);scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail article{scroll-snap-align:start}
+.rail .ph{aspect-ratio:4/5;overflow:hidden;background:#111}
+.rail img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.rail article:hover img{transform:scale(1.04)}
+.rail .mq{margin-top:12px;font-size:13px;color:var(--gris);font-variation-settings:"wdth" 110;font-weight:600}
+.rail h3{font-size:17px;font-weight:620;margin-top:2px}
+.rail .px{display:flex;gap:10px;align-items:baseline;margin-top:6px}
+.rail .px b{font-size:28px;font-weight:840;font-variation-settings:"wdth" 75}
+.rail .px span{font-size:14px;color:var(--gris)}
+.rail-nav{display:flex;gap:10px}
+.rail-nav button{width:48px;height:48px;border:1.5px solid var(--trait);display:grid;place-items:center}
+.rail-nav button:hover{border-color:var(--blanc)}
+@media (max-width:760px){.rail-nav{display:none}}
+
+/* ---------- étapes ---------- */
+.etapes{list-style:none;display:grid;gap:0;counter-reset:e}
+@media (min-width:900px){.etapes{grid-template-columns:repeat(3,1fr);column-gap:40px}}
+.etapes li{counter-increment:e;border-top:1px solid var(--trait);padding:24px 0 30px;display:grid;grid-template-columns:auto 1fr;gap:18px}
+.etapes li::before{content:counter(e);font-size:64px;font-weight:860;font-variation-settings:"wdth" 75;line-height:.8}
+.etapes h3{font-size:22px;font-weight:740;font-variation-settings:"wdth" 92;line-height:1.15}
+.etapes p{color:#cfcfcf;margin-top:6px}
+.etapes code{font-family:inherit;background:#1d1d1d;padding:1px 6px}
+
+/* ---------- l'offre ---------- */
+.offre{display:grid;gap:clamp(40px,7vw,90px);align-items:center}
+@media (min-width:960px){.offre{grid-template-columns:1fr 1fr}}
+.scene{perspective:1100px;display:grid;place-items:center;padding:10px 0}
+.carte{position:relative;width:min(100%,470px);aspect-ratio:1.586;border-radius:18px;padding:clamp(18px,4vw,28px);transform-style:preserve-3d;
+  background:radial-gradient(120% 140% at var(--reflet,50%) 0%,#2a2a2a 0%,#0e0e0e 46%,#050505 100%);border:1px solid #3a3a3a;
+  box-shadow:0 50px 90px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.12);overflow:hidden;will-change:transform}
+.carte::before{content:"";position:absolute;inset:0;opacity:.18;background:repeating-linear-gradient(100deg,rgba(255,255,255,.07) 0 1px,transparent 1px 4px)}
+.carte .h{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+.carte .h img{height:clamp(40px,8vw,58px);width:auto}
+.carte .h span{font-size:12px;letter-spacing:.14em;color:#bdbdbd;font-weight:650;font-variation-settings:"wdth" 115}
+.carte .nom{position:absolute;left:clamp(18px,4vw,28px);bottom:clamp(44px,9vw,62px);font-size:clamp(40px,9vw,64px);font-weight:860;font-variation-settings:"wdth" 75;line-height:.9;text-transform:uppercase}
+.carte .b{position:absolute;left:clamp(18px,4vw,28px);right:clamp(18px,4vw,28px);bottom:clamp(16px,3.5vw,24px);display:flex;justify-content:space-between;font-size:12px;letter-spacing:.12em;color:#bdbdbd;font-weight:600;font-variation-settings:"wdth" 112}
+.prixbloc .gros{font-size:clamp(96px,20vw,180px);font-weight:860;font-variation-settings:"wdth" 75;line-height:.82;letter-spacing:-.02em}
+.prixbloc .sous{font-size:19px;margin-top:14px;color:#e2e2e2}
+.prixbloc ul{list-style:none;margin:26px 0;display:grid;gap:10px}
+.prixbloc li{padding-left:26px;position:relative;color:#d6d6d6}
+.prixbloc li::before{content:"";position:absolute;left:0;top:.62em;width:12px;height:2px;background:var(--blanc)}
+.case{display:flex;gap:14px;align-items:flex-start;margin-top:14px;cursor:pointer;font-size:15px;color:#d0d0d0;line-height:1.45}
+.case input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;border:1.5px solid var(--blanc);margin-top:1px;display:grid;place-items:center;cursor:pointer}
+.case input:checked{background:var(--blanc)}
+.case input:checked::after{content:"";width:6px;height:11px;border:solid var(--noir);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.payer{margin-top:24px;width:100%}
+.note{margin-top:14px;font-size:14px;color:var(--gris)}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="lang-btns">
-    <button class="active" onclick="setLang('fr')">FR</button>
-    <button onclick="setLang('en')">EN</button>
-    <button onclick="setLang('de')">DE</button>
-    <button onclick="setLang('es')">ES</button>
-  </div>
-  <div class="box">
-    <div class="bar-top"></div>
-    <div class="bar-bot"></div>
-    <div class="header">
-      <div class="brand">⚜ &nbsp; C A S U A L &nbsp; D I V I S I O N &nbsp; ⚜</div>
-      <div class="vip-title" id="t-title">ACCÈS VIP — PERMANENT</div>
-      <div class="divider"></div>
-      <div class="subtitle" id="t-sub">Casu avant tout le monde.</div>
-    </div>
-    <div class="benefits">
-      <div class="section-title" id="t-section">CE QUE TU OBTIENS</div>
-      <div id="items"></div>
-    </div>
-    <div class="price-box">
-      <div class="payment-label" id="t-payment">PAIEMENT UNIQUE</div>
-      <div class="price">4.99€</div>
-      <div class="lifetime" id="t-lifetime">ACCÈS PERMANENT — SANS ABONNEMENT</div>
-    </div>
-    <div id="t-activation-box" style="border:1px solid #D4AF37;padding:12px 16px;margin-bottom:1rem;background:#1a1400;text-align:center;">
-      <div style="font-size:10px;color:#8B6914;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;font-family:sans-serif;" id="t-activation-label">DÉLAI D'ACTIVATION</div>
-      <div style="font-size:20px;color:#D4AF37;font-weight:bold;letter-spacing:2px;">⏱ 12H MAX</div>
-      <div style="font-size:11px;color:#999;margin-top:4px;font-family:sans-serif;" id="t-activation-text">Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.</div>
-    </div>
-    <div style="margin-bottom:1rem;padding:12px 16px;background:#111;border:0.5px solid #2a2a2a;">
-      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-        <input type="checkbox" id="cgu-check" style="margin-top:3px;width:auto;accent-color:#D4AF37;" onchange="toggleCTA()">
-        <span id="t-cgu-text" style="font-size:11px;color:#666;font-family:sans-serif;line-height:1.6;">J'ai lu et j'accepte les <a href="#legal" style="color:#8B6914;text-decoration:underline;">conditions d'utilisation</a> de Casual Division by Casu'Hall</span>
-      </label>
-    </div>
-    <a href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" class="cta" id="t-cta" onclick="return checkCGU()" style="opacity:0.4;cursor:not-allowed;">REJOINDRE MAINTENANT →</a>
-    <div class="legal-box" id="legal">
-      <div class="legal-title" id="t-legal-title">CONDITIONS D'ACCÈS</div>
-      <div class="legal-text" id="t-legal"></div>
+
+<header class="barre">
+  <a class="logo" href="./" aria-label="Casual Division, accueil"><img src="assets/img/logo-cd.png" alt="Casual Division" width="58" height="38"></a>
+  <nav>
+    <a class="lien" href="map.html">Casual Map</a>
+    <a class="lien" href="fiabilite.html">Vendeurs fiables</a>
+    <a class="btn vide petit-btn" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#discord"/></svg>Discord</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero grain" aria-labelledby="h1">
+  <div class="photo"><picture><source media="(max-width: 760px)" srcset="assets/img/hero-torches-vertical.jpg"><img src="assets/img/hero-torches.jpg" alt="" fetchpriority="high"></picture></div>
+  <h1 id="h1" class="display">
+    <span class="ln"><span class="w"><span class="i" style="--d:.15s">Les pièces</span></span> <span class="w"><span class="i" style="--d:.25s">casual</span></span></span>
+    <span class="ln"><span class="w"><span class="i" style="--d:.35s">de Vinted,</span></span> <span class="w"><span class="i" style="--d:.45s">avant tout</span></span></span>
+    <span class="ln"><span class="w"><span class="i" style="--d:.55s">le monde.</span></span></span>
+  </h1>
+  <div class="bas">
+    <p class="lead">Le bot de la Casual Division scanne Vinted jour et nuit. Quand une pièce Lyle&nbsp;&amp;&nbsp;Scott, Fred Perry ou Weekend Offender passe sous la cote, elle tombe sur ton Discord.</p>
+    <div class="actions">
+      <a class="btn plein" href="#offre">Devenir Casual Elite pour 4,99 €</a>
+      <a class="lien-souligne" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener">Rejoindre le Discord gratuitement</a>
     </div>
   </div>
+</section>
+
+<div class="chiffres" aria-label="Le bot en chiffres">
+  <div><b data-compte="16600" data-suffixe="+">16 600+</b><span>pépites postées depuis le lancement</span></div>
+  <div><b data-compte="650">650</b><span>nouvelles pépites par jour</span></div>
+  <div><b data-compte="11">11</b><span>marques casual surveillées</span></div>
 </div>
+
+<div class="defile" aria-label="Marques surveillées"><div class="piste">
+  <span>Lyle &amp; Scott<i>/</i></span><span>Fred Perry<i>/</i></span><span>Weekend Offender<i>/</i></span><span>Peaceful Hooligan<i>/</i></span><span>Alpha Industries<i>/</i></span><span>Ma.Strum<i>/</i></span><span>Pitbull<i>/</i></span><span>Aquascutum<i>/</i></span><span>Lonsdale<i>/</i></span><span>The North Face<i>/</i></span><span>Adidas Spezial, Samba, Gazelle<i>/</i></span>
+</div></div>
+
+<section class="bloc" aria-labelledby="t-dm">
+  <div class="dm">
+    <div>
+      <h2 id="t-dm" class="titre">Direct sur ton Discord.</h2>
+      <p class="lead" style="margin-top:22px">Tu choisis tes marques, tes tailles et ton budget. Dès qu'une annonce colle, le bot t'écrit en message privé, avec la photo, le prix et la cote du marché. Tu cliques, tu achètes sur Vinted.</p>
+    </div>
+    <div class="discord" role="img" aria-label="Exemple de message envoyé par le bot : coupe-vent Lyle & Scott taille M à 15 euros, cote environ 40 euros, moins 62 pour cent">
+      <div class="qui"><img src="assets/img/logo-cd.png" alt=""><div><b>Casual Division</b><em>APP</em><small>aujourd'hui à 14:24</small></div></div>
+      <div class="emb">
+        <div class="t">LYLE &amp; SCOTT · VESTE/MANTEAU</div>
+        <div class="d">Lyle &amp; Scott zwarte jas maat M</div>
+        <div class="ch">
+          <div><b>Prix</b><span class="prix">15 €</span></div>
+          <div><b>Cote</b>~40 € sur les annonces similaires, <strong style="color:#fff">−62 %</strong></div>
+          <div><b>Taille</b>M</div>
+          <div><b>État</b>Très bon état</div>
+        </div>
+        <img src="assets/img/deals/ls-coupe-vent.jpg" alt="" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloc" aria-labelledby="t-av">
+  <div class="entete"><h2 id="t-av" class="titre">Ce que tu débloques.</h2></div>
+  <div class="avantages">
+    <div><h3>Tes pépites en DM</h3><p>Avec <strong>/mon-flux</strong>, tu règles tes marques, tailles, couleurs et ton budget. Le bot ne t'envoie que ce qui te correspond.</p></div>
+    <div><h3>La cote sur chaque annonce</h3><p>Le prix habituel de la pièce et la réduction en pourcentage. Tu sais tout de suite si c'est une vraie affaire.</p></div>
+    <div><h3>Le salon VIP en direct</h3><p>Toutes les pépites, 24 h/24, au moment où elles sont mises en ligne. Avant qu'elles partent.</p></div>
+    <div><h3>Le chat des membres</h3><p>Les trouvailles de la communauté dans #trouvailles-vip, les conseils, les bons plans entre casuals.</p></div>
+  </div>
+</section>
+
+<section class="bloc" aria-labelledby="t-pep">
+  <div class="entete">
+    <h2 id="t-pep" class="titre">Trouvées par le bot ce mois-ci.</h2>
+    <div class="rail-nav" style="justify-self:end"><button type="button" aria-label="Pépites précédentes" data-rail="-1">←</button><button type="button" aria-label="Pépites suivantes" data-rail="1">→</button></div>
+  </div>
+  <div class="rail" id="rail">
+    <article><div class="ph"><img src="assets/img/deals/ls-coupe-vent.jpg" alt="Coupe-vent Lyle & Scott à capuche" loading="lazy"></div><p class="mq">Lyle &amp; Scott</p><h3>Coupe-vent à capuche, M</h3><p class="px"><b>15 €</b><span>cote ~40 €</span></p></article>
+    <article><div class="ph"><img src="assets/img/deals/alpha-ma1.jpg" alt="Bomber Alpha Industries MA-1" loading="lazy"></div><p class="mq">Alpha Industries</p><h3>Bomber MA-1</h3><p class="px"><b>25 €</b><span>cote ~72 €</span></p></article>
+    <article><div class="ph"><img src="assets/img/deals/ls-enfilable.jpg" alt="Coupe-vent enfilable Lyle & Scott noir" loading="lazy"></div><p class="mq">Lyle &amp; Scott</p><h3>Coupe-vent enfilable, M</h3><p class="px"><b>15 €</b><span>cote ~40 €</span></p></article>
+    <article><div class="ph"><img src="assets/img/deals/wo-coupe-vent.jpg" alt="Coupe-vent Weekend Offender à capuche" loading="lazy"></div><p class="mq">Weekend Offender</p><h3>Coupe-vent à capuche, S</h3><p class="px"><b>15 €</b></p></article>
+    <article><div class="ph"><img src="assets/img/deals/wo-camo.jpg" alt="Veste Weekend Offender camouflage" loading="lazy"></div><p class="mq">Weekend Offender</p><h3>Veste camo, L</h3><p class="px"><b>25 €</b></p></article>
+    <article><div class="ph"><img src="assets/img/deals/ph-softshell.jpg" alt="Softshell Peaceful Hooligan kaki" loading="lazy"></div><p class="mq">Peaceful Hooligan</p><h3>Softshell vintage, S</h3><p class="px"><b>25 €</b></p></article>
+  </div>
+</section>
+
+<section class="bloc" aria-labelledby="t-et">
+  <div class="entete"><h2 id="t-et" class="titre">Comment ça marche.</h2></div>
+  <ol class="etapes">
+    <li><div><h3>Tu paies 4,99 €</h3><p>Une seule fois, par carte sur Stripe. Pas d'abonnement, rien à résilier.</p></div></li>
+    <li><div><h3>Tu rejoins le Discord</h3><p>Envoie ton pseudo Discord et l'e-mail du paiement à El Cinco en message privé. Ton rôle Casual Elite arrive sous 12 h.</p></div></li>
+    <li><div><h3>Tu règles ton flux</h3><p>Tape <code>/mon-flux creer</code>, choisis tes marques et tes tailles. Les pépites tombent en DM.</p></div></li>
+  </ol>
+</section>
+
+<section class="bloc" id="offre" aria-labelledby="t-of">
+  <div class="offre">
+    <div class="scene">
+      <div class="carte" data-carte aria-hidden="true">
+        <div class="h"><img src="assets/img/logo-cd.png" alt=""><span>ACCÈS VIP</span></div>
+        <div class="nom">Casual<br>Elite</div>
+        <div class="b"><span>MEMBRE À VIE</span><span>EXPIRE : JAMAIS</span></div>
+      </div>
+    </div>
+    <div class="prixbloc">
+      <h2 id="t-of" class="sr">L'offre Casual Elite</h2>
+      <p class="gros">4,99 €</p>
+      <p class="sous">Une fois. À vie. Pas d'abonnement.</p>
+      <ul>
+        <li>Pépites en DM selon ton flux</li>
+        <li>La cote du marché sur chaque annonce</li>
+        <li>Salon VIP en direct, 24 h/24</li>
+        <li>Chat des membres et #trouvailles-vip</li>
+      </ul>
+      <label class="case"><input type="checkbox" id="cgu"><span>J'ai lu et j'accepte les <a href="#cgu-txt" class="lien-souligne">conditions d'utilisation</a>.</span></label>
+      <label class="case"><input type="checkbox" id="retract"><span>Je demande l'activation de mon accès sans attendre et je reconnais perdre mon droit de rétractation une fois l'accès activé.</span></label>
+      <a class="btn plein payer" id="payer" href="https://buy.stripe.com/00w00l7JseTJ9FNgDTcAo00" aria-disabled="true">Payer 4,99 € avec Stripe</a>
+      <p class="note" id="payer-note">Coche les deux cases pour continuer. Paiement sécurisé par Stripe, reçu envoyé par e-mail.</p>
+    </div>
+  </div>
+</section>
+
+<section class="bloc faq" aria-labelledby="t-faq">
+  <div class="entete"><h2 id="t-faq" class="titre">Questions.</h2></div>
+  <details><summary>C'est vraiment à vie ?<span class="plus"></span></summary><p>Oui. Tu paies une fois et ton accès reste actif tant que le service existe. Si un jour il devait fermer, tous les membres seraient prévenus au moins 30 jours avant.</p></details>
+  <details><summary>Comment j'active mon accès après le paiement ?<span class="plus"></span></summary><p>Rejoins le Discord, puis envoie ton pseudo Discord et l'e-mail utilisé pour payer à El Cinco en message privé. Le rôle Casual Elite est ajouté sous 12 h maximum, souvent bien avant.</p></details>
+  <details><summary>Le bot achète à ma place ?<span class="plus"></span></summary><p>Non. Il te prévient, et tu achètes toi-même sur Vinted. La Casual Division n'intervient pas dans les transactions entre acheteurs et vendeurs.</p></details>
+  <details><summary>Quelles marques sont surveillées ?<span class="plus"></span></summary><p>Lyle &amp; Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Pitbull, Aquascutum, Lonsdale, The North Face, et les Adidas Spezial, Samba et Gazelle.</p></details>
+  <details><summary>Je peux être remboursé ?<span class="plus"></span></summary><p>Avant l'activation de ton accès, oui : écris-nous. Une fois l'accès activé, il n'y a plus de remboursement, conformément à l'article L221-28 du Code de la consommation.</p></details>
+  <details><summary>Je ne suis pas encore sur le Discord.<span class="plus"></span></summary><p>Rejoins-le gratuitement avec <a class="lien-souligne" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener">ce lien</a>. Tu peux voir des exemples de pépites dans le salon vip-preview avant de te décider.</p></details>
+</section>
+</main>
+
+<footer class="pied">
+  <div class="haut">
+    <img src="assets/img/logo-cd.png" alt="Casual Division">
+    <div class="cols">
+      <div><p class="titre-col">La Division</p><ul><li><a href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener">Discord</a></li><li><a href="map.html">Casual Map</a></li><li><a href="fiabilite.html">Vendeurs fiables</a></li></ul></div>
+      <div><p class="titre-col">Casu'Hall</p><ul><li><a href="https://casuhall.fr" target="_blank" rel="noopener">casuhall.fr</a></li><li><a href="https://www.tiktok.com/@el_cinco_casuals" target="_blank" rel="noopener">TikTok</a></li><li><a href="https://www.instagram.com/casuhall_france/" target="_blank" rel="noopener">Instagram</a></li></ul></div>
+    </div>
+  </div>
+  <details id="cgu-txt"><summary>Conditions d'utilisation</summary><ol>
+    <li>Après validation du paiement, l'accès VIP est activé sous 12 heures maximum.</li>
+    <li>L'accès est strictement personnel et non transférable.</li>
+    <li>L'accès est permanent tant que le service est en activité. En cas de fermeture définitive, les membres sont informés avec un préavis d'au moins 30 jours. Casu'Hall ne peut être tenu responsable d'une interruption liée à des causes extérieures (fermeture de plateformes tierces, cas de force majeure).</li>
+    <li>Aucun remboursement n'est effectué après activation de l'accès, conformément à l'article L221-28 du Code de la consommation.</li>
+    <li>Le service de scan automatique est fourni à titre indicatif. Casual Division ne garantit pas un volume fixe d'annonces et ne peut être tenu responsable d'interruptions techniques, notamment liées aux restrictions des plateformes tierces.</li>
+    <li>Les annonces partagées proviennent de plateformes tierces (Vinted). Casual Division n'intervient pas dans les transactions et ne peut être tenu responsable des litiges entre acheteurs et vendeurs.</li>
+    <li>Casual Division se réserve le droit de modifier les conditions du service, avec notification préalable aux membres.</li>
+    <li>En cas d'abus ou de comportement contraire aux règles de la communauté, l'accès peut être révoqué sans remboursement.</li>
+  </ol></details>
+  <details><summary>Mentions légales</summary><div class="txt">
+    Éditeur : Casu'Hall, micro-entreprise, SIRET 953 076 346 00022. Contact : <a class="lien-souligne" href="mailto:casuhall.contact@gmail.com">casuhall.contact@gmail.com</a>.<br>
+    Hébergement : GitHub Pages, GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.<br>
+    Paiement : Stripe. Photos d'ambiance : Unsplash et Pexels. Les marques citées appartiennent à leurs propriétaires ; Casual Division n'est affilié à aucune d'elles ni à Vinted.
+  </div></details>
+  <details><summary>Données personnelles</summary><div class="txt">
+    Le paiement est traité par Stripe : nous ne voyons jamais ta carte. Pour activer ton accès, nous utilisons uniquement ton pseudo Discord et l'e-mail du paiement. Ces données ne sont ni revendues ni utilisées pour de la publicité. Tu peux demander leur suppression à tout moment à casuhall.contact@gmail.com.
+  </div></details>
+  <div class="bas"><span>© <span data-annee>2026</span> Casual Division by Casu'Hall</span><span>Since 2024</span></div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol></svg>
+
+<script src="assets/site.js" defer></script>
 <script>
-const langs = {
-  fr: {
-    title: "ACCÈS VIP — PERMANENT",
-    sub: "Les meilleures affaires casual. Avant tout le monde.",
-    section: "CE QUE TU OBTIENS",
-    items: [
-      ["Bot Vinted actif 24h/24", "scan automatique toutes les 2 minutes — les meilleures affaires dans ton Discord avant que tout le monde les voie"],
-      ["Alertes deals prioritaires", "dès qu'une pièce passe sous le prix du marché, tu reçois une notification immédiate en DM"],
-      ["Personnalisation complète via /mon-flux", "configure tes marques, tailles, couleurs, budget — le bot filtre exactement selon tes critères"],
-      ["Marques surveillées", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) et d'autres à venir"],
-      ["Liste exclusive des meilleurs vendeurs casual", "vendeurs vérifiés et fiables, mis à jour par la communauté"],
-      ["Accès au salon #trouvailles-vip", "poste tes coups, suis les achats de la communauté"],
-      ["Accès au chat membres exclusif", ""]
-    ],
-    payment: "PAIEMENT UNIQUE",
-    lifetime: "ACCÈS PERMANENT — SANS ABONNEMENT",
-    cta: "REJOINDRE MAINTENANT →",
-    legalTitle: "CONDITIONS D'UTILISATION",
-    activationLabel: "DÉLAI D'ACTIVATION",
-    activationText: "Après validation du paiement, ton accès VIP est activé manuellement sous 12h maximum.",
-    cguText: "J'ai lu et j'accepte les <a href='#legal' style='color:#8B6914;text-decoration:underline;'>conditions d'utilisation</a> de Casual Division by Casu'Hall",
-    legal: `
-      <p>1. Après validation du paiement, l'accès VIP est activé manuellement sous 12h maximum.</p>
-      <p>2. L'accès est strictement personnel et non transférable.</p>
-      <p>3. L'accès est permanent tant que le service est en activité. En cas de fermeture définitive, les membres seront informés avec un préavis minimum de 30 jours. Casu'Hall ne pourra être tenu responsable d'une interruption liée à des causes extérieures (fermeture de plateformes tierces, cas de force majeure).</p>
-      <p>4. Aucun remboursement ne sera effectué après activation de l'accès, conformément à l'article L221-28 du Code de la consommation relatif aux contenus numériques.</p>
-      <p>5. Le service de scan automatique est fourni à titre indicatif. Casual Division ne garantit pas un volume fixe d'annonces et ne peut être tenu responsable d'interruptions techniques, notamment liées aux restrictions des plateformes tierces.</p>
-      <p>6. Les annonces partagées proviennent de plateformes tierces (Vinted). Casual Division n'intervient pas dans les transactions et ne peut être tenu responsable des litiges entre acheteurs et vendeurs.</p>
-      <p>7. Casual Division se réserve le droit de modifier les conditions du service à tout moment, avec notification préalable aux membres.</p>
-      <p>8. En cas d'abus ou de comportement contraire aux règles de la communauté, l'accès pourra être révoqué sans remboursement.</p>
-      <p style="margin-top:0.8rem; color:#555;">Éditeur : Casu'Hall — Micro-entreprise — SIRET : 95307634600022 — casuhall.fr</p>
-    `
-  },
-  en: {
-    title: "VIP ACCESS — PERMANENT",
-    sub: "The best casual deals. Before everyone else.",
-    section: "WHAT YOU GET",
-    items: [
-      ["24/7 active Vinted bot", "automatic scan every 2 minutes — the best deals in your Discord before anyone else sees them"],
-      ["Priority deal alerts", "as soon as an item drops below market price, you get an instant DM notification"],
-      ["Full personalisation via /mon-flux", "set your brands, sizes, colours and budget — the bot filters exactly to your criteria"],
-      ["Monitored brands", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) and more to come"],
-      ["Exclusive list of the best casual sellers", "verified, reliable sellers updated by the community"],
-      ["Access to #trouvailles-vip channel", "share your finds, follow community purchases"],
-      ["Access to exclusive members chat", ""]
-    ],
-    payment: "ONE-TIME PAYMENT",
-    lifetime: "PERMANENT ACCESS — NO SUBSCRIPTION",
-    cta: "JOIN NOW →",
-    legalTitle: "TERMS OF USE",
-    activationLabel: "ACTIVATION DELAY",
-    activationText: "After payment confirmation, your VIP access is activated manually within 12 hours maximum.",
-    cguText: "I have read and accept the <a href='#legal' style='color:#8B6914;text-decoration:underline;'>terms of use</a> of Casual Division by Casu'Hall",
-    legal: `
-      <p>1. After payment confirmation, VIP access is activated manually within 12 hours maximum.</p>
-      <p>2. Access is strictly personal and non-transferable.</p>
-      <p>3. No refund will be made after activation of access, in accordance with regulations applicable to digital content.</p>
-      <p>4. The automatic scanning service is provided for informational purposes. Casual Division does not guarantee a fixed volume of listings and cannot be held responsible for technical interruptions.</p>
-      <p>5. Listings shared come from third-party platforms (Vinted). Casual Division is not involved in transactions and cannot be held liable for disputes between buyers and sellers.</p>
-      <p>6. Casual Division reserves the right to modify service conditions at any time, with prior notice to members.</p>
-      <p>7. In case of abuse or behaviour contrary to community rules, access may be revoked without refund.</p>
-      <p style="margin-top:0.8rem; color:#555;">Publisher: Casu'Hall — Sole trader — SIRET : 95307634600022 — casuhall.fr</p>
-    `
-  },
-  de: {
-    title: "VIP-ZUGANG — PERMANENT",
-    sub: "Die besten Casual-Deals. Vor allen anderen.",
-    section: "WAS DU BEKOMMST",
-    items: [
-      ["24/7 aktiver Vinted-Bot", "automatischer Scan alle 2 Minuten — die besten Angebote in deinem Discord, bevor sie alle sehen"],
-      ["Prioritäts-Deal-Alarme", "sobald ein Artikel unter den Marktpreis fällt, bekommst du sofort eine DM-Benachrichtigung"],
-      ["Vollständige Personalisierung via /mon-flux", "stelle Marken, Größen, Farben und Budget ein — der Bot filtert genau nach deinen Kriterien"],
-      ["Überwachte Marken", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) und weitere"],
-      ["Exklusive Liste der besten Casual-Verkäufer", "geprüfte, zuverlässige Verkäufer, von der Community aktualisiert"],
-      ["Zugang zum #trouvailles-vip Kanal", "teile deine Funde, verfolge Community-Käufe"],
-      ["Zugang zum exklusiven Mitglieder-Chat", ""]
-    ],
-    payment: "EINMALIGE ZAHLUNG",
-    lifetime: "PERMANENTER ZUGANG — KEIN ABO",
-    cta: "JETZT BEITRETEN →",
-    legalTitle: "NUTZUNGSBEDINGUNGEN",
-    activationLabel: "AKTIVIERUNGSZEIT",
-    activationText: "Nach Zahlungsbestätigung wird dein VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.",
-    cguText: "Ich habe die <a href='#legal' style='color:#8B6914;text-decoration:underline;'>Nutzungsbedingungen</a> von Casual Division by Casu'Hall gelesen und akzeptiere sie.",
-    legal: `
-      <p>1. Nach Zahlungsbestätigung wird der VIP-Zugang innerhalb von maximal 12 Stunden manuell aktiviert.</p>
-      <p>2. Der Zugang ist streng persönlich und nicht übertragbar.</p>
-      <p>3. Nach Aktivierung des Zugangs erfolgt keine Rückerstattung.</p>
-      <p>4. Der automatische Scan-Service wird nur zu Informationszwecken bereitgestellt. Casual Division garantiert kein festes Volumen an Angeboten.</p>
-      <p>5. Die geteilten Angebote stammen von Drittanbieter-Plattformen (Vinted). Casual Division haftet nicht für Streitigkeiten zwischen Käufern und Verkäufern.</p>
-      <p>6. Casual Division behält sich das Recht vor, die Servicebedingungen jederzeit zu ändern.</p>
-      <p>7. Bei Missbrauch kann der Zugang ohne Rückerstattung widerrufen werden.</p>
-      <p style="margin-top:0.8rem; color:#555;">Herausgeber: Casu'Hall — Einzelunternehmer — SIRET : 95307634600022 — casuhall.fr</p>
-    `
-  },
-  es: {
-    title: "ACCESO VIP — PERMANENTE",
-    sub: "Las mejores ofertas casual. Antes que nadie.",
-    section: "LO QUE OBTIENES",
-    items: [
-      ["Bot Vinted activo 24/7", "escaneo automático cada 2 minutos — las mejores ofertas en tu Discord antes que nadie"],
-      ["Alertas de deals prioritarias", "en cuanto una pieza baja del precio de mercado, recibes una notificación inmediata por DM"],
-      ["Personalización completa vía /mon-flux", "configura tus marcas, tallas, colores y presupuesto — el bot filtra exactamente según tus criterios"],
-      ["Marcas vigiladas", "Lyle & Scott, Fred Perry, Weekend Offender, Peaceful Hooligan, Alpha Industries, Ma.Strum, Adidas (Samba, Gazelle, Spezial) y más por venir"],
-      ["Lista exclusiva de los mejores vendedores casual", "vendedores verificados y fiables, actualizados por la comunidad"],
-      ["Acceso al canal #trouvailles-vip", "publica tus hallazgos, sigue las compras de la comunidad"],
-      ["Acceso al chat exclusivo de miembros", ""]
-    ],
-    payment: "PAGO ÚNICO",
-    lifetime: "ACCESO PERMANENTE — SIN SUSCRIPCIÓN",
-    cta: "UNIRSE AHORA →",
-    legalTitle: "CONDICIONES DE USO",
-    activationLabel: "PLAZO DE ACTIVACIÓN",
-    activationText: "Tras la confirmación del pago, tu acceso VIP se activa manualmente en un máximo de 12 horas.",
-    cguText: "He leído y acepto las <a href='#legal' style='color:#8B6914;text-decoration:underline;'>condiciones de uso</a> de Casual Division by Casu'Hall",
-    legal: `
-      <p>1. Tras la confirmación del pago, el acceso VIP se activa manualmente en un máximo de 12 horas.</p>
-      <p>2. El acceso es estrictamente personal e intransferible.</p>
-      <p>3. No se realizarán reembolsos tras la activación del acceso.</p>
-      <p>4. El servicio de escaneo automático se proporciona a título informativo. Casual Division no garantiza un volumen fijo de anuncios.</p>
-      <p>5. Los anuncios compartidos provienen de plataformas de terceros (Vinted). Casual Division no interviene en las transacciones.</p>
-      <p>6. Casual Division se reserva el derecho de modificar las condiciones del servicio en cualquier momento.</p>
-      <p>7. En caso de abuso, el acceso podrá ser revocado sin reembolso.</p>
-      <p style="margin-top:0.8rem; color:#555;">Editor: Casu'Hall — Autónomo — SIRET : 95307634600022 — casuhall.fr</p>
-    `
-  }
-};
-
-function setLang(lang) {
-  const d = langs[lang];
-  document.getElementById('t-title').textContent = d.title;
-  document.getElementById('t-sub').textContent = d.sub;
-  document.getElementById('t-section').textContent = d.section;
-  document.getElementById('t-payment').textContent = d.payment;
-  document.getElementById('t-lifetime').textContent = d.lifetime;
-  document.getElementById('t-cta').textContent = d.cta;
-  document.getElementById('t-legal-title').textContent = d.legalTitle;
-  if(d.activationLabel) document.getElementById('t-activation-label').textContent = d.activationLabel;
-  if(d.cguText) document.getElementById('t-cgu-text').innerHTML = d.cguText;
-  if(d.activationText) document.getElementById('t-activation-text').textContent = d.activationText;
-  document.getElementById('t-legal').innerHTML = d.legal;
-  const container = document.getElementById('items');
-  container.innerHTML = '';
-  d.items.forEach(([bold, rest]) => {
-    const div = document.createElement('div');
-    div.className = 'item';
-    div.innerHTML = '<div class="dot">●</div><div class="item-text"><strong>' + bold + '</strong>' + (rest ? ' — ' + rest : '') + '</div>';
-    container.appendChild(div);
-  });
-  document.querySelectorAll('.lang-btns button').forEach(b => b.classList.remove('active'));
-  document.querySelector('.lang-btns button[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
-}
-setLang('fr');
-
-function toggleCTA() {
-  const checked = document.getElementById('cgu-check').checked;
-  const btn = document.getElementById('t-cta');
-  btn.style.opacity = checked ? '1' : '0.4';
-  btn.style.cursor = checked ? 'pointer' : 'not-allowed';
-}
-
-function checkCGU() {
-  if (!document.getElementById('cgu-check').checked) {
-    alert('Veuillez accepter les conditions d\'utilisation pour continuer.');
-    return false;
-  }
-  return true;
-}
+  // Paiement : le bouton ne s'active qu'avec les deux cases cochées
+  (() => {
+    const c1 = document.getElementById('cgu'), c2 = document.getElementById('retract'), b = document.getElementById('payer'), n = document.getElementById('payer-note');
+    const maj = () => { const ok = c1.checked && c2.checked; b.setAttribute('aria-disabled', ok ? 'false' : 'true');
+      n.textContent = ok ? 'Paiement sécurisé par Stripe, reçu envoyé par e-mail.' : 'Coche les deux cases pour continuer. Paiement sécurisé par Stripe, reçu envoyé par e-mail.'; };
+    c1.addEventListener('change', maj); c2.addEventListener('change', maj); maj();
+    // Rail des pépites : flèches sur ordinateur
+    const rail = document.getElementById('rail');
+    document.querySelectorAll('[data-rail]').forEach(x => x.addEventListener('click', () => rail.scrollBy({ left: +x.dataset.rail * rail.clientWidth * .8, behavior: 'smooth' })));
+  })();
 </script>
 </body>
 </html>

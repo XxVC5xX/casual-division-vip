@@ -1,475 +1,459 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casual Map — Casual Division</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Casual Map · Casual Division</title>
+<meta name="description" content="La carte des casuals de la Casual Division : ajoute ton club, vois qui est près de chez toi et le classement des clubs.">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Casual Map · ajoute ton club">
+<meta property="og:description" content="Tous les casuals de la Division sur une carte, et le classement des clubs les plus représentés.">
+<meta property="og:image" content="https://xxvc5xx.github.io/casual-division-vip/assets/img/og-map.jpg">
+<meta property="og:url" content="https://xxvc5xx.github.io/casual-division-vip/map.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--black:#0a0a0a;--white:#f5f3ef;--gold:#c9a84c;--gold-dark:#8a6f2e;--surface:#141414;--surface2:#1e1e1e;--border:#2a2a2a;--muted:#666;--red:#e24b4a}
-body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-header{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--black);position:sticky;top:0;z-index:1000}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em}
-.logo span{color:var(--gold)}
-.logo-sub{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
-.discord-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--surface2);border:1px solid var(--border);padding:0.4rem 1rem;border-radius:2px;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:border-color 0.2s,color 0.2s}
-.discord-badge:hover{border-color:var(--gold);color:var(--gold)}
-.discord-dot{width:8px;height:8px;background:#5865F2;border-radius:50%}
-.header-right{text-align:right}
-.counter-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
-.counter{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);line-height:1}
-.layout{display:grid;grid-template-columns:210px 1fr 190px;height:calc(100vh - 72px)}
-@media(max-width:1100px) and (min-width:901px){
-  .layout{grid-template-columns:180px 1fr 170px}
-  .form-section{padding:0.85rem}
-  .form-group{margin-bottom:0.6rem}
-  .clubs-section{padding:0.85rem 1rem}
-}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.form-section{padding:1.25rem;border-bottom:1px solid var(--border)}
-.form-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
-.form-group{margin-bottom:0.85rem;position:relative}
-.form-group label{display:block;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.35rem}
-.form-group input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.55rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;border-radius:2px;transition:border-color 0.2s}
-.form-group input:focus{border-color:var(--gold)}
-.form-group input::placeholder{color:var(--muted)}
-.btn-add{width:100%;padding:0.7rem;background:var(--gold);color:var(--black);border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.15em;cursor:pointer;border-radius:2px;transition:background 0.2s,transform 0.1s}
-.btn-add:hover{background:#e8c06a}
-.btn-add:active{transform:scale(0.98)}
-.btn-add:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
-.members-section{flex:1;overflow-y:auto;padding:1rem 1.25rem}
-.section-label{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem}
-.member-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
-.member-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0}
-.member-info{flex:1;min-width:0}
-.member-pseudo{font-size:0.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.member-location{font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.75rem;padding:0.2rem 0.4rem;display:none;transition:color 0.15s;flex-shrink:0}
-.btn-del:hover{color:var(--red)}
-body.admin-mode .btn-del{display:block}
-#map{z-index:1}
-.right-panel{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.clubs-section{padding:1.25rem;flex:1;overflow-y:auto}
-.clubs-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--gold);margin-bottom:1rem}
-.club-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
-.club-rank{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--muted);width:18px;text-align:center;flex-shrink:0}
-.club-rank.top1{color:var(--gold)}
-.club-rank.top2{color:#aaa}
-.club-rank.top3{color:#cd7f32}
-.club-name{flex:1;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.club-count{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold);flex-shrink:0}
-.club-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0}
-.club-logo-placeholder{width:22px;height:22px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;color:var(--muted)}
-.casual-strip{padding:0.85rem 1.25rem;border-top:1px solid var(--border);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.8}
-.casual-strip a{color:var(--gold);text-decoration:none}
-.search-results{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-top:none;z-index:100;max-height:160px;overflow-y:auto}
-.search-result-item{padding:0.45rem 0.75rem;font-size:0.8rem;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s}
-.search-result-item:hover{background:var(--surface2);color:var(--gold)}
-.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid var(--gold);color:var(--white);padding:0.6rem 1rem;font-size:0.82rem;border-radius:2px;z-index:9999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none}
-.toast.show{opacity:1;transform:translateY(0)}
-.empty-state{text-align:center;padding:2rem 0.5rem;color:var(--muted);font-size:0.78rem;line-height:1.7}
-.admin-btn{position:fixed;bottom:0.5rem;left:0.5rem;background:rgba(10,10,10,0.7);border:1px solid #222;color:#333;padding:0.2rem 0.5rem;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;z-index:9999;transition:all 0.2s;backdrop-filter:blur(4px)}
-.admin-btn:hover{border-color:var(--gold);color:var(--gold)}
-body.admin-mode .admin-btn{border-color:var(--red);color:var(--red);background:rgba(226,75,74,0.1)}
-.leaflet-container{background:#0d0d0d}
-.leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:3px;color:var(--white);box-shadow:0 8px 24px rgba(0,0,0,0.7)}
-.leaflet-popup-tip{background:var(--surface)}
-.leaflet-popup-content{margin:10px 14px;font-family:'DM Sans',sans-serif}
-.popup-pseudo{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.05em;color:var(--gold)}
-.popup-city{font-size:0.75rem;color:var(--muted);margin-top:2px}
-.popup-club{font-size:0.8rem;margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
-.share-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:0.4rem 0.9rem;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem}
-.share-btn:hover{border-color:var(--gold);color:var(--gold)}
-.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:none;align-items:center;justify-content:center}
-.share-overlay.open{display:flex}
-.share-modal{background:#0f0f0f;border:1px solid var(--border);width:360px;max-width:90vw;overflow:hidden;position:relative}
-.share-close{position:absolute;top:0.75rem;right:0.75rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;line-height:1;padding:0.2rem 0.4rem;transition:color 0.2s}
-.share-close:hover{color:var(--white)}
-.share-card{padding:2rem;background:#0f0f0f}
-.share-card-inner{border:1px solid #2a2a2a;padding:1.5rem;background:#111;position:relative;overflow:hidden}
-.share-card-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#c9a84c,transparent)}
-.share-card-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.08em;line-height:1;margin-bottom:0.15rem}
-.share-card-title span{color:var(--gold)}
-.share-card-sub{font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem}
-.share-card-divider{height:1px;background:var(--border);margin:1rem 0}
-.share-card-cta{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem}
-.share-card-url{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold);letter-spacing:0.05em;word-break:break-all}
-.share-card-badge{position:absolute;top:1rem;right:1rem;background:var(--gold);color:#0a0a0a;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:0.1em;padding:0.2rem 0.5rem;border-radius:1px}
-.share-actions{padding:0 1.5rem 1.5rem;display:flex;flex-direction:column;gap:0.5rem}
-.share-action-btn{width:100%;padding:0.65rem;border:1px solid var(--border);background:none;color:var(--white);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px;transition:all 0.2s;text-align:center}
-.share-action-btn:hover{border-color:var(--gold);color:var(--gold)}
-.share-action-btn.primary{background:var(--gold);color:#0a0a0a;border-color:var(--gold)}
-.share-action-btn.primary:hover{background:#e8c06a}
-.share-hint{font-size:0.65rem;color:var(--muted);text-align:center;padding:0 1.5rem 1rem;letter-spacing:0.05em}
-.edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9100;display:none;align-items:center;justify-content:center}
-.edit-overlay.open{display:flex}
-.edit-modal{background:#0f0f0f;border:1px solid var(--border);width:320px;max-width:92vw;padding:1.5rem;position:relative}
-.edit-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:var(--gold);margin-bottom:1.25rem}
-.edit-field{margin-bottom:0.85rem}
-.edit-field label{display:block;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.3rem}
-.edit-field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--white);padding:0.5rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;border-radius:2px}
-.edit-field input:focus{border-color:var(--gold)}
-.edit-actions{display:flex;gap:0.5rem;margin-top:1.25rem}
-.edit-save{flex:1;padding:0.6rem;background:var(--gold);color:#0a0a0a;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px}
-.edit-cancel{flex:1;padding:0.6rem;background:none;color:var(--muted);border:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.12em;cursor:pointer;border-radius:2px}
-.btn-edit{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;padding:0.2rem 0.3rem;display:none;transition:color 0.15s;flex-shrink:0}
-.btn-edit:hover{color:var(--gold)}
-body.admin-mode .btn-edit{display:block}
+body{overflow-x:hidden}
+.app{display:grid;padding-top:68px}
+@media (min-width:960px){.app{grid-template-columns:1fr 440px;height:100svh}}
 
+/* ---------- carte ---------- */
+.carte-zone{position:relative;height:56svh;min-height:340px;background:#0a0a0a;border-bottom:1px solid var(--trait)}
+@media (min-width:960px){.carte-zone{height:auto;border-bottom:0;border-right:1px solid var(--trait)}}
+#map{position:absolute;inset:0;background:#0a0a0a}
+.leaflet-tile-pane{filter:grayscale(1) invert(1) brightness(.78) contrast(1.05)}
+.leaflet-container{font-family:"Mona Sans",system-ui,sans-serif}
+.leaflet-control-zoom{border:0!important;margin:14px!important}
+.leaflet-control-zoom a{background:#000!important;color:#fff!important;border:1px solid var(--trait)!important;width:40px!important;height:40px!important;line-height:38px!important;border-radius:0!important}
+.leaflet-control-attribution{background:rgba(0,0,0,.7)!important;color:#8a8a8a!important;font-size:10px!important}
+.leaflet-control-attribution a{color:#bdbdbd!important}
+.point{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.85),0 0 0 4px rgba(255,255,255,.35)}
+.point.moi{width:18px;height:18px;animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 3px #000,0 0 0 4px #fff}100%{box-shadow:0 0 0 3px #000,0 0 0 26px rgba(255,255,255,0)}}
+.amas{width:34px;height:34px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-weight:820;font-variation-settings:"wdth" 80;font-size:16px;box-shadow:0 0 0 4px rgba(0,0,0,.8)}
+.leaflet-popup-content-wrapper{background:#000;color:#fff;border:1px solid #3a3a3a;border-radius:0;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.leaflet-popup-tip{background:#000;border:1px solid #3a3a3a}
+.leaflet-popup-content{margin:14px 16px;line-height:1.35}
+.leaflet-container a.leaflet-popup-close-button{color:#9c9c9c}
+.pop b{display:block;font-size:22px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:1}
+.pop span{display:block;margin-top:6px;font-size:14px}
+.pop small{display:block;color:var(--gris);font-size:13px;margin-top:2px}
+.compteur{position:absolute;z-index:500;left:14px;bottom:14px;background:#000;border:1px solid var(--trait);padding:10px 14px;display:flex;gap:18px}
+.compteur b{display:block;font-size:26px;font-weight:840;font-variation-settings:"wdth" 75;line-height:1}
+.compteur span{font-size:12px;color:var(--gris)}
 
-@media(max-width:900px){
-  .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;height:auto}
-  .sidebar{border-right:none;border-bottom:1px solid var(--border)}
-  .right-panel{border-left:none;border-top:1px solid var(--border);flex-direction:row;flex-wrap:wrap}
-  .clubs-section{flex:1;min-width:200px}
-  .casual-strip{width:100%;border-top:1px solid var(--border)}
-  #map{height:55vh;min-height:300px}
-  header{padding:0.85rem 1rem}
-  .logo{font-size:1.4rem}
-  .counter{font-size:1.4rem}
-  .discord-badge{display:none}
-  .members-section{max-height:200px}
-}
-@media(max-width:600px){
-  header{padding:0.6rem 0.75rem;flex-wrap:wrap;gap:0.5rem}
-  .logo{font-size:1.2rem}
-  .logo-sub{font-size:0.55rem}
-  .counter{font-size:1.3rem}
-  .counter-label{font-size:0.55rem}
-  .share-btn{font-size:0.72rem;padding:0.3rem 0.6rem}
-  #map{height:42vh;min-height:240px}
-  .right-panel{flex-direction:column}
-  .clubs-section{max-height:160px;overflow-y:auto;padding:0.85rem 1rem}
-  .clubs-title{font-size:0.85rem;margin-bottom:0.6rem}
-  .club-item{padding:0.35rem 0}
-  .form-section{padding:1rem}
-  .form-group{margin-bottom:0.65rem}
-  .form-group input{padding:0.45rem 0.6rem;font-size:0.78rem}
-  .btn-add{padding:0.6rem;font-size:0.85rem}
-  .members-section{padding:0.75rem 1rem;max-height:130px}
-  .member-pseudo{font-size:0.78rem}
-  .member-location{font-size:0.68rem}
-  .admin-btn{bottom:0.3rem;left:0.3rem;font-size:0.5rem;padding:0.15rem 0.4rem}
-  .toast{bottom:1rem;right:0.5rem;left:0.5rem;text-align:center;font-size:0.75rem}
-  .casual-strip{padding:0.6rem 1rem;font-size:0.62rem}
-  .share-modal{width:95vw}
-  .share-card{padding:1.25rem}
-  .share-card-title{font-size:1.6rem}
-}
+/* ---------- panneau ---------- */
+.panneau{display:flex;flex-direction:column;min-height:0}
+@media (min-width:960px){.panneau{overflow:auto}}
+.panneau .tete{padding:26px var(--pad) 0}
+@media (min-width:960px){.panneau .tete{padding:28px 28px 0}}
+.panneau h1{font-size:clamp(54px,14vw,84px)}
+.panneau .tete p{color:#cfcfcf;margin-top:12px;font-size:16px}
+.onglets{display:flex;margin:22px var(--pad) 0;border-bottom:1px solid var(--trait);position:sticky;top:0;background:#000;z-index:5}
+@media (min-width:960px){.onglets{margin:22px 28px 0}}
+.onglets button{flex:1;padding:14px 4px;font-weight:680;font-size:15px;color:var(--gris);border-bottom:2px solid transparent;margin-bottom:-1px;font-variation-settings:"wdth" 100}
+.onglets button[aria-selected="true"]{color:#fff;border-color:#fff}
+.vue{padding:18px var(--pad) 40px}
+@media (min-width:960px){.vue{padding:18px 28px 40px}}
+.vue[hidden]{display:none}
+
+.classement{list-style:none}
+.classement li button{width:100%;display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;text-align:left;padding:13px 0;border-bottom:1px solid var(--trait)}
+.classement li button:hover .nm{text-decoration:underline;text-underline-offset:4px}
+.classement .rg{font-size:20px;font-weight:840;font-variation-settings:"wdth" 75;color:var(--gris)}
+.classement li:nth-child(-n+3) .rg{color:#fff}
+.classement .nm{font-weight:650;font-size:16px;text-transform:uppercase;font-variation-settings:"wdth" 92}
+.classement .nb{font-size:22px;font-weight:840;font-variation-settings:"wdth" 75}
+.classement .barre-nb{grid-column:2/4;height:2px;background:var(--trait);margin-top:-4px}
+.classement .barre-nb i{display:block;height:100%;background:#fff}
+.focus-club{border:1px solid var(--trait);padding:16px;margin-bottom:16px}
+.focus-club h2{font-size:34px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:1}
+.focus-club p{color:var(--gris);font-size:14px;margin-top:6px}
+.focus-club .acts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+
+.cherche{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:14px 16px;font-size:16px}
+.cherche:focus{border-color:#fff;outline:0}
+.membres{list-style:none;margin-top:10px}
+.membres li{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--trait)}
+.membres li button.m{flex:1;text-align:left;padding:12px 0}
+.membres .p{font-weight:650}
+.membres .l{font-size:14px;color:var(--gris)}
+.membres .adm{display:none;gap:6px}
+body.admin .membres .adm{display:flex}
+.membres .adm button{font-size:13px;border:1px solid var(--trait);padding:6px 10px}
+.rien{color:var(--gris);padding:18px 0}
+
+.form{display:grid;gap:16px}
+.champ label{display:block;font-size:14px;font-weight:620;margin-bottom:6px}
+.champ .aide{display:block;font-size:13px;color:var(--gris);margin-top:6px}
+.champ input{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:14px 16px;font-size:16px}
+.champ input:focus{border-color:#fff;outline:0}
+.villes{list-style:none;border:1px solid var(--trait);border-top:0;max-height:240px;overflow:auto}
+.villes li{padding:12px 16px;cursor:pointer;border-top:1px solid var(--trait);font-size:15px}
+.villes li[aria-selected="true"],.villes li:hover{background:#fff;color:#000}
+.form .btn{width:100%}
+.erreur{color:#fff;background:#2a0000;border:1px solid #5a1a1a;padding:10px 12px;font-size:14px}
+
+/* ---------- fenêtres ---------- */
+dialog{margin:auto;background:#000;color:#fff;border:1px solid #3a3a3a;padding:0;width:min(560px,calc(100% - 24px));max-height:calc(100svh - 24px)}
+dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
+dialog .in{padding:24px}
+dialog h2{font-size:40px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:.95}
+dialog p{color:#cfcfcf;margin-top:10px}
+dialog .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px}
+.story{display:block;width:100%;max-width:260px;margin:18px auto 0;border:1px solid var(--trait)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.duo .btn{padding:0 10px}
+.pied-mini{padding:22px var(--pad) 34px;display:flex;flex-wrap:wrap;gap:10px 22px;font-size:14px;color:var(--gris);border-top:1px solid var(--trait)}
+.pied-mini a{color:#cfcfcf;text-decoration:none}
+@media (min-width:960px){.pied-mini{padding:22px 28px 34px}}
 </style>
 </head>
 <body>
-<header>
-  <div>
-    <div class="logo">CASUAL <span>MAP</span></div>
-    <div class="logo-sub">Casual Division</div>
-  </div>
-  <a class="discord-badge" href="https://discord.gg/hbKPnjCWtZ" target="_blank">
-    <span class="discord-dot"></span>Rejoindre Casual Division
-  </a>
-  <button class="share-btn" onclick="openShare()">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-    Partager
-  </button>
-  <div style="display:flex;gap:1.5rem;align-items:center">
-    <div style="text-align:center">
-      <div class="counter" id="total-counter">...</div>
-      <div class="counter-label">Membres</div>
-    </div>
-    <div style="text-align:center">
-      <div class="counter" id="stat-clubs">0</div>
-      <div class="counter-label">Clubs</div>
-    </div>
-  </div>
+
+<header class="barre pleine">
+  <a class="logo" href="./" aria-label="Casual Division, accueil"><img src="assets/img/logo-cd.png" alt="Casual Division" width="58" height="38"></a>
+  <nav>
+    <a class="lien" href="./">Casual Elite</a>
+    <a class="lien" href="fiabilite.html">Vendeurs fiables</a>
+    <a class="btn vide petit-btn" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#discord"/></svg>Discord</a>
+  </nav>
 </header>
-<div class="layout">
-  <div class="sidebar">
-    <div class="form-section">
-      <div class="form-title">Rejoins la carte</div>
-      <div class="form-group">
-        <label>Pseudo Discord *</label>
-        <input type="text" id="input-pseudo" placeholder="ton_pseudo" maxlength="32"/>
-      </div>
-      <div class="form-group">
-        <label>Ville du club *</label>
-        <input type="text" id="input-city" placeholder="Ex: Manchester, Paris, Lyon..." autocomplete="off"/>
-        <div class="search-results" id="city-results" style="display:none"></div>
-      </div>
-      <div class="form-group">
-        <label>Nom du club *</label>
-        <input type="text" id="input-club" placeholder="Ex: PSG, Lyle FC, Man City..." maxlength="50"/>
-      </div>
-      <button class="btn-add" id="btn-add" onclick="addMember()">AJOUTER MON MARQUEUR</button>
-    </div>
-    <div class="members-section">
-      <div class="section-label">Membres — <span id="member-count">0</span></div>
-      <div id="members-list"><div class="empty-state">Chargement...</div></div>
-    </div>
+
+<div class="app">
+  <div class="carte-zone">
+    <div id="map" role="application" aria-label="Carte des membres"></div>
+    <div class="compteur" aria-live="polite"><div><b id="n-membres">–</b><span>casuals</span></div><div><b id="n-clubs">–</b><span>clubs</span></div></div>
   </div>
-  <div id="map"></div>
-  <div class="right-panel">
-    <div class="clubs-section">
-      <div class="clubs-title">Top Clubs</div>
-      <div id="clubs-list"><div class="empty-state">Chargement...</div></div>
+
+  <div class="panneau">
+    <div class="tete">
+      <h1 class="display">Casual<br>Map</h1>
+      <p>Tous les casuals de la Division, club par club. Ajoute-toi et vois qui représente ton club.</p>
+      <div class="duo">
+        <button class="btn plein" type="button" data-aller="rejoindre">Ajouter mon club</button>
+        <button class="btn vide" type="button" id="partager-lien">Partager la carte</button>
+      </div>
     </div>
-    <div class="casual-strip">
-      <a href="https://casuhall.fr" target="_blank" style="display:flex;align-items:center;gap:0.6rem">
-        <img src="data:image/png;base64,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" alt="Casu'Hall" style="height:28px;width:auto;opacity:0.85;mix-blend-mode:screen"/>
-        <span>casuhall.fr — Les meilleures pièces casual d'occasion →</span>
-      </a>
+
+    <div class="onglets" role="tablist" aria-label="Sections de la carte">
+      <button role="tab" id="t-classement" aria-controls="v-classement" aria-selected="true">Classement</button>
+      <button role="tab" id="t-membres" aria-controls="v-membres" aria-selected="false">Membres</button>
+      <button role="tab" id="t-rejoindre" aria-controls="v-rejoindre" aria-selected="false">Rejoindre</button>
     </div>
-  </div>
-</div>
-<button class="admin-btn" onclick="toggleAdmin()">Admin</button>
-<div class="toast" id="toast"></div>
-<div class="edit-overlay" id="edit-overlay" onclick="if(event.target===this)closeEdit()">
-  <div class="edit-modal">
-    <button class="share-close" onclick="closeEdit()">✕</button>
-    <h3>MODIFIER LE MEMBRE</h3>
-    <input type="hidden" id="edit-id"/>
-    <div class="edit-field">
-      <label>Pseudo Discord</label>
-      <input type="text" id="edit-pseudo" maxlength="32" disabled style="opacity:0.5"/>
-    </div>
-    <div class="edit-field">
-      <label>Nom du club</label>
-      <input type="text" id="edit-club" maxlength="50"/>
-    </div>
-    <div class="edit-field">
-      <label>Ville du club</label>
-      <input type="text" id="edit-city" maxlength="100"/>
-    </div>
-    <div class="edit-actions">
-      <button class="edit-cancel" onclick="closeEdit()">ANNULER</button>
-      <button class="edit-save" onclick="saveMember()">ENREGISTRER</button>
+
+    <section class="vue" id="v-classement" role="tabpanel" aria-labelledby="t-classement">
+      <div id="focus"></div>
+      <ol class="classement" id="classement"><li class="rien">Chargement de la carte…</li></ol>
+    </section>
+
+    <section class="vue" id="v-membres" role="tabpanel" aria-labelledby="t-membres" hidden>
+      <label class="sr" for="recherche">Chercher un pseudo, un club ou une ville</label>
+      <input class="cherche" id="recherche" type="search" placeholder="Pseudo, club ou ville" autocomplete="off">
+      <ul class="membres" id="membres"></ul>
+    </section>
+
+    <section class="vue" id="v-rejoindre" role="tabpanel" aria-labelledby="t-rejoindre" hidden>
+      <form class="form" id="form" novalidate>
+        <div class="champ"><label for="f-pseudo">Ton pseudo Discord</label><input id="f-pseudo" maxlength="32" autocomplete="nickname" required></div>
+        <div class="champ"><label for="f-club">Ton club</label><input id="f-club" maxlength="50" list="clubs-connus" required><span class="aide">Choisis-le dans la liste s'il y est déjà, pour que tout le monde soit compté ensemble.</span><datalist id="clubs-connus"></datalist></div>
+        <div class="champ"><label for="f-ville">La ville de ton club</label>
+          <input id="f-ville" maxlength="80" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="villes" required>
+          <ul class="villes" id="villes" role="listbox" hidden></ul>
+          <span class="aide">Tape au moins 2 lettres et choisis la ville dans la liste.</span></div>
+        <div id="f-erreur" class="erreur" role="alert" hidden></div>
+        <button class="btn plein" type="submit" id="f-envoyer">Ajouter mon marqueur</button>
+        <p class="petit">Ton pseudo, ton club et ta ville seront visibles par tout le monde sur la carte. Pour te retirer, écris à El Cinco sur Discord.</p>
+      </form>
+    </section>
+
+    <div class="pied-mini">
+      <a href="./">Casual Elite</a><a href="fiabilite.html">Vendeurs fiables</a><a href="https://casuhall.fr" target="_blank" rel="noopener">casuhall.fr</a>
+      <button type="button" id="admin-btn" class="petit" style="margin-left:auto">Admin</button>
     </div>
   </div>
 </div>
 
-<div class="share-overlay" id="share-overlay" onclick="if(event.target===this)closeShare()">
-  <div class="share-modal">
-    <button class="share-close" onclick="closeShare()">✕</button>
-    <div class="share-card">
-      <div class="share-card-inner">
-        <div class="share-card-badge">LIVE</div>
-        <div class="share-card-title">CASUAL <span>MAP</span></div>
-        <div class="share-card-sub">Casual Division — Europe</div>
-        <div class="share-card-divider"></div>
-        <div class="share-card-cta">Ajoute ton marqueur sur la carte</div>
-        <div class="share-card-url">xxvc5xx.github.io/casual-division-vip/map.html</div>
-      </div>
-    </div>
-    <div class="share-actions">
-      <button class="share-action-btn primary" onclick="copyLink()">COPIER LE LIEN</button>
-      <button class="share-action-btn" onclick="shareInstagram()">PARTAGER EN STORY INSTAGRAM</button>
-    </div>
-    <div class="share-hint">Fais une capture d'écran de la card pour la partager en story</div>
+<dialog id="d-story" aria-labelledby="d-story-t">
+  <div class="in">
+    <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
+    <h2 id="d-story-t">Tu es sur la carte.</h2>
+    <p>Partage ta carte en story pour ramener les casuals de ton club.</p>
+    <img class="story" id="story-img" alt="Aperçu de ta story Casual Map">
+    <div class="acts"><button class="btn plein" type="button" id="story-partager">Partager en story</button><a class="btn vide" id="story-dl" download="casual-map.png">Télécharger l'image</a></div>
   </div>
-</div>
+</dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<dialog id="d-admin" aria-labelledby="d-admin-t">
+  <div class="in">
+    <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
+    <h2 id="d-admin-t">Admin</h2>
+    <form id="admin-form" class="form" style="margin-top:16px">
+      <div class="champ"><label for="a-mail">E-mail</label><input id="a-mail" type="email" autocomplete="username" required></div>
+      <div class="champ"><label for="a-mdp">Mot de passe</label><input id="a-mdp" type="password" autocomplete="current-password" required></div>
+      <div id="a-erreur" class="erreur" role="alert" hidden></div>
+      <button class="btn plein" type="submit">Se connecter</button>
+    </form>
+    <div id="admin-ok" hidden><p>Connecté. Les boutons Modifier et Supprimer apparaissent dans l'onglet Membres.</p><div class="acts"><button class="btn vide" type="button" id="admin-sortir">Se déconnecter</button></div></div>
+  </div>
+</dialog>
+
+<dialog id="d-edit" aria-labelledby="d-edit-t">
+  <div class="in">
+    <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
+    <h2 id="d-edit-t">Modifier</h2>
+    <form id="edit-form" class="form" style="margin-top:16px">
+      <div class="champ"><label for="e-club">Club</label><input id="e-club" maxlength="50" list="clubs-connus" required></div>
+      <div class="champ"><label for="e-ville">Ville (laisser telle quelle pour ne pas bouger le marqueur)</label><input id="e-ville" maxlength="80" required></div>
+      <div id="e-erreur" class="erreur" role="alert" hidden></div>
+      <button class="btn plein" type="submit">Enregistrer</button>
+    </form>
+  </div>
+</dialog>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol></svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/site.js" defer></script>
+<script src="assets/donnees.js"></script>
 <script>
-const SUPABASE_URL='https://emiveacfwbhhpcdghanv.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaXZlYWNmd2JoaHBjZGdoYW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjQ1NTgsImV4cCI6MjA5MjEwMDU1OH0.zZ6eWTPVXMhUp1VQbpUI-J5L_t0osI9ipLTSoLeQQRY';
-const ADMIN_CODE='VC5';
+(() => {
+  const sb = CD.supabase();
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const cle = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  let membres = [], clubs = [], marqueurs = new Map(), moiId = null;
 
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let members=[];
-let map,clusterGroup,selectedCity=null,searchTimeout=null,isAdmin=false;
+  // ---------- carte ----------
+  const map = L.map('map', { center: [48.5, 6], zoom: 5, zoomControl: true, worldCopyJump: true });
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
+  map.attributionControl.setPrefix(false);
+  const amas = L.markerClusterGroup({ maxClusterRadius: 42, showCoverageOnHover: false,
+    iconCreateFunction: c => L.divIcon({ html: `<div class="amas">${c.getChildCount()}</div>`, className: '', iconSize: [34, 34] }) });
+  map.addLayer(amas);
+  const icone = moi => L.divIcon({ html: `<div class="point${moi ? ' moi' : ''}"></div>`, className: '', iconSize: moi ? [18, 18] : [12, 12] });
 
-async function loadData(){
-  const{data,error}=await sb.from('members').select('*');
-  if(!error&&data){members=data;}
-  renderAll();
-}
-
-function initMap(){
-  map=L.map('map',{center:[48.5,10],zoom:5,attributionControl:false});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
-  clusterGroup=L.markerClusterGroup({
-    iconCreateFunction:function(c){
-      return L.divIcon({html:'<div style="background:#c9a84c;color:#0a0a0a;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:0.95rem;border:2px solid #8a6f2e;box-shadow:0 0 8px rgba(201,168,76,0.5)">'+c.getChildCount()+'</div>',iconSize:[34,34],className:''});
-    },maxClusterRadius:15
-  });
-  map.addLayer(clusterGroup);
-
-  // Frontières pays en doré subtil
-  fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
-    .then(r=>r.json())
-    .then(data=>{
-      L.geoJSON(data,{
-        style:{color:'#c0c8d8',weight:1.5,opacity:0.55,fillOpacity:0}
-      }).addTo(map);
-    }).catch(()=>{});
-
-  loadData();
-}
-
-const goldIcon=L.divIcon({html:'<div style="width:14px;height:14px;background:#c9a84c;border-radius:50%;border:2px solid #8a6f2e;box-shadow:0 0 6px rgba(201,168,76,0.6)"></div>',iconSize:[14,14],iconAnchor:[7,7],className:''});
-
-function renderAll(){
-  clusterGroup.clearLayers();
-  const filtered=members;
-
-  // Stats
-  const clubs=new Set(members.filter(m=>m.club).map(m=>m.club.trim()));
-  document.getElementById('stat-clubs').textContent=clubs.size;
-  document.getElementById('total-counter').textContent=filtered.length;
-  document.getElementById('member-count').textContent=filtered.length;
-
-  const list=document.getElementById('members-list');
-  if(!filtered.length){list.innerHTML='<div class="empty-state">Aucun membre<br>pour ce pays</div>';}
-  else{list.innerHTML=filtered.map((m,i)=>`<div class="member-item"><div class="member-dot"></div><div class="member-info"><div class="member-pseudo">${esc(m.pseudo)}</div><div class="member-location">${m.club?esc(m.club)+' · ':''} ${esc(m.city)}</div></div><button class="btn-edit" onclick="editMember(${m.id})">✏️</button><button class="btn-del" onclick="deleteMember(${m.id})">✕</button></div>`).join('');}
-
-  filtered.forEach(m=>{
-    const mk=L.marker([m.lat,m.lng],{icon:goldIcon});
-    mk.bindPopup(`<div class="popup-pseudo">${m.club?esc(m.club):esc(m.pseudo)}</div>${m.club?'<div style="font-size:0.72rem;color:#666;margin-top:2px">'+esc(m.pseudo)+'</div>':''}<div class="popup-city">📍 ${esc(m.city)}</div>`);
-    clusterGroup.addLayer(mk);
-  });
-  renderClubs(filtered);
-}
-
-function renderClubs(src){
-  const list=(src&&src.length!==undefined)?src:members;
-  const counts={};
-  list.forEach(m=>{if(m.club){const k=m.club.trim();counts[k]=(counts[k]||0)+1;}});
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const cl=document.getElementById('clubs-list');
-  if(!sorted.length){cl.innerHTML='<div class="empty-state">Aucun club<br>pour l\'instant</div>';return;}
-  cl.innerHTML=sorted.map(([name,count],i)=>{
-    const initials=name.split(' ').filter(w=>w.length>2).map(w=>w[0].toUpperCase()).slice(0,2).join('')||name.slice(0,2).toUpperCase();
-    return `<div class="club-item"><div class="club-logo-placeholder">${initials}</div><div class="club-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}">${i+1}</div><div class="club-name">${esc(name)}</div><div class="club-count">${count}</div></div>`;
-  }).join('');
-}
-
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-function toast(msg,err){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.borderColor=err?'#e24b4a':'#c9a84c';
-  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
-}
-
-async function addMember(){
-  const pseudo=document.getElementById('input-pseudo').value.trim();
-  const club=document.getElementById('input-club').value.trim();
-  if(!pseudo){toast('Entre ton pseudo Discord',true);return;}
-  if(!selectedCity){toast('Sélectionne la ville du club dans la liste',true);return;}
-  if(!club){toast('Entre le nom de ton club',true);return;}
-  const btn=document.getElementById('btn-add');
-  btn.disabled=true;btn.textContent='ENREGISTREMENT...';
-  try{
-    const existing=members.find(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
-    const entry={pseudo,city:selectedCity.name,lat:selectedCity.lat,lng:selectedCity.lng,club:club||''};
-    if(existing){
-      await sb.from('members').update(entry).eq('id',existing.id);
-      toast('Marqueur mis à jour !');
-    }else{
-      await sb.from('members').insert(entry);
-      toast('Bienvenue sur la Casual Map ! 🍋');
-    }
-    await loadData();
-    document.getElementById('input-pseudo').value='';
-    document.getElementById('input-city').value='';
-    document.getElementById('input-club').value='';
-    selectedCity=null;
-    const m=members.find(m=>m.pseudo.toLowerCase()===pseudo.toLowerCase());
-    if(m)map.flyTo([m.lat,m.lng],8,{duration:1.5});
-  }catch(e){toast('Erreur — réessaie',true);}
-  btn.disabled=false;btn.textContent='AJOUTER MON MARQUEUR';
-}
-
-async function deleteMember(id){
-  if(!isAdmin)return;
-  const res = await fetch('https://emiveacfwbhhpcdghanv.supabase.co/functions/v1/delete-member', {
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer ' + SUPABASE_KEY
-    },
-    body:JSON.stringify({id,code:ADMIN_CODE})
-  });
-  if(res.ok){await loadData();toast('Marqueur supprimé');}
-  else{toast('Erreur suppression',true);}
-}
-
-function toggleAdmin(){
-  if(isAdmin){isAdmin=false;document.body.classList.remove('admin-mode');toast('Mode admin désactivé');return;}
-  const code=prompt('Code admin :');
-  if(code===ADMIN_CODE){isAdmin=true;document.body.classList.add('admin-mode');toast('Mode admin activé');}
-  else if(code!==null){toast('Code incorrect',true);}
-}
-
-async function searchCity(q){
-  if(q.length<2){document.getElementById('city-results').style.display='none';return;}
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6&accept-language=fr`);
-    const data=await r.json();
-    const el=document.getElementById('city-results');
-    if(!data.length){el.style.display='none';return;}
-    el.style.display='block';
-    el.innerHTML=data.map(d=>{
-      const name=d.display_name.split(',').slice(0,2).join(',').trim();
-      return `<div class="search-result-item" onclick="selectCity('${name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}',${d.lat},${d.lon})">${name}</div>`;
-    }).join('');
-  }catch(e){}
-}
-
-function selectCity(name,lat,lng){
-  selectedCity={name,lat:parseFloat(lat),lng:parseFloat(lng)};
-  document.getElementById('input-city').value=name;
-  document.getElementById('city-results').style.display='none';
-}
-
-document.getElementById('input-city').addEventListener('input',function(){clearTimeout(searchTimeout);searchTimeout=setTimeout(()=>searchCity(this.value),350);});
-document.addEventListener('click',e=>{if(!e.target.closest('.form-group'))document.getElementById('city-results').style.display='none';});
-document.getElementById('input-club').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
-document.getElementById('input-pseudo').addEventListener('keypress',e=>{if(e.key==='Enter')addMember();});
-
-function editMember(id){
-  const m=members.find(x=>x.id===id);
-  if(!m)return;
-  document.getElementById('edit-id').value=id;
-  document.getElementById('edit-pseudo').value=m.pseudo;
-  document.getElementById('edit-club').value=m.club||'';
-  document.getElementById('edit-city').value=m.city||'';
-  document.getElementById('edit-overlay').classList.add('open');
-}
-function closeEdit(){document.getElementById('edit-overlay').classList.remove('open')}
-async function saveMember(){
-  const id=parseInt(document.getElementById('edit-id').value);
-  const club=document.getElementById('edit-club').value.trim();
-  const city=document.getElementById('edit-city').value.trim();
-  if(!club||!city){toast('Club et ville obligatoires',true);return;}
-  await sb.from('members').update({club,city}).eq('id',id);
-  closeEdit();
-  await loadData();
-  toast('Membre mis à jour ✓');
-}
-
-function openShare(){document.getElementById('share-overlay').classList.add('open')}
-function closeShare(){document.getElementById('share-overlay').classList.remove('open')}
-function copyLink(){
-  navigator.clipboard.writeText('https://xxvc5xx.github.io/casual-division-vip/map.html');
-  toast('Lien copié ! 🍋');
-  closeShare();
-}
-function shareInstagram(){
-  if(navigator.share){
-    navigator.share({title:'Casual Map — Casual Division',url:'https://xxvc5xx.github.io/casual-division-vip/map.html'});
-  } else {
-    copyLink();
-    toast('Lien copié — colle-le dans ta story !');
+  // ---------- données ----------
+  async function charger() {
+    const { data, error } = await sb.from('members').select('id,pseudo,city,club,lat,lng,created_at').order('created_at', { ascending: false });
+    if (error) { $('#classement').innerHTML = '<li class="rien">La carte ne répond pas pour le moment. Réessaie dans une minute.</li>'; return; }
+    membres = data || [];
+    calculerClubs(); dessiner(); classement(); listeMembres(); remplirClubs();
+    const q = new URLSearchParams(location.search).get('club'); if (q) montrerClub(cle(q));
   }
-}
 
-initMap();
+  function calculerClubs() {
+    const g = new Map();
+    membres.forEach(m => { const k = cle(m.club); if (!k) return;
+      if (!g.has(k)) g.set(k, { k, noms: new Map(), membres: [] });
+      const c = g.get(k); c.membres.push(m); c.noms.set(m.club.trim(), (c.noms.get(m.club.trim()) || 0) + 1); });
+    clubs = [...g.values()].map(c => ({ ...c, nom: [...c.noms.entries()].sort((a, b) => b[1] - a[1])[0][0] }))
+      .sort((a, b) => b.membres.length - a.membres.length || a.nom.localeCompare(b.nom));
+    $('#n-membres').textContent = membres.length; $('#n-clubs').textContent = clubs.length;
+  }
+
+  function dessiner() {
+    amas.clearLayers(); marqueurs.clear();
+    membres.forEach(m => {
+      const mk = L.marker([m.lat, m.lng], { icon: icone(m.id === moiId), title: m.pseudo })
+        .bindPopup(`<div class="pop"><b>${esc(m.club)}</b><span>${esc(m.pseudo)}</span><small>${esc(m.city)}</small></div>`);
+      marqueurs.set(m.id, mk); amas.addLayer(mk);
+    });
+  }
+
+  function classement() {
+    if (!clubs.length) { $('#classement').innerHTML = '<li class="rien">Personne sur la carte pour l\'instant. Sois le premier.</li>'; return; }
+    const max = clubs[0].membres.length;
+    $('#classement').innerHTML = clubs.map((c, i) => `<li><button type="button" data-club="${esc(c.k)}">
+      <span class="rg">${i + 1}</span><span class="nm">${esc(c.nom)}</span><span class="nb">${c.membres.length}</span>
+      <span class="barre-nb" aria-hidden="true"><i style="width:${Math.max(4, c.membres.length / max * 100)}%"></i></span></button></li>`).join('');
+  }
+
+  function montrerClub(k) {
+    const c = clubs.find(x => x.k === k); if (!c) return;
+    const b = L.latLngBounds(c.membres.map(m => [m.lat, m.lng]));
+    map.flyToBounds(b.pad(.6), { maxZoom: 10, duration: .9 });
+    const rang = clubs.indexOf(c) + 1;
+    $('#focus').innerHTML = `<div class="focus-club"><h2>${esc(c.nom)}</h2>
+      <p>${c.membres.length} casual${c.membres.length > 1 ? 's' : ''} sur la carte · ${rang}${rang === 1 ? 'er' : 'e'} du classement</p>
+      <p style="color:#cfcfcf">${c.membres.slice(0, 12).map(m => esc(m.pseudo)).join(', ')}${c.membres.length > 12 ? '…' : ''}</p>
+      <div class="acts"><button class="btn plein petit-btn" type="button" data-partager-club="${esc(c.k)}">Partager le lien du club</button>
+      <button class="btn vide petit-btn" type="button" data-tout>Voir tous les clubs</button></div></div>`;
+    $('#focus').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function listeMembres() {
+    const q = cle($('#recherche').value);
+    const l = q ? membres.filter(m => cle(m.pseudo + ' ' + m.club + ' ' + m.city).includes(q)) : membres;
+    $('#membres').innerHTML = l.length ? l.slice(0, 200).map(m => `<li><button class="m" type="button" data-membre="${m.id}">
+      <span class="p">${esc(m.pseudo)}</span><br><span class="l">${esc(m.club)} · ${esc(m.city)}</span></button>
+      <span class="adm"><button type="button" data-modifier="${m.id}">Modifier</button><button type="button" data-supprimer="${m.id}">Supprimer</button></span></li>`).join('')
+      : '<li class="rien">Aucun résultat. Essaie un autre pseudo, club ou ville.</li>';
+  }
+
+  function remplirClubs() { $('#clubs-connus').innerHTML = clubs.map(c => `<option value="${esc(c.nom)}">`).join(''); }
+
+  // ---------- onglets ----------
+  const onglets = ['classement', 'membres', 'rejoindre'];
+  function ouvrir(nom) {
+    onglets.forEach(o => { $('#t-' + o).setAttribute('aria-selected', o === nom); $('#v-' + o).hidden = o !== nom; });
+    if (nom === 'rejoindre') setTimeout(() => $('#f-pseudo').focus(), 50);
+  }
+  onglets.forEach(o => $('#t-' + o).addEventListener('click', () => ouvrir(o)));
+  document.querySelector('[role=tablist]').addEventListener('keydown', e => {
+    const i = onglets.findIndex(o => $('#t-' + o).getAttribute('aria-selected') === 'true');
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = onglets[(i + (e.key === 'ArrowRight' ? 1 : 2)) % 3]; ouvrir(n); $('#t-' + n).focus(); }
+  });
+  document.addEventListener('click', e => {
+    const t = e.target.closest('button,a'); if (!t) return;
+    if (t.dataset.aller) { ouvrir(t.dataset.aller); $('.onglets').scrollIntoView({ behavior: 'smooth' }); }
+    if (t.dataset.club) montrerClub(t.dataset.club);
+    if (t.hasAttribute('data-tout')) { $('#focus').innerHTML = ''; map.flyTo([48.5, 6], 5, { duration: .8 }); }
+    if (t.dataset.partagerClub) { const c = clubs.find(x => x.k === t.dataset.partagerClub); partager(location.origin + location.pathname + '?club=' + encodeURIComponent(c.nom), `${c.nom} sur la Casual Map`); }
+    if (t.dataset.membre) { const mk = marqueurs.get(+t.dataset.membre); if (mk) amas.zoomToShowLayer(mk, () => mk.openPopup()); if (innerWidth < 960) $('#map').scrollIntoView({ behavior: 'smooth' }); }
+    if (t.dataset.modifier) modifier(+t.dataset.modifier);
+    if (t.dataset.supprimer) supprimer(+t.dataset.supprimer);
+    if (t.hasAttribute('data-fermer')) t.closest('dialog').close();
+  });
+  $('#recherche').addEventListener('input', listeMembres);
+
+  async function partager(url, titre) {
+    if (navigator.share) { try { await navigator.share({ title: titre, url }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+    try { await navigator.clipboard.writeText(url); cdToast('Lien copié.'); } catch { prompt('Copie ce lien :', url); }
+  }
+  $('#partager-lien').addEventListener('click', () => partager(location.origin + location.pathname, 'Casual Map · Casual Division'));
+
+  // ---------- villes (recherche OpenStreetMap) ----------
+  let choix = null, minuterie = null, sel = -1, resultats = [];
+  const champVille = $('#f-ville'), liste = $('#villes');
+  champVille.addEventListener('input', () => {
+    choix = null; clearTimeout(minuterie); const q = champVille.value.trim();
+    if (q.length < 2) { fermerListe(); return; }
+    minuterie = setTimeout(async () => {
+      try {
+        const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=6&accept-language=fr&featuretype=city&q=${encodeURIComponent(q)}`);
+        resultats = (await r.json()).map(x => ({ nom: x.display_name.split(',').slice(0, 1).concat(x.display_name.split(',').slice(-1)).map(s => s.trim()).join(', '), lat: +x.lat, lng: +x.lon }));
+      } catch { resultats = []; }
+      sel = -1;
+      liste.innerHTML = resultats.length ? resultats.map((v, i) => `<li role="option" id="ville-${i}" aria-selected="false" data-i="${i}">${esc(v.nom)}</li>`).join('') : '<li aria-disabled="true">Aucune ville trouvée</li>';
+      liste.hidden = false; champVille.setAttribute('aria-expanded', 'true');
+    }, 320);
+  });
+  function fermerListe() { liste.hidden = true; champVille.setAttribute('aria-expanded', 'false'); champVille.removeAttribute('aria-activedescendant'); }
+  function prendre(i) { choix = resultats[i]; champVille.value = choix.nom; fermerListe(); }
+  liste.addEventListener('mousedown', e => { const li = e.target.closest('li[data-i]'); if (li) { e.preventDefault(); prendre(+li.dataset.i); } });
+  champVille.addEventListener('keydown', e => {
+    if (liste.hidden || !resultats.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); sel = (sel + (e.key === 'ArrowDown' ? 1 : -1) + resultats.length) % resultats.length;
+      liste.querySelectorAll('li').forEach((li, i) => li.setAttribute('aria-selected', i === sel)); champVille.setAttribute('aria-activedescendant', 'ville-' + sel); }
+    if (e.key === 'Enter' && sel >= 0) { e.preventDefault(); prendre(sel); }
+    if (e.key === 'Escape') fermerListe();
+  });
+  champVille.addEventListener('blur', () => setTimeout(fermerListe, 150));
+
+  // ---------- rejoindre ----------
+  const MSG = { pseudo_pris: 'Ce pseudo est déjà sur la carte. Pour changer ton club ou ta ville, écris à El Cinco sur Discord.',
+    pseudo_invalide: 'Ton pseudo doit faire entre 2 et 32 caractères.', club_invalide: 'Le nom du club doit faire entre 2 et 50 caractères.',
+    ville_invalide: 'Choisis la ville dans la liste.', position_invalide: 'Choisis la ville dans la liste.', trop_de_demandes: 'Beaucoup d\'inscriptions en ce moment. Réessaie dans un moment.' };
+  function erreur(id, txt) { const e = $(id); e.textContent = txt; e.hidden = !txt; }
+  $('#form').addEventListener('submit', async e => {
+    e.preventDefault(); erreur('#f-erreur', '');
+    const pseudo = $('#f-pseudo').value.trim(), club = $('#f-club').value.trim();
+    if (pseudo.length < 2) return erreur('#f-erreur', MSG.pseudo_invalide);
+    if (club.length < 2) return erreur('#f-erreur', MSG.club_invalide);
+    if (!choix) return erreur('#f-erreur', MSG.ville_invalide);
+    const b = $('#f-envoyer'); b.setAttribute('aria-disabled', 'true'); b.textContent = 'Ajout en cours…';
+    const { data, error } = await sb.rpc('rejoindre_carte', { p_pseudo: pseudo, p_ville: choix.nom, p_club: club, p_lat: choix.lat, p_lng: choix.lng });
+    b.setAttribute('aria-disabled', 'false'); b.textContent = 'Ajouter mon marqueur';
+    if (error) { const k = Object.keys(MSG).find(k => (error.message || '').includes(k)); return erreur('#f-erreur', MSG[k] || 'L\'ajout n\'a pas marché. Réessaie dans une minute.'); }
+    moiId = data.id; membres.unshift(data); calculerClubs(); dessiner(); classement(); listeMembres(); remplirClubs();
+    $('#form').reset(); choix = null; ouvrir('classement');
+    map.flyTo([data.lat, data.lng], 9, { duration: 1 });
+    const c = clubs.find(x => x.k === cle(data.club));
+    story(data, c ? c.membres.length : 1, c ? clubs.indexOf(c) + 1 : clubs.length);
+  });
+
+  // ---------- story 1080 × 1920 (textes dans la zone visible des applis) ----------
+  async function story(m, nb, rang) {
+    await document.fonts.load('860 100px "Mona Sans"');
+    const cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1920; const g = cv.getContext('2d');
+    g.fillStyle = '#000'; g.fillRect(0, 0, 1080, 1920);
+    const photo = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = 'assets/img/story-fond.jpg'; });
+    if (photo) { const k = Math.max(1080 / photo.width, 1100 / photo.height), w = photo.width * k, h = photo.height * k; g.globalAlpha = .6; g.drawImage(photo, (1080 - w) / 2, (1100 - h) / 2, w, h); g.globalAlpha = 1;
+      const gr = g.createLinearGradient(0, 500, 0, 1100); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, '#000'); g.fillStyle = gr; g.fillRect(0, 500, 1080, 600); }
+    const logo = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = 'assets/img/logo-cd.png'; });
+    if (logo) g.drawImage(logo, 90, 230, 210, 210 * logo.height / logo.width);
+    g.fillStyle = '#fff'; g.textBaseline = 'alphabetic';
+    const ajuste = (txt, taille, max) => { let t = taille; do { g.font = `860 ${t}px "Mona Sans"`; g.fontStretch = 'condensed'; t -= 4; } while (g.measureText(txt).width > max && t > 40); };
+    g.font = '600 40px "Mona Sans"'; g.fillStyle = '#bdbdbd'; g.fillText('JE SUIS SUR LA CASUAL MAP', 90, 700);
+    g.fillStyle = '#fff'; const club = m.club.toUpperCase(); ajuste(club, 230, 840); g.fillText(club, 90, 890); g.fontStretch = 'normal';
+    g.font = '600 56px "Mona Sans"'; g.fillText(m.pseudo, 90, 980);
+    g.font = '400 44px "Mona Sans"'; g.fillStyle = '#bdbdbd'; g.fillText(m.city, 90, 1045);
+    g.fillStyle = '#fff'; g.font = '860 190px "Mona Sans"'; g.fontStretch = 'condensed'; g.fillText(String(nb), 90, 1300); g.fontStretch = 'normal';
+    g.font = '600 40px "Mona Sans"'; g.fillStyle = '#bdbdbd';
+    g.fillText(`casual${nb > 1 ? 's' : ''} de ${m.club.length > 22 ? 'mon club' : m.club} sur la carte`, 90, 1350);
+    g.fillText(`${rang}${rang === 1 ? 'er' : 'e'} club sur ${clubs.length}`, 90, 1405);
+    g.fillStyle = '#fff'; g.fillRect(90, 1440, 120, 4);
+    const blob = await new Promise(r => { try { cv.toBlob(r, 'image/png'); } catch { r(null); } });
+    const url = blob ? URL.createObjectURL(blob) : '';
+    $('#story-img').src = url || cv.toDataURL?.() || ''; $('#story-dl').href = url;
+    $('#story-partager').onclick = async () => {
+      const f = blob && new File([blob], 'casual-map.png', { type: 'image/png' });
+      if (f && navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: 'Casual Map' }); } catch {} }
+      else { $('#story-dl').click(); cdToast('Image enregistrée : ajoute-la en story.'); }
+    };
+    $('#d-story').showModal();
+  }
+
+  // ---------- admin ----------
+  async function majAdmin() {
+    const { data } = await sb.auth.getSession();
+    let ok = false;
+    if (data.session) { const r = await sb.rpc('est_admin'); ok = r.data === true; }
+    document.body.classList.toggle('admin', ok);
+    $('#admin-form').hidden = ok; $('#admin-ok').hidden = !ok;
+    return ok;
+  }
+  $('#admin-btn').addEventListener('click', async () => { await majAdmin(); $('#d-admin').showModal(); });
+  $('#admin-form').addEventListener('submit', async e => {
+    e.preventDefault(); erreur('#a-erreur', '');
+    const { error } = await sb.auth.signInWithPassword({ email: $('#a-mail').value.trim(), password: $('#a-mdp').value });
+    if (error) return erreur('#a-erreur', 'E-mail ou mot de passe incorrect.');
+    if (!(await majAdmin())) { await sb.auth.signOut(); erreur('#a-erreur', 'Ce compte n\'a pas les droits admin.'); }
+    else { ouvrir('membres'); }
+  });
+  $('#admin-sortir').addEventListener('click', async () => { await sb.auth.signOut(); await majAdmin(); $('#d-admin').close(); });
+  let enEdition = null;
+  function modifier(id) { const m = membres.find(x => x.id === id); if (!m) return; enEdition = m;
+    $('#e-club').value = m.club; $('#e-ville').value = m.city; erreur('#e-erreur', ''); $('#d-edit').showModal(); }
+  $('#edit-form').addEventListener('submit', async e => {
+    e.preventDefault(); const m = enEdition; const maj = { club: $('#e-club').value.trim(), city: $('#e-ville').value.trim() };
+    if (maj.city !== m.city) {
+      try { const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(maj.city)}`); const v = (await r.json())[0];
+        if (!v) return erreur('#e-erreur', 'Ville introuvable.'); maj.lat = +v.lat; maj.lng = +v.lon; } catch { return erreur('#e-erreur', 'Recherche de la ville impossible.'); }
+    }
+    const { error } = await sb.from('members').update(maj).eq('id', m.id);
+    if (error) return erreur('#e-erreur', 'Modification refusée : reconnecte-toi en admin.');
+    Object.assign(m, maj); calculerClubs(); dessiner(); classement(); listeMembres(); $('#d-edit').close(); cdToast('Modifié.');
+  });
+  async function supprimer(id) {
+    const m = membres.find(x => x.id === id); if (!m || !confirm(`Retirer ${m.pseudo} de la carte ?`)) return;
+    const { error } = await sb.from('members').delete().eq('id', id);
+    if (error) return cdToast('Suppression refusée : reconnecte-toi en admin.');
+    membres = membres.filter(x => x.id !== id); calculerClubs(); dessiner(); classement(); listeMembres(); cdToast(`${m.pseudo} retiré de la carte.`);
+  }
+
+  charger(); majAdmin();
+})();
 </script>
 </body>
 </html>

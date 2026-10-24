@@ -1,0 +1,14 @@
+# Réveille la base de la Casual Map tous les 3 jours pour que Supabase (offre gratuite) ne la mette pas en pause.
+# La clé ci-dessous est la clé publique déjà présente dans les pages du site.
+name: Reveil base Casual Map
+on:
+  schedule:
+    - cron: "17 6 */3 * *"
+  workflow_dispatch:
+jobs:
+  reveil:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping de la base
+        run: |
+          curl -fsS -o /dev/null -w "HTTP %{http_code}\n"             "https://emiveacfwbhhpcdghanv.supabase.co/rest/v1/members?select=id&limit=1"             -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaXZlYWNmd2JoaHBjZGdoYW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjQ1NTgsImV4cCI6MjA5MjEwMDU1OH0.zZ6eWTPVXMhUp1VQbpUI-J5L_t0osI9ipLTSoLeQQRY" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaXZlYWNmd2JoaHBjZGdoYW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MjQ1NTgsImV4cCI6MjA5MjEwMDU1OH0.zZ6eWTPVXMhUp1VQbpUI-J5L_t0osI9ipLTSoLeQQRY"
