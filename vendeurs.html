@@ -1,218 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casual Division — Vendeurs Vinted</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Meilleurs vendeurs Vinted · Casual Division</title>
+<meta name="description" content="Les meilleurs vendeurs casual sur Vinted, choisis par l'équipe de la Casual Division.">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Meilleurs vendeurs Vinted · Casual Division">
+<meta property="og:description" content="Les vendeurs casual sur Vinted choisis par l'équipe de la Division.">
+<meta property="og:image" content="https://xxvc5xx.github.io/casual-division-vip/assets/img/og.jpg">
+<meta property="og:url" content="https://xxvc5xx.github.io/casual-division-vip/vendeurs.html">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0a0a0a; min-height: 100vh; padding: 2rem; font-family: 'Garamond', 'Georgia', serif; }
-.container { max-width: 700px; margin: 0 auto; }
-.header { text-align: center; margin-bottom: 2rem; border: 1px solid #8B6914; padding: 2rem; position: relative; background: #0f0f0f; }
-.bar { position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #8B6914, #D4AF37, #8B6914); }
-.bar.top { top: 0; } .bar.bottom { bottom: 0; }
-.brand { font-size: 10px; color: #8B6914; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.5rem; }
-.title { font-size: 20px; color: #D4AF37; letter-spacing: 2px; margin-bottom: 0.5rem; }
-.subtitle { font-size: 12px; color: #666; font-style: italic; }
-.count { font-size: 10px; color: #8B6914; letter-spacing: 2px; margin-top: 0.5rem; font-family: sans-serif; }
-.section-title { font-size: 9px; color: #D4AF37; letter-spacing: 4px; text-transform: uppercase; margin: 1.5rem 0 1rem; font-family: sans-serif; }
-.grid { display: flex; flex-direction: column; gap: 10px; }
-.seller-card { display: flex; align-items: center; gap: 16px; background: #0f0f0f; border: 0.5px solid #2a2a2a; padding: 14px 16px; text-decoration: none; transition: border-color 0.2s; position: relative; }
-.seller-card:hover { border-color: #8B6914; }
-.seller-card.top { border: 1px solid #D4AF37; background: #111; }
-.seller-card.top::before { content: '⭐ TOP VENDEUR'; position: absolute; top: -1px; right: 12px; background: #D4AF37; color: #0a0a0a; font-size: 8px; font-weight: bold; padding: 2px 8px; letter-spacing: 1px; font-family: sans-serif; }
-.avatar { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; color: #D4AF37; font-family: sans-serif; font-weight: bold; }
-.seller-card.top .avatar { border-color: #D4AF37; }
-.info { flex: 1; }
-.name { color: #fff; font-size: 14px; font-family: sans-serif; font-weight: 600; margin-bottom: 2px; }
-.seller-card.top .name { color: #D4AF37; }
-.tag { font-size: 10px; color: #555; font-family: sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-.arrow { color: #333; font-size: 14px; font-family: sans-serif; }
-.seller-card:hover .arrow { color: #D4AF37; }
-.admin-section { margin-top: 2rem; border: 0.5px solid #2a2a2a; padding: 1.5rem; background: #0f0f0f; }
-.admin-title { font-size: 9px; color: #555; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; font-family: sans-serif; }
-.admin-form { display: none; flex-direction: column; gap: 10px; }
-.admin-form.visible { display: flex; }
-input { background: #1a1a1a; border: 0.5px solid #333; color: #fff; padding: 10px 12px; font-size: 13px; font-family: sans-serif; width: 100%; }
-input:focus { outline: none; border-color: #8B6914; }
-.btn { background: #D4AF37; color: #0a0a0a; border: none; padding: 10px; font-size: 11px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: sans-serif; }
-.btn-unlock { background: transparent; border: 0.5px solid #333; color: #555; padding: 8px 16px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-family: sans-serif; }
-.btn-unlock:hover { border-color: #8B6914; color: #8B6914; }
-.btn-danger { background: #8B0000; color: #fff; border: none; padding: 4px 10px; font-size: 10px; cursor: pointer; font-family: sans-serif; margin-left: 8px; }
-.error { color: #cc4444; font-size: 11px; font-family: sans-serif; }
-.success { color: #44aa44; font-size: 11px; font-family: sans-serif; }
-.checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666; font-family: sans-serif; }
-input[type="checkbox"] { width: auto; }
+.intro{padding:130px var(--pad) 40px;max-width:var(--max);margin:0 auto}
+.intro h1{font-size:clamp(60px,14vw,160px)}
+.intro .lead{margin-top:22px}
+.outils{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 10px;display:flex;gap:8px;flex-wrap:wrap}
+.outils button{border:1px solid var(--trait);padding:10px 14px;font-size:14px;font-weight:620;color:#cfcfcf}
+.outils button[aria-pressed="true"]{background:#fff;color:#000;border-color:#fff}
+.zone{max-width:var(--max);margin:0 auto;padding:18px var(--pad) 60px}
+.grille{display:grid;gap:1px;background:var(--trait);border:1px solid var(--trait);grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))}
+.vend{background:#000;padding:22px 20px 20px;display:grid;grid-template-rows:auto 1fr auto;gap:14px;min-height:230px;position:relative}
+.vend .ini{font-size:84px;font-weight:860;font-variation-settings:"wdth" 75;line-height:.8;color:#2b2b2b;text-transform:uppercase}
+.vend.top .ini{color:#fff}
+.vend .tag{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;letter-spacing:.06em;padding:5px 8px;background:#fff;color:#000;font-variation-settings:"wdth" 110}
+.vend h2{font-size:26px;font-weight:800;font-variation-settings:"wdth" 82;line-height:1.05;word-break:break-word}
+.vend p{color:var(--gris);font-size:14px;margin-top:4px}
+.vend .btn{width:100%}
+.vend .adm{display:none;gap:6px}
+body.admin .vend .adm{display:flex}
+.vend .adm button{font-size:13px;border:1px solid var(--trait);padding:6px 10px}
+.rien{color:var(--gris);padding:30px 20px;background:#000}
+.note-bas{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 50px;color:var(--gris);font-size:14px}
+.bandeau-admin{display:none;max-width:var(--max);margin:0 auto;padding:0 var(--pad) 18px;gap:10px;flex-wrap:wrap}
+body.admin .bandeau-admin{display:flex}
+dialog{margin:auto;background:#000;color:#fff;border:1px solid #3a3a3a;padding:0;width:min(520px,calc(100% - 24px))}
+dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
+dialog .in{padding:24px}
+dialog h2{font-size:38px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:.95;padding-right:40px}
+dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px}
+.form{display:grid;gap:14px;margin-top:16px}
+.champ label{display:block;font-size:14px;font-weight:620;margin-bottom:6px}
+.champ input{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:12px 14px;font-size:16px}
+.champ input:focus{border-color:#fff;outline:0}
+.case{display:flex;gap:10px;align-items:center;font-size:15px}
+.case input{width:20px;height:20px;accent-color:#fff}
+.erreur{color:#fff;background:#2a0000;border:1px solid #5a1a1a;padding:10px 12px;font-size:14px}
+.form .btn{width:100%}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="bar top"></div>
-    <div class="bar bottom"></div>
-    <div class="brand">⚜ CASUAL DIVISION ⚜</div>
-    <div class="title">VENDEURS VINTED VÉRIFIÉS</div>
-    <div class="subtitle">Sélectionnés par l'équipe — spécialisés casual</div>
-    <div class="count" id="count"></div>
+
+<header class="barre">
+  <a class="logo" href="./" aria-label="Casual Division, accueil"><img src="assets/img/logo-cd.png" alt="Casual Division" width="58" height="38"></a>
+  <nav>
+    <a class="lien" href="./">Casual Elite</a>
+    <a class="lien" href="map.html">Casual Map</a>
+    <a class="lien" href="fiabilite.html">Vendeurs fiables</a>
+    <a class="btn vide petit-btn" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#discord"/></svg>Discord</a>
+  </nav>
+</header>
+
+<main>
+  <section class="intro">
+    <h1 class="display">Meilleurs<br>vendeurs<br>Vinted.</h1>
+    <p class="lead">Les vendeurs casual qu'on suit sur Vinted : bonnes pièces, bons prix, envois sérieux. Choisis par l'équipe de la Division.</p>
+  </section>
+
+  <div class="bandeau-admin">
+    <strong style="align-self:center">Mode admin</strong>
+    <button class="btn plein petit-btn" type="button" id="ajouter">Ajouter un vendeur</button>
+    <button class="btn vide petit-btn" type="button" id="sortir">Se déconnecter</button>
   </div>
 
-  <div class="section-title">⭐ TOP VENDEURS</div>
-  <div class="grid" id="top-list"></div>
+  <div class="outils" role="group" aria-label="Filtrer">
+    <button type="button" aria-pressed="true" data-f="tous">Tous</button>
+    <button type="button" aria-pressed="false" data-f="top">Top vendeurs</button>
+  </div>
 
-  <div class="section-title">VENDEURS RECOMMANDÉS</div>
-  <div class="grid" id="regular-list"></div>
+  <div class="zone"><div class="grille" id="grille"><p class="rien">Chargement…</p></div></div>
 
-  <div class="admin-section">
-    <div class="admin-title">ESPACE ADMINISTRATEUR</div>
-    <button class="btn-unlock" onclick="showUnlock()">🔒 Accès admin</button>
-    <div id="unlock-form" style="margin-top:1rem; display:none;">
-      <input type="password" id="code-input" placeholder="Code d'accès..." style="max-width:200px; display:inline-block; margin-right:8px;">
-      <button class="btn" onclick="checkCode()" style="display:inline-block; padding:10px 20px;">OK</button>
-      <div id="code-error" class="error" style="margin-top:8px;"></div>
-    </div>
-    <div class="admin-form" id="admin-form">
-      <div style="font-size:11px; color:#44aa44; font-family:sans-serif; margin-bottom:0.5rem;">✅ Accès admin autorisé</div>
-      <input type="text" id="new-name" placeholder="Pseudo Vinted (ex: casual_store)">
-      <input type="text" id="new-url" placeholder="Lien Vinted (ex: https://www.vinted.fr/member/123456)">
-      <div class="checkbox-row">
-        <input type="checkbox" id="new-top">
-        <label for="new-top">Top vendeur (badge doré)</label>
-      </div>
-      <button class="btn" onclick="addSeller()">+ AJOUTER LE VENDEUR</button>
-      <div id="add-status"></div>
+  <p class="note-bas">Ces vendeurs vendent sur Vinted : la transaction se fait entre toi et eux, la Casual Division n'y intervient pas. Tu connais un vendeur qui mérite sa place ici ? Dis-le à El Cinco sur Discord. Pour les vendeurs du Discord, va voir les <a class="lien-souligne" href="fiabilite.html">Vendeurs fiables</a>.</p>
+</main>
+
+<footer class="pied">
+  <div class="haut">
+    <img src="assets/img/logo-cd.png" alt="Casual Division">
+    <div class="cols">
+      <div><p class="titre-col">La Division</p><ul><li><a href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener">Discord</a></li><li><a href="./">Casual Elite</a></li><li><a href="map.html">Casual Map</a></li><li><a href="fiabilite.html">Vendeurs fiables</a></li></ul></div>
+      <div><p class="titre-col">Casu'Hall</p><ul><li><a href="https://casuhall.fr" target="_blank" rel="noopener">casuhall.fr</a></li><li><a href="https://www.tiktok.com/@el_cinco_casuals" target="_blank" rel="noopener">TikTok</a></li><li><a href="https://www.instagram.com/casuhall_france/" target="_blank" rel="noopener">Instagram</a></li></ul></div>
     </div>
   </div>
-</div>
+  <div class="bas"><span>© <span data-annee>2026</span> Casual Division by Casu'Hall</span><button type="button" id="admin-btn" style="color:inherit">Admin</button></div>
+</footer>
 
+<dialog id="d-v" aria-labelledby="d-v-t"><div class="in">
+  <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
+  <h2 id="d-v-t">Vendeur</h2>
+  <form class="form" id="f-v" novalidate>
+    <div class="champ"><label for="v-pseudo">Pseudo Vinted</label><input id="v-pseudo" maxlength="50" required></div>
+    <div class="champ"><label for="v-url">Lien du profil</label><input id="v-url" maxlength="200" inputmode="url" placeholder="https://www.vinted.fr/member/…" required></div>
+    <div class="champ"><label for="v-spe">Spécialité (facultatif)</label><input id="v-spe" maxlength="80" placeholder="Lyle & Scott, Adidas…"></div>
+    <label class="case"><input type="checkbox" id="v-top"> Top vendeur</label>
+    <div id="v-erreur" class="erreur" role="alert" hidden></div>
+    <button class="btn plein" type="submit">Enregistrer</button>
+  </form>
+</div></dialog>
+
+<dialog id="d-admin" aria-labelledby="d-admin-t"><div class="in">
+  <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
+  <h2 id="d-admin-t">Admin</h2>
+  <form id="admin-form" class="form">
+    <div class="champ"><label for="ad-mail">E-mail</label><input id="ad-mail" type="email" autocomplete="username" required></div>
+    <div class="champ"><label for="ad-mdp">Mot de passe</label><input id="ad-mdp" type="password" autocomplete="current-password" required></div>
+    <div id="ad-erreur" class="erreur" role="alert" hidden></div>
+    <button class="btn plein" type="submit">Se connecter</button>
+  </form>
+</div></dialog>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol></svg>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="assets/site.js" defer></script>
+<script src="assets/donnees.js"></script>
 <script>
-const ADMIN_CODE = "VC5";
-const STORAGE_KEY = "casual_division_sellers";
+(() => {
+  const sb = CD.supabase();
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const urlOk = u => /^https:\/\/(www\.)?vinted\.[a-z.]+\/member\//i.test(u || '');
+  let liste = [], filtre = 'tous', admin = false, enCours = null;
 
-const DEFAULT_SELLERS = [
-  { name: "Casual_Store", url: "https://www.vinted.fr/member/222715715", top: true },
-  { name: "OC'CASUAL", url: "https://www.vinted.fr/member/45952213", top: true },
-  { name: "Val", url: "https://www.vinted.fr/member/25584555", top: true },
-  { name: "terrace_carlos", url: "https://www.vinted.fr/member/3135806057", top: false },
-  { name: "1312christian131", url: "https://www.vinted.fr/member/272051765", top: false },
-  { name: "s.slazioforza", url: "https://www.vinted.fr/member/273058301", top: false },
-  { name: "casualland", url: "https://www.vinted.fr/member/180314715", top: false },
-  { name: "nilsnocap", url: "https://www.vinted.fr/member/86082493", top: false },
-  { name: "louis_mrt732", url: "https://www.vinted.fr/member/282792070", top: false },
-  { name: "casual_brand_mrlpl", url: "https://www.vinted.fr/member/295062969", top: false },
-  { name: "seller076", url: "https://www.vinted.fr/member/235048354", top: false },
-];
+  async function charger() {
+    const { data, error } = await sb.from('vendeurs_vinted').select('id,pseudo,vinted_url,top,specialite,ordre').order('top', { ascending: false }).order('ordre').order('pseudo');
+    if (error) { $('#grille').innerHTML = '<p class="rien">La liste ne répond pas pour le moment. Réessaie dans une minute.</p>'; return; }
+    liste = data; rendu();
+  }
+  function rendu() {
+    const l = liste.filter(v => filtre === 'tous' || v.top);
+    $('#grille').innerHTML = l.length ? l.map(v => `<article class="vend${v.top ? ' top' : ''}">
+      ${v.top ? '<span class="tag">TOP VENDEUR</span>' : ''}
+      <span class="ini" aria-hidden="true">${esc(v.pseudo.replace(/[^a-z0-9]/gi, '').slice(0, 2) || '?')}</span>
+      <div><h2>${esc(v.pseudo)}</h2><p>${esc(v.specialite || 'Vendeur casual')}</p></div>
+      <div><a class="btn ${v.top ? 'plein' : 'vide'}" href="${urlOk(v.vinted_url) ? esc(v.vinted_url) : '#'}" target="_blank" rel="noopener nofollow">Voir sur Vinted</a>
+      <div class="adm" style="margin-top:10px"><button type="button" data-modif="${v.id}">Modifier</button><button type="button" data-suppr="${v.id}">Supprimer</button></div></div>
+    </article>`).join('') : '<p class="rien">Aucun vendeur pour ce filtre.</p>';
+  }
+  document.querySelectorAll('.outils button').forEach(b => b.addEventListener('click', () => {
+    filtre = b.dataset.f; document.querySelectorAll('.outils button').forEach(x => x.setAttribute('aria-pressed', x === b)); rendu(); }));
 
-function loadSellers() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch(e) {}
-  saveSellers(DEFAULT_SELLERS);
-  return DEFAULT_SELLERS;
-}
-
-function saveSellers(sellers) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sellers));
-  } catch(e) {}
-}
-
-let sellers = loadSellers();
-
-function getInitials(name) {
-  return name.replace(/[^a-zA-Z]/g, '').substring(0, 2).toUpperCase() || '??';
-}
-
-let isAdmin = false;
-
-function renderSellers() {
-  const topList = document.getElementById('top-list');
-  const regularList = document.getElementById('regular-list');
-  topList.innerHTML = '';
-  regularList.innerHTML = '';
-  document.getElementById('count').textContent = sellers.length + ' vendeurs référencés';
-
-  sellers.filter(s => s.top).forEach((s, i) => {
-    topList.appendChild(createCard(s, sellers.indexOf(s)));
+  const erreur = (id, t) => { const e = $(id); e.textContent = t; e.hidden = !t; };
+  function editer(v) { enCours = v || null; $('#d-v-t').textContent = v ? 'Modifier' : 'Ajouter';
+    $('#v-pseudo').value = v?.pseudo || ''; $('#v-url').value = v?.vinted_url || ''; $('#v-spe').value = v?.specialite || ''; $('#v-top').checked = !!v?.top;
+    erreur('#v-erreur', ''); $('#d-v').showModal(); }
+  document.addEventListener('click', async e => {
+    const t = e.target.closest('button'); if (!t) return;
+    if (t.hasAttribute('data-fermer')) t.closest('dialog').close();
+    if (!admin) return;
+    if (t.dataset.modif) editer(liste.find(v => v.id === +t.dataset.modif));
+    if (t.dataset.suppr) { const v = liste.find(x => x.id === +t.dataset.suppr); if (!confirm(`Retirer ${v.pseudo} de la liste ?`)) return;
+      const { error } = await sb.from('vendeurs_vinted').delete().eq('id', v.id); if (error) return cdToast('Refusé : reconnecte-toi en admin.'); cdToast('Retiré.'); charger(); }
   });
-  sellers.filter(s => !s.top).forEach((s) => {
-    regularList.appendChild(createCard(s, sellers.indexOf(s)));
+  $('#ajouter').addEventListener('click', () => editer(null));
+  $('#f-v').addEventListener('submit', async e => {
+    e.preventDefault(); erreur('#v-erreur', '');
+    const d = { pseudo: $('#v-pseudo').value.trim(), vinted_url: $('#v-url').value.trim(), specialite: $('#v-spe').value.trim() || null, top: $('#v-top').checked };
+    if (d.pseudo.length < 2) return erreur('#v-erreur', 'Pseudo trop court.');
+    if (!urlOk(d.vinted_url)) return erreur('#v-erreur', 'Colle le lien du profil Vinted (https://www.vinted.fr/member/…).');
+    const { error } = enCours ? await sb.from('vendeurs_vinted').update(d).eq('id', enCours.id) : await sb.from('vendeurs_vinted').insert(d);
+    if (error) return erreur('#v-erreur', 'Refusé : reconnecte-toi en admin.');
+    $('#d-v').close(); cdToast('Enregistré.'); charger();
   });
-}
-
-function createCard(s, index) {
-  const card = document.createElement('a');
-  card.href = s.url;
-  card.target = '_blank';
-  card.className = 'seller-card' + (s.top ? ' top' : '');
-  card.innerHTML = `
-    <div class="avatar">${getInitials(s.name)}</div>
-    <div class="info">
-      <div class="name">${s.name}</div>
-      <div class="tag">Vendeur Casual · Vérifié</div>
-    </div>
-    <div class="arrow">→</div>
-    ${isAdmin ? `<button class="btn-danger" onclick="removeSeller(event, ${index})">✕</button>` : ''}
-  `;
-  return card;
-}
-
-function removeSeller(e, index) {
-  e.preventDefault();
-  e.stopPropagation();
-  if (confirm('Supprimer ce vendeur ?')) {
-    sellers.splice(index, 1);
-    saveSellers(sellers);
-    renderSellers();
+  async function majAdmin() {
+    const { data } = await sb.auth.getSession(); admin = false;
+    if (data.session) { const r = await sb.rpc('est_admin'); admin = r.data === true; }
+    document.body.classList.toggle('admin', admin); return admin;
   }
-}
-
-function showUnlock() {
-  document.getElementById('unlock-form').style.display = 'block';
-}
-
-function checkCode() {
-  const code = document.getElementById('code-input').value.trim();
-  if (code === ADMIN_CODE) {
-    isAdmin = true;
-    document.getElementById('unlock-form').style.display = 'none';
-    document.getElementById('admin-form').classList.add('visible');
-    renderSellers();
-  } else {
-    document.getElementById('code-error').textContent = 'Code incorrect.';
-  }
-}
-
-function addSeller() {
-  const name = document.getElementById('new-name').value.trim();
-  const url = document.getElementById('new-url').value.trim();
-  const top = document.getElementById('new-top').checked;
-  const status = document.getElementById('add-status');
-
-  if (!name || !url) {
-    status.className = 'error';
-    status.textContent = 'Remplis tous les champs.';
-    return;
-  }
-  if (!url.includes('vinted.fr')) {
-    status.className = 'error';
-    status.textContent = 'Le lien doit être un lien Vinted.';
-    return;
-  }
-
-  sellers.push({ name, url, top });
-  saveSellers(sellers);
-  renderSellers();
-
-  document.getElementById('new-name').value = '';
-  document.getElementById('new-url').value = '';
-  document.getElementById('new-top').checked = false;
-  status.className = 'success';
-  status.textContent = '✅ Vendeur ajouté et sauvegardé !';
-  setTimeout(() => status.textContent = '', 3000);
-}
-
-renderSellers();
+  $('#admin-btn').addEventListener('click', async () => { if (await majAdmin()) return cdToast('Déjà connecté en admin.'); erreur('#ad-erreur', ''); $('#d-admin').showModal(); });
+  $('#admin-form').addEventListener('submit', async e => {
+    e.preventDefault(); erreur('#ad-erreur', '');
+    const { error } = await sb.auth.signInWithPassword({ email: $('#ad-mail').value.trim(), password: $('#ad-mdp').value });
+    if (error) return erreur('#ad-erreur', 'E-mail ou mot de passe incorrect.');
+    if (!(await majAdmin())) { await sb.auth.signOut(); return erreur('#ad-erreur', 'Ce compte n\'a pas les droits admin.'); }
+    $('#d-admin').close(); rendu();
+  });
+  $('#sortir').addEventListener('click', async () => { await sb.auth.signOut(); await majAdmin(); rendu(); });
+  majAdmin().then(charger);
+})();
 </script>
 </body>
 </html>
