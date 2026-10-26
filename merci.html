@@ -40,9 +40,9 @@
 </main>
 <script src="assets/site.js" defer></script>
 <script>
-  // Quand le bot donnera le rôle tout seul (v4.3 installée), passer AUTO à true.
-  const AUTO = false;
-  if (AUTO) document.querySelector('#etape-role p').textContent = 'Rien à faire : le bot te donne le rôle Casual Elite tout seul, en une minute environ. Tu reçois un message de bienvenue en DM.';
+  // Rôle donné tout seul par le bot (v4.3). Si CASUAL_ELITE_AUTO est coupé sur le bot, repasser AUTO à false.
+  const AUTO = true;
+  if (AUTO) document.querySelector('#etape-role p').textContent = 'Tu étais déjà sur le Discord ? Rien à faire : le bot te donne le rôle Casual Elite tout seul, en une minute environ, avec un message de bienvenue en DM. Tu n\'y étais pas encore au moment de payer ? Écris à El Cinco en message privé avec ton pseudo et l\'e-mail du paiement : il active ton rôle à la main.';
 </script>
 </body>
 </html>
