@@ -17,69 +17,95 @@
 <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-.intro{padding:130px var(--pad) 40px;max-width:var(--max);margin:0 auto}
-.intro h1{font-size:clamp(64px,15vw,170px)}
-.intro .lead{margin-top:22px}
-.stats{display:flex;gap:clamp(22px,5vw,56px);margin-top:34px;flex-wrap:wrap}
-.stats b{display:block;font-size:clamp(38px,7vw,64px);font-weight:840;font-variation-settings:"wdth" 75;line-height:1}
-.stats span{font-size:14px;color:var(--gris)}
+/* Vendeurs fiables — retouche du 27/10 : le titre parle fort, chaque vendeur a sa fiche, le reste est fin. */
+.intro{padding:118px var(--pad) 34px;max-width:var(--max);margin:0 auto}
+.intro h1{font-size:clamp(52px,11vw,112px)}
+.intro .lead{margin-top:20px}
+.compte{margin-top:16px;color:#bdbdbd;font-size:15.5px}
+.compte b{color:#fff;font-weight:650;font-variant-numeric:tabular-nums}
+
 .outils{position:sticky;top:66px;z-index:20;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);border-block:1px solid var(--trait)}
-.outils .in{max-width:var(--max);margin:0 auto;padding:14px var(--pad);display:grid;gap:12px}
+.outils[hidden]{display:none}
+.outils .in{max-width:var(--max);margin:0 auto;padding:12px var(--pad);display:grid;gap:10px}
 @media (min-width:860px){.outils .in{grid-template-columns:1fr auto;align-items:center}}
-.cherche{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:13px 16px;font-size:16px}
+.cherche{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:12px 14px;font-size:16px}
 .cherche:focus{border-color:#fff;outline:0}
 .filtres{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
-.filtres button{white-space:nowrap;border:1px solid var(--trait);padding:10px 14px;font-size:14px;font-weight:620;color:#cfcfcf}
+.filtres button{white-space:nowrap;border:1px solid var(--trait);padding:9px 13px;font-size:14px;font-weight:560;color:#cfcfcf}
+.filtres button[hidden]{display:none}
 .filtres button[aria-pressed="true"]{background:#fff;color:#000;border-color:#fff}
-.liste{max-width:var(--max);margin:0 auto;padding:10px var(--pad) 80px}
-.vendeur{border-bottom:1px solid var(--trait)}
-.vendeur>button{width:100%;text-align:left;display:grid;grid-template-columns:1fr auto;gap:6px 20px;align-items:center;padding:22px 0}
-.vendeur .ps{font-size:clamp(26px,4.4vw,40px);font-weight:840;font-variation-settings:"wdth" 78;line-height:1;word-break:break-word}
-.vendeur .sp{grid-column:1;color:var(--gris);font-size:15px}
-.vendeur .note{grid-row:1/3;grid-column:2;text-align:right}
-.vendeur .note b{display:block;font-size:clamp(28px,4.5vw,40px);font-weight:840;font-variation-settings:"wdth" 75;line-height:1}
-.vendeur .note span{font-size:13px;color:var(--gris)}
-.badge{display:inline-block;vertical-align:middle;margin-left:12px;font-size:12px;font-weight:700;letter-spacing:.06em;padding:5px 8px;border:1px solid #fff;font-variation-settings:"wdth" 110;position:relative;top:-6px}
-.badge.or{background:#fff;color:#000}
-.badge.nouveau{border-color:#555;color:#bdbdbd}
-.badge.suspendu,.badge.banni{border-color:#7a2a2a;color:#e0a0a0}
-.detail{padding:0 0 26px}
+
+/* ---------- fiches vendeurs ---------- */
+.liste{max-width:var(--max);margin:0 auto;padding:6px var(--pad) 56px;display:grid;gap:14px;align-items:start}
+@media (min-width:760px){.liste{grid-template-columns:1fr 1fr}}
+.vendeur{border:1px solid var(--trait);padding:22px;display:grid;gap:18px}
+.vendeur .haut{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:14px;align-items:center}
+.mono{width:46px;height:46px;border-radius:50%;border:1px solid #3a3a3a;display:grid;place-items:center;font-size:18px;font-weight:600;color:#e6e6e6}
+.ps{font-size:20px;font-weight:650;line-height:1.2;word-break:break-word}
+.sous{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:3px;font-size:14px;color:var(--gris)}
+.badge{font-weight:600;color:#d6d6d6}
+.badge.or{color:#fff}
+.badge.nouveau{color:var(--gris);font-weight:500}
+.badge.suspendu,.badge.banni{color:#e0a0a0}
+.note{text-align:right;white-space:nowrap}
+.note b{display:block;font-size:22px;font-weight:650;line-height:1;font-variant-numeric:tabular-nums}
+.note .etoiles{display:block;font-size:11px;letter-spacing:1.5px;margin-top:6px}
+.note small{display:block;font-size:12.5px;color:var(--gris);margin-top:2px}
+.note .pas-encore{font-size:13px;color:var(--gris)}
+@media (max-width:520px){
+  .vendeur .haut{grid-template-columns:46px minmax(0,1fr)}
+  .note{grid-column:2;text-align:left;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .note b{display:inline;font-size:17px}
+  .note .etoiles,.note small{display:inline;margin:0}
+}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;border-top:1px solid #1a1a1a;padding-top:16px}
+.actions .btn{margin-left:auto;min-height:40px;border-width:1px}
+.lien-btn{font-size:14.5px;color:#d6d6d6;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.lien-btn:hover{color:#fff}
 .detail[hidden]{display:none}
-.meta{display:flex;flex-wrap:wrap;gap:8px 22px;color:#bdbdbd;font-size:14px;margin-bottom:16px}
-.meta a{color:#fff}
-.avis{list-style:none;display:grid;gap:10px}
-.avis li{border:1px solid var(--trait);padding:14px 16px}
+.depuis{font-size:14px;color:var(--gris);margin-bottom:4px}
+.avis{list-style:none}
+.avis li{border-top:1px solid #1a1a1a;padding:14px 0 4px}
+.avis li:first-child{border-top:0;padding-top:4px}
 .avis .h{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--gris)}
-.avis .h b{color:#fff}
-.etoiles{letter-spacing:2px;color:#fff;font-size:15px}
-.avis p{margin-top:8px;color:#e2e2e2}
-.avis small{display:block;margin-top:8px;color:var(--gris);font-size:13px}
+.avis .h b{color:#fff;font-weight:600;margin-right:6px}
+.etoiles{letter-spacing:1.5px;color:#fff;font-size:12px}
+.avis p{margin-top:6px;color:#e2e2e2;font-size:15.5px}
+.avis small{display:block;margin-top:6px;color:var(--gris);font-size:13px}
 .avis .adm{display:none;gap:8px;margin-top:10px}
 body.admin .avis .adm{display:flex}
 .avis .adm button,.adm-v button{font-size:13px;border:1px solid var(--trait);padding:6px 10px}
 .adm-v{display:none;gap:8px;margin-top:14px}
 body.admin .adm-v{display:flex}
-.att{border-color:#555!important;border-style:dashed!important}
-.rien{color:var(--gris);padding:30px 0}
-.avert{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 50px;color:var(--gris);font-size:14px}
-.bandeau-admin{display:none;max-width:var(--max);margin:0 auto;padding:16px var(--pad);border-bottom:1px solid var(--trait);gap:10px;flex-wrap:wrap;align-items:center}
+.att{opacity:.7}
+.rien{color:var(--gris);padding:24px 0;grid-column:1/-1}
+
+/* ---------- inviter à donner son avis ---------- */
+.inviter{max-width:var(--max);margin:0 auto;padding:44px var(--pad) 48px;border-top:1px solid var(--trait);display:grid;gap:32px}
+@media (min-width:860px){.inviter{grid-template-columns:1fr 1fr;gap:56px}}
+.inviter h2{font-size:24px;font-weight:700;line-height:1.2}
+.inviter p{color:#bdbdbd;margin-top:8px;max-width:34em}
+.inviter .btn{margin-top:18px;min-height:46px;border-width:1px}
+.avert{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 48px;color:#7d7d7d;font-size:13.5px}
+
+.bandeau-admin{display:none;max-width:var(--max);margin:0 auto;padding:16px var(--pad);border-top:1px solid var(--trait);gap:10px;flex-wrap:wrap;align-items:center}
 body.admin .bandeau-admin{display:flex}
-dialog{margin:auto;background:#000;color:#fff;border:1px solid #3a3a3a;padding:0;width:min(560px,calc(100% - 24px));max-height:calc(100svh - 24px)}
+dialog{margin:auto;background:#000;color:#fff;border:1px solid #333;padding:0;width:min(520px,calc(100% - 24px));max-height:calc(100svh - 24px)}
 dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
 dialog .in{padding:24px}
-dialog h2{font-size:40px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:.95;padding-right:40px}
-dialog p{color:#cfcfcf;margin-top:10px}
-dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px}
+dialog h2{font-size:28px;font-weight:700;line-height:1.1;padding-right:40px}
+dialog p{color:#cfcfcf;margin-top:8px}
+dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px;color:var(--gris)}
 .form{display:grid;gap:14px;margin-top:16px}
-.champ label,.champ .lab{display:block;font-size:14px;font-weight:620;margin-bottom:6px}
+.champ label,.champ .lab{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
 .champ input,.champ select,.champ textarea{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:12px 14px;font-size:16px}
 .champ textarea{min-height:96px;resize:vertical}
 .champ input:focus,.champ select:focus,.champ textarea:focus{border-color:#fff;outline:0}
 .notes{display:flex;gap:6px}
-.notes button{width:46px;height:46px;border:1px solid var(--trait);font-size:20px;color:#666}
+.notes button{width:44px;height:44px;border:1px solid var(--trait);font-size:18px;color:#5a5a5a}
 .notes button.on{color:#000;background:#fff;border-color:#fff}
-.erreur{color:#fff;background:#2a0000;border:1px solid #5a1a1a;padding:10px 12px;font-size:14px}
-.form .btn{width:100%}
+.erreur{color:#fff;background:#1c0606;border:1px solid #4a1a1a;padding:10px 12px;font-size:14px}
+.form .btn{width:100%;border-width:1px}
 </style>
 </head>
 <body>
@@ -96,12 +122,8 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
 <main>
   <section class="intro">
     <h1 class="display">Vendeurs<br>fiables.</h1>
-    <p class="lead">Les vendeurs casual vérifiés par El Cinco et notés par les membres de la Division. Avant d'acheter à quelqu'un, regarde ici.</p>
-    <div class="stats" aria-live="polite">
-      <div><b id="s-vendeurs">–</b><span>vendeurs vérifiés</span></div>
-      <div><b id="s-avis">–</b><span>avis publiés</span></div>
-      <div><b id="s-note">–</b><span>note moyenne</span></div>
-    </div>
+    <p class="lead">Les vendeurs du Discord vérifiés par El Cinco et notés par les membres de la Division. Avant d'acheter à quelqu'un, regarde ici.</p>
+    <p class="compte" aria-live="polite"><b id="s-vendeurs">–</b> vendeurs vérifiés, <b id="s-avis">–</b> avis publiés.</p>
   </section>
 
   <div class="bandeau-admin">
@@ -111,7 +133,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     <button class="btn vide petit-btn" type="button" id="sortir">Se déconnecter</button>
   </div>
 
-  <div class="outils"><div class="in">
+  <div class="outils" hidden><div class="in">
     <label class="sr" for="recherche">Chercher un vendeur</label>
     <input class="cherche" id="recherche" type="search" placeholder="Chercher un pseudo ou une marque" autocomplete="off">
     <div class="filtres" role="group" aria-label="Filtrer par badge">
@@ -124,7 +146,19 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
 
   <div class="liste" id="liste"><p class="rien">Chargement…</p></div>
 
-  <p class="avert">Les badges et les avis sont des informations de la communauté, vérifiées par El Cinco. Ils n'engagent ni la Casual Division ni ses admins : vérifie toujours toi-même avant d'acheter. Tu as eu un problème avec un vendeur ? Écris à El Cinco sur Discord.</p>
+  <section class="inviter" aria-label="Donner son avis">
+    <div>
+      <h2>Tu as acheté à un membre ?</h2>
+      <p>Laisse ton avis sur sa fiche : ça aide les autres à acheter tranquille. Ton avis est publié après vérification par El Cinco.</p>
+    </div>
+    <div>
+      <h2>Le vendeur n'est pas dans la liste ?</h2>
+      <p>Écris à El Cinco sur Discord. Il vérifie le vendeur et l'ajoute ici.</p>
+      <a class="btn vide" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#discord"/></svg>Écrire sur Discord</a>
+    </div>
+  </section>
+
+  <p class="avert">Les badges et les avis viennent de la communauté et sont vérifiés par El Cinco. Ils n'engagent ni la Casual Division ni ses admins : vérifie toujours toi-même avant d'acheter. Un problème avec un vendeur ? Écris à El Cinco sur Discord.</p>
 </main>
 
 <footer class="pied">
@@ -191,8 +225,12 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   const $ = s => document.querySelector(s);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const BADGES = { or: "Vendeur d'or", fiable: 'Fiable', nouveau: 'En observation', suspendu: 'Suspendu', banni: 'Banni' };
+  const SYMBOLES = { or: '★ ', fiable: '✓ ' };
   const ORDRE = { or: 0, fiable: 1, nouveau: 2, suspendu: 3, banni: 4 };
+  const PUBLICS = ['or', 'fiable', 'nouveau'];
+  const RECHERCHE_DES = 7;   // barre de recherche et filtres à partir de 7 vendeurs
   const lienVinted = u => /^https:\/\/(www\.)?vinted\.[a-z.]+\/member\//i.test(u || '') ? u : '';
+  const virgule = n => Number(n).toFixed(1).replace('.', ',');
   let vendeurs = [], avis = [], filtre = 'tous', admin = false, ouvert = null, cible = null, note = 0;
 
   async function charger() {
@@ -203,41 +241,50 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     if (v.error || a.error) { $('#liste').innerHTML = '<p class="rien">La liste ne répond pas pour le moment. Réessaie dans une minute.</p>'; return; }
     vendeurs = v.data.sort((x, y) => (ORDRE[x.badge] ?? 9) - (ORDRE[y.badge] ?? 9) || (y.note_moyenne || 0) - (x.note_moyenne || 0) || x.pseudo.localeCompare(y.pseudo));
     avis = a.data;
-    const pub = avis.filter(r => r.statut === 'publie');
-    const visibles = vendeurs.filter(x => ['or', 'fiable', 'nouveau'].includes(x.badge));
+    const visibles = vendeurs.filter(x => PUBLICS.includes(x.badge));
     $('#s-vendeurs').textContent = visibles.length;
-    $('#s-avis').textContent = pub.length;
-    $('#s-note').textContent = pub.length ? (pub.reduce((s, r) => s + r.note, 0) / pub.length).toFixed(1).replace('.', ',') : '–';
+    $('#s-avis').textContent = avis.filter(r => r.statut === 'publie').length;
     $('#n-attente').textContent = avis.filter(r => r.statut === 'en_attente').length;
+    $('.outils').hidden = vendeurs.length < RECHERCHE_DES;
+    document.querySelectorAll('.filtres [data-f]').forEach(b => { b.hidden = b.dataset.f !== 'tous' && !vendeurs.some(x => x.badge === b.dataset.f); });
     rendu();
   }
 
-  function etoiles(n) { return '★'.repeat(n) + '☆'.repeat(5 - n); }
+  const etoiles = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  const initiale = p => esc((String(p).trim().match(/[\p{L}\p{N}]/u) || ['?'])[0].toUpperCase());
+
   function rendu() {
     const q = $('#recherche').value.trim().toLowerCase();
     const l = vendeurs.filter(x => (filtre === 'tous' || x.badge === filtre) && (!q || (x.pseudo + ' ' + (x.specialite || '')).toLowerCase().includes(q)));
     if (!l.length) { $('#liste').innerHTML = `<p class="rien">${vendeurs.length ? 'Aucun vendeur pour cette recherche.' : 'Aucun vendeur vérifié pour l\'instant.'}</p>`; return; }
     $('#liste').innerHTML = l.map(x => {
       const ra = avis.filter(r => r.vendor_id === x.id && (r.statut === 'publie' || admin));
-      const vu = lienVinted(x.vinted_url);
+      const vu = lienVinted(x.vinted_url), ouv = ouvert === x.id;
+      const voir = ra.length ? (ra.length > 1 ? `les ${ra.length} avis` : "l'avis") : 'les détails';
+      const detail = ra.length || x.membre_depuis || admin;
       return `<article class="vendeur">
-        <button type="button" aria-expanded="${ouvert === x.id}" aria-controls="d-${x.id}" data-ouvrir="${x.id}">
-          <span><span class="ps">${esc(x.pseudo)}</span><span class="badge ${esc(x.badge)}">${esc(BADGES[x.badge] || x.badge)}</span></span>
-          <span class="note">${x.nb_avis ? `<b>${Number(x.note_moyenne).toFixed(1).replace('.', ',')}</b><span>${x.nb_avis} avis</span>` : '<span>Pas encore d\'avis</span>'}</span>
-          <span class="sp">${esc(x.specialite || 'Vendeur casual')}</span>
-        </button>
-        <div class="detail" id="d-${x.id}" ${ouvert === x.id ? '' : 'hidden'}>
-          <div class="meta">${x.membre_depuis ? `<span>Membre depuis ${esc(x.membre_depuis)}</span>` : ''}${vu ? `<a href="${esc(vu)}" target="_blank" rel="noopener nofollow">Voir son profil Vinted</a>` : ''}</div>
-          <ul class="avis">${ra.length ? ra.map(r => `<li class="${r.statut !== 'publie' ? 'att' : ''}">
-            <div class="h"><span><b>${esc(r.pseudo_acheteur)}</b> <span class="etoiles" aria-label="${r.note} sur 5">${etoiles(r.note)}</span></span><span>${new Date(r.created_at).toLocaleDateString('fr-FR')}</span></div>
+        <div class="haut">
+          <span class="mono" aria-hidden="true">${initiale(x.pseudo)}</span>
+          <div><h2 class="ps">${esc(x.pseudo)}</h2>
+            <p class="sous"><span class="badge ${esc(x.badge)}">${SYMBOLES[x.badge] || ''}${esc(BADGES[x.badge] || x.badge)}</span>${x.specialite ? `<span>${esc(x.specialite)}</span>` : ''}</p></div>
+          <div class="note">${x.nb_avis ? `<b>${virgule(x.note_moyenne)}</b><span class="etoiles" aria-label="${virgule(x.note_moyenne)} sur 5">${etoiles(Math.round(x.note_moyenne))}</span><small>${x.nb_avis} avis</small>` : '<span class="pas-encore">Pas encore noté</span>'}</div>
+        </div>
+        <div class="actions">
+          ${detail ? `<button type="button" class="lien-btn" aria-expanded="${ouv}" aria-controls="d-${x.id}" data-ouvrir="${x.id}">${ouv ? 'Masquer' : 'Voir'} ${voir}</button>` : ''}
+          ${vu ? `<a class="lien-btn" href="${esc(vu)}" target="_blank" rel="noopener nofollow">Profil Vinted</a>` : ''}
+          <button class="btn vide petit-btn" type="button" data-avis="${x.id}">Laisser un avis</button>
+        </div>
+        ${detail ? `<div class="detail" id="d-${x.id}" ${ouv ? '' : 'hidden'}>
+          ${x.membre_depuis ? `<p class="depuis">Membre depuis ${esc(x.membre_depuis)}</p>` : ''}
+          ${ra.length ? `<ul class="avis">${ra.map(r => `<li class="${r.statut !== 'publie' ? 'att' : ''}">
+            <div class="h"><span><b>${esc(r.pseudo_acheteur)}</b><span class="etoiles" aria-label="${r.note} sur 5">${etoiles(r.note)}</span></span><span>${new Date(r.created_at).toLocaleDateString('fr-FR')}</span></div>
             ${r.commentaire ? `<p>${esc(r.commentaire)}</p>` : ''}
-            ${(r.article || r.prix || r.moyen_envoi) ? `<small>${[r.article, r.prix && (esc(r.prix) + ' €'), r.moyen_envoi].filter(Boolean).map(esc).join(' · ')}</small>` : ''}
+            ${(r.article || r.prix || r.moyen_envoi) ? `<small>${[r.article && esc(r.article), r.prix && (esc(r.prix) + ' €'), r.moyen_envoi && esc(r.moyen_envoi)].filter(Boolean).join(', ')}</small>` : ''}
             ${r.statut !== 'publie' ? `<small>${r.statut === 'en_attente' ? 'En attente de validation' : 'Refusé'}</small>` : ''}
             <div class="adm">${r.statut !== 'publie' ? `<button type="button" data-publier="${r.id}">Publier</button>` : ''}${r.statut === 'en_attente' ? `<button type="button" data-refuser="${r.id}">Refuser</button>` : ''}<button type="button" data-suppr-avis="${r.id}">Supprimer</button></div>
-          </li>`).join('') : '<li>Pas encore d\'avis sur ce vendeur.</li>'}</ul>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn vide petit-btn" type="button" data-avis="${x.id}">J'ai acheté chez lui : laisser un avis</button></div>
+          </li>`).join('')}</ul>` : ''}
           <div class="adm-v"><button type="button" data-modif-v="${x.id}">Modifier le vendeur</button><button type="button" data-suppr-v="${x.id}">Supprimer le vendeur</button></div>
-        </div>
+        </div>` : ''}
       </article>`; }).join('');
   }
 

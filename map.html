@@ -20,100 +20,123 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
 <link rel="stylesheet" href="assets/site.css">
 <style>
+/* Casual Map — retouche du 27/10 : une seule voix forte (le titre), le reste fin et calme. */
 body{overflow-x:hidden}
-.app{display:grid;padding-top:68px}
-@media (min-width:960px){.app{grid-template-columns:1fr 440px;height:100svh}}
+.app{display:grid;padding-top:67px}
+@media (min-width:960px){
+  .app{grid-template-columns:minmax(0,1fr) 440px;grid-template-rows:auto minmax(0,1fr);height:100svh}
+  .carte-zone{grid-column:1;grid-row:1/3}
+  .tete{grid-column:2;grid-row:1}
+  .panneau{grid-column:2;grid-row:2;overflow:auto}
+}
+
+/* ---------- en-tête du panneau ---------- */
+.tete{padding:26px var(--pad) 22px}
+@media (min-width:960px){.tete{padding:30px 28px 22px}}
+.tete h1{font-size:clamp(46px,12vw,66px)}
+.tete .chiffres{margin-top:12px;color:#bdbdbd;font-size:16px;max-width:30em}
+.tete .chiffres b{color:#fff;font-weight:650;font-variant-numeric:tabular-nums}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.duo .btn{min-height:48px;padding:0 12px;font-size:15px;border-width:1px}
 
 /* ---------- carte ---------- */
-.carte-zone{position:relative;height:56svh;min-height:340px;background:#0a0a0a;border-bottom:1px solid var(--trait)}
-@media (min-width:960px){.carte-zone{height:auto;border-bottom:0;border-right:1px solid var(--trait)}}
-#map{position:absolute;inset:0;background:#0a0a0a}
-.leaflet-tile-pane{filter:grayscale(1) invert(1) brightness(.78) contrast(1.05)}
+.carte-zone{position:relative;height:58svh;min-height:320px;background:#0b0b0b;border-block:1px solid var(--trait)}
+@media (min-width:960px){.carte-zone{height:auto;border-block:0;border-right:1px solid var(--trait)}}
+#map{position:absolute;inset:0;background:#0b0b0b}
+.leaflet-tile{filter:grayscale(1) brightness(.72) contrast(1.12)}
 .leaflet-container{font-family:"Mona Sans",system-ui,sans-serif}
 .leaflet-control-zoom{border:0!important;margin:14px!important}
-.leaflet-control-zoom a{background:#000!important;color:#fff!important;border:1px solid var(--trait)!important;width:40px!important;height:40px!important;line-height:38px!important;border-radius:0!important}
-.leaflet-control-attribution{background:rgba(0,0,0,.7)!important;color:#8a8a8a!important;font-size:10px!important}
-.leaflet-control-attribution a{color:#bdbdbd!important}
-.point{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.85),0 0 0 4px rgba(255,255,255,.35)}
-.point.moi{width:18px;height:18px;animation:pulse 1.6s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 3px #000,0 0 0 4px #fff}100%{box-shadow:0 0 0 3px #000,0 0 0 26px rgba(255,255,255,0)}}
-.amas{width:34px;height:34px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-weight:820;font-variation-settings:"wdth" 80;font-size:16px;box-shadow:0 0 0 4px rgba(0,0,0,.8)}
-.leaflet-popup-content-wrapper{background:#000;color:#fff;border:1px solid #3a3a3a;border-radius:0;box-shadow:0 20px 40px rgba(0,0,0,.6)}
-.leaflet-popup-tip{background:#000;border:1px solid #3a3a3a}
-.leaflet-popup-content{margin:14px 16px;line-height:1.35}
-.leaflet-container a.leaflet-popup-close-button{color:#9c9c9c}
-.pop b{display:block;font-size:22px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:1}
-.pop span{display:block;margin-top:6px;font-size:14px}
-.pop small{display:block;color:var(--gris);font-size:13px;margin-top:2px}
-.compteur{position:absolute;z-index:500;left:14px;bottom:14px;background:#000;border:1px solid var(--trait);padding:10px 14px;display:flex;gap:18px}
-.compteur b{display:block;font-size:26px;font-weight:840;font-variation-settings:"wdth" 75;line-height:1}
-.compteur span{font-size:12px;color:var(--gris)}
+.leaflet-control-zoom a{background:rgba(0,0,0,.72)!important;color:#fff!important;border:1px solid #333!important;width:34px!important;height:34px!important;line-height:32px!important;border-radius:0!important;font-weight:400!important}
+.leaflet-control-zoom a + a{border-top:0!important}
+@media (hover:none){.leaflet-control-zoom{display:none}}
+.leaflet-control-attribution{background:rgba(0,0,0,.6)!important;color:#777!important;font-size:10px!important}
+.leaflet-control-attribution a{color:#a8a8a8!important}
+.point{width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #000,0 0 14px rgba(255,255,255,.45)}
+.point.moi{width:14px;height:14px;animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 2px #000,0 0 0 3px #fff}100%{box-shadow:0 0 0 2px #000,0 0 0 24px rgba(255,255,255,0)}}
+.amas{width:var(--t);height:var(--t);border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.62);color:#fff;
+  border:1px solid rgba(255,255,255,.92);font-size:var(--f);font-weight:600;
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);transition:background .2s,color .2s}
+.amas:hover{background:#fff;color:#000}
+.leaflet-popup-content-wrapper{background:#000;color:#fff;border:1px solid #333;border-radius:0;box-shadow:0 18px 40px rgba(0,0,0,.6)}
+.leaflet-popup-tip{background:#000;border:1px solid #333}
+.leaflet-popup-content{margin:12px 16px;line-height:1.4}
+.leaflet-container a.leaflet-popup-close-button{color:#8f8f8f}
+.pop b{display:block;font-size:17px;font-weight:650}
+.pop span{display:block;margin-top:2px;font-size:14px;color:#d6d6d6}
+.pop small{display:block;color:var(--gris);font-size:13px}
 
 /* ---------- panneau ---------- */
 .panneau{display:flex;flex-direction:column;min-height:0}
-@media (min-width:960px){.panneau{overflow:auto}}
-.panneau .tete{padding:26px var(--pad) 0}
-@media (min-width:960px){.panneau .tete{padding:28px 28px 0}}
-.panneau h1{font-size:clamp(54px,14vw,84px)}
-.panneau .tete p{color:#cfcfcf;margin-top:12px;font-size:16px}
-.onglets{display:flex;margin:22px var(--pad) 0;border-bottom:1px solid var(--trait);position:sticky;top:0;background:#000;z-index:5}
-@media (min-width:960px){.onglets{margin:22px 28px 0}}
-.onglets button{flex:1;padding:14px 4px;font-weight:680;font-size:15px;color:var(--gris);border-bottom:2px solid transparent;margin-bottom:-1px;font-variation-settings:"wdth" 100}
+.onglets{display:flex;margin:0 var(--pad);border-bottom:1px solid var(--trait);position:sticky;top:67px;background:#000;z-index:5}
+@media (min-width:960px){.onglets{margin:0 28px;top:0}}
+.onglets button{flex:1;padding:14px 4px;font-weight:560;font-size:15px;color:var(--gris);border-bottom:1px solid transparent;margin-bottom:-1px}
 .onglets button[aria-selected="true"]{color:#fff;border-color:#fff}
-.vue{padding:18px var(--pad) 40px}
-@media (min-width:960px){.vue{padding:18px 28px 40px}}
+.vue{padding:8px var(--pad) 36px}
+@media (min-width:960px){.vue{padding:8px 28px 36px}}
 .vue[hidden]{display:none}
 
 .classement{list-style:none}
-.classement li button{width:100%;display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;text-align:left;padding:13px 0;border-bottom:1px solid var(--trait)}
-.classement li button:hover .nm{text-decoration:underline;text-underline-offset:4px}
-.classement .rg{font-size:20px;font-weight:840;font-variation-settings:"wdth" 75;color:var(--gris)}
+.classement li button{width:100%;display:grid;grid-template-columns:20px 36px minmax(0,1fr) 48px 28px;gap:12px;align-items:center;text-align:left;
+  padding:11px 0;border-bottom:1px solid #1a1a1a}
+.sigle{width:36px;height:36px;border-radius:50%;border:1px solid #3a3a3a;display:grid;place-items:center;flex:none;color:#e6e6e6;
+  font-size:var(--s);font-weight:720;font-variation-settings:"wdth" 82;letter-spacing:.02em;line-height:1}
+.classement li:nth-child(-n+3) .sigle{background:#fff;border-color:#fff;color:#000}
+.classement .rg{font-size:13px;color:#6f6f6f}
 .classement li:nth-child(-n+3) .rg{color:#fff}
-.classement .nm{font-weight:650;font-size:16px;text-transform:uppercase;font-variation-settings:"wdth" 92}
-.classement .nb{font-size:22px;font-weight:840;font-variation-settings:"wdth" 75}
-.classement .barre-nb{grid-column:2/4;height:2px;background:var(--trait);margin-top:-4px}
-.classement .barre-nb i{display:block;height:100%;background:#fff}
-.focus-club{border:1px solid var(--trait);padding:16px;margin-bottom:16px}
-.focus-club h2{font-size:34px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:1}
-.focus-club p{color:var(--gris);font-size:14px;margin-top:6px}
-.focus-club .acts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.classement .nm{font-size:15.5px;font-weight:560;color:#e6e6e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.classement li button:hover .nm{color:#fff;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.classement .jauge{height:2px;background:#222}
+.classement .jauge i{display:block;height:100%;background:#fff}
+.classement .nb{font-size:15px;font-weight:650;text-align:right;font-variant-numeric:tabular-nums}
+.classement li .tout-voir{display:block;width:100%;border:0;padding:16px 0 4px;text-align:left;font-size:15px;color:#d6d6d6;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.focus-club{border:1px solid var(--trait);padding:18px;margin:12px 0 8px}
+.focus-club .tete-club{display:flex;gap:14px;align-items:center}
+.focus-club .tete-club .sigle{width:54px;height:54px;font-size:calc(var(--s) * 1.35);background:#fff;border-color:#fff;color:#000}
+.focus-club h2{font-size:26px;font-weight:700;line-height:1.1}
+.focus-club p{color:var(--gris);font-size:14px;margin-top:4px}
+.focus-club .pseudos{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.focus-club .pseudos span{font-size:13px;color:#d6d6d6;border:1px solid var(--trait);padding:3px 8px}
+.focus-club .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.focus-club .btn{border-width:1px}
 
-.cherche{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:14px 16px;font-size:16px}
+.cherche{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:13px 14px;font-size:16px;margin-top:12px}
 .cherche:focus{border-color:#fff;outline:0}
-.membres{list-style:none;margin-top:10px}
-.membres li{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--trait)}
+.membres{list-style:none;margin-top:6px}
+.membres li{display:flex;align-items:center;gap:10px;border-bottom:1px solid #1a1a1a}
 .membres li button.m{flex:1;text-align:left;padding:12px 0}
-.membres .p{font-weight:650}
-.membres .l{font-size:14px;color:var(--gris)}
+.membres .p{font-weight:600;font-size:15.5px}
+.membres .l{font-size:13.5px;color:var(--gris)}
 .membres .adm{display:none;gap:6px}
 body.admin .membres .adm{display:flex}
 .membres .adm button{font-size:13px;border:1px solid var(--trait);padding:6px 10px}
 .rien{color:var(--gris);padding:18px 0}
 
-.form{display:grid;gap:16px}
-.champ label{display:block;font-size:14px;font-weight:620;margin-bottom:6px}
+.form{display:grid;gap:16px;margin-top:14px}
+.champ label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
 .champ .aide{display:block;font-size:13px;color:var(--gris);margin-top:6px}
-.champ input{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:14px 16px;font-size:16px}
+.champ input{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:13px 14px;font-size:16px}
 .champ input:focus{border-color:#fff;outline:0}
 .villes{list-style:none;border:1px solid var(--trait);border-top:0;max-height:240px;overflow:auto}
-.villes li{padding:12px 16px;cursor:pointer;border-top:1px solid var(--trait);font-size:15px}
+.villes li{padding:11px 14px;cursor:pointer;border-top:1px solid var(--trait);font-size:15px}
 .villes li[aria-selected="true"],.villes li:hover{background:#fff;color:#000}
-.form .btn{width:100%}
-.erreur{color:#fff;background:#2a0000;border:1px solid #5a1a1a;padding:10px 12px;font-size:14px}
+.form .btn{width:100%;border-width:1px}
+.erreur{color:#fff;background:#1c0606;border:1px solid #4a1a1a;padding:10px 12px;font-size:14px}
 
 /* ---------- fenêtres ---------- */
-dialog{margin:auto;background:#000;color:#fff;border:1px solid #3a3a3a;padding:0;width:min(560px,calc(100% - 24px));max-height:calc(100svh - 24px)}
+dialog{margin:auto;background:#000;color:#fff;border:1px solid #333;padding:0;width:min(520px,calc(100% - 24px));max-height:calc(100svh - 24px)}
 dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
 dialog .in{padding:24px}
-dialog h2{font-size:40px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:.95}
-dialog p{color:#cfcfcf;margin-top:10px}
+dialog h2{font-size:28px;font-weight:700;line-height:1.1;padding-right:40px}
+dialog p{color:#cfcfcf;margin-top:8px}
 dialog .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px}
-.story{display:block;width:100%;max-width:260px;margin:18px auto 0;border:1px solid var(--trait)}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.duo .btn{padding:0 10px}
-.pied-mini{padding:22px var(--pad) 34px;display:flex;flex-wrap:wrap;gap:10px 22px;font-size:14px;color:var(--gris);border-top:1px solid var(--trait)}
-.pied-mini a{color:#cfcfcf;text-decoration:none}
-@media (min-width:960px){.pied-mini{padding:22px 28px 34px}}
+dialog .btn{border-width:1px}
+dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px;color:var(--gris)}
+.story{display:block;width:100%;max-width:240px;margin:18px auto 0;border:1px solid var(--trait)}
+.pied-mini{margin-top:auto;padding:22px var(--pad) 34px;display:flex;flex-wrap:wrap;gap:10px 22px;font-size:14px;color:var(--gris);border-top:1px solid var(--trait)}
+.pied-mini a{color:#bdbdbd;text-decoration:none}
+.pied-mini a:hover{color:#fff}
+@media (min-width:960px){.pied-mini{padding:22px 28px 30px}}
 </style>
 </head>
 <body>
@@ -128,21 +151,20 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
 </header>
 
 <div class="app">
+  <div class="tete">
+    <h1 class="display">Casual Map</h1>
+    <p class="chiffres" aria-live="polite"><b id="n-membres">–</b> casuals et <b id="n-clubs">–</b> clubs sur la carte. Ajoute-toi et vois qui représente ton club.</p>
+    <div class="duo">
+      <button class="btn plein" type="button" data-aller="rejoindre">Ajouter mon club</button>
+      <button class="btn vide" type="button" id="partager-lien">Partager la carte</button>
+    </div>
+  </div>
+
   <div class="carte-zone">
     <div id="map" role="application" aria-label="Carte des membres"></div>
-    <div class="compteur" aria-live="polite"><div><b id="n-membres">–</b><span>casuals</span></div><div><b id="n-clubs">–</b><span>clubs</span></div></div>
   </div>
 
   <div class="panneau">
-    <div class="tete">
-      <h1 class="display">Casual<br>Map</h1>
-      <p>Tous les casuals de la Division, club par club. Ajoute-toi et vois qui représente ton club.</p>
-      <div class="duo">
-        <button class="btn plein" type="button" data-aller="rejoindre">Ajouter mon club</button>
-        <button class="btn vide" type="button" id="partager-lien">Partager la carte</button>
-      </div>
-    </div>
-
     <div class="onglets" role="tablist" aria-label="Sections de la carte">
       <button role="tab" id="t-classement" aria-controls="v-classement" aria-selected="true">Classement</button>
       <button role="tab" id="t-membres" aria-controls="v-membres" aria-selected="false">Membres</button>
@@ -231,32 +253,57 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   const $ = s => document.querySelector(s);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const cle = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
-  let membres = [], clubs = [], marqueurs = new Map(), moiId = null;
+  // Le même club tapé de plusieurs façons est compté une seule fois
+  const ALIAS = { 'paris saint germain': 'psg', 'paris sg': 'psg', 'losc': 'losc lille', 'rc lens': 'rcl', 'racing club de lens': 'rcl',
+    'smcaen': 'sm caen', 'stade malherbe caen': 'sm caen', 'as saint etienne': 'asse', 'sporting charleroi': 'rcsc' };
+  const cleClub = s => { const k = cle(s); return ALIAS[k] || k; };
+  // Sigles connus avec certitude. Un nom court d'un seul mot (RCSC, HAC, SRD…) est déjà un sigle ; sinon la première lettre :
+  // on n'invente jamais de sigle.
+  const SIGLES = { 'aj auxerre': 'AJA', 'olympique lyonnais': 'OL', 'losc lille': 'LOSC', 'clermont foot': 'CF63', 'fc nantes': 'FCN',
+    'olympique de marseille': 'OM', 'fc metz': 'FCM', 'servette fc': 'SFC', 'sm caen': 'SMC', 'us orleans': 'USO', 'amiens sc': 'ASC',
+    'angers sco': 'SCO', 'as monaco': 'ASM', 'as nancy lorraine': 'ASNL', 'berliner fc dynamo': 'BFC', 'cs sedan ardennes': 'CSSA',
+    'dijon fco': 'DFCO', 'fc martigues': 'FCM', 'fc rouen': 'FCR', 'girondins de bordeaux': 'FCGB', 'grenoble foot 38': 'GF38',
+    'guingamp': 'EAG', 'muc 72': 'MUC', 'nimes olympique': 'NO', 'ogc nice': 'OGCN', 'stade rennais': 'SRFC' };
+  const NOMS = { 'fc metz': 'FC Metz', 'servette fc': 'Servette FC', 'sm caen': 'SM Caen', 'as monaco': 'AS Monaco', 'cs sedan ardennes': 'CS Sedan Ardennes',
+    'nimes olympique': 'Nîmes Olympique', 'stade rennais': 'Stade Rennais', 'union foot touraine': 'Union Foot Touraine', 'fribourg gotteron': 'Fribourg-Gottéron' };
+  const motCourt = k => /^[a-z0-9]{2,5}$/.test(k);
+  const sigleDe = (k, nom) => SIGLES[k] || (motCourt(k) ? k.toUpperCase() : (nom.match(/[\p{L}\p{N}]/u) || ['?'])[0].toUpperCase());
+  const pastille = c => `<span class="sigle" style="--s:${[13, 13, 13, 12, 10.5][Math.min(c.sigle.length, 4)] || 9.5}px" aria-hidden="true">${esc(c.sigle)}</span>`;
+  const TOP = 10;
+  let membres = [], clubs = [], marqueurs = new Map(), moiId = null, toutVoir = false;
 
   // ---------- carte ----------
-  const map = L.map('map', { center: [48.5, 6], zoom: 5, zoomControl: true, worldCopyJump: true });
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
+  const map = L.map('map', { center: [47, 3], zoom: 6, maxZoom: 16, zoomControl: false, worldCopyJump: true });
+  L.control.zoom({ position: 'topright' }).addTo(map);
+  // Fond Esri « Dark Gray Canvas » : gratuit et sans clé (CARTO en exige une depuis 2026). Noms de villes à partir du zoom 7.
+  const esri = c => `https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_${c}/MapServer/tile/{z}/{y}/{x}`;
+  L.tileLayer(esri('Base'), { maxZoom: 16, attribution: 'Esri, HERE, Garmin, © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
+  L.tileLayer(esri('Reference'), { maxZoom: 16, minZoom: 7 }).addTo(map);
   map.attributionControl.setPrefix(false);
-  const amas = L.markerClusterGroup({ maxClusterRadius: 42, showCoverageOnHover: false,
-    iconCreateFunction: c => L.divIcon({ html: `<div class="amas">${c.getChildCount()}</div>`, className: '', iconSize: [34, 34] }) });
+  const amas = L.markerClusterGroup({ maxClusterRadius: 46, showCoverageOnHover: false,
+    iconCreateFunction: c => { const n = c.getChildCount(), t = n < 5 ? 30 : n < 15 ? 38 : n < 40 ? 46 : 56;
+      return L.divIcon({ html: `<div class="amas" style="--t:${t}px;--f:${t < 40 ? 13 : 15}px">${n}</div>`, className: '', iconSize: [t, t] }); } });
+  const vueGenerale = () => membres.length ? map.fitBounds(L.latLngBounds(membres.map(m => [m.lat, m.lng])), { padding: [36, 36], maxZoom: 7 }) : null;
   map.addLayer(amas);
-  const icone = moi => L.divIcon({ html: `<div class="point${moi ? ' moi' : ''}"></div>`, className: '', iconSize: moi ? [18, 18] : [12, 12] });
+  const icone = moi => L.divIcon({ html: `<div class="point${moi ? ' moi' : ''}"></div>`, className: '', iconSize: moi ? [14, 14] : [9, 9] });
 
   // ---------- données ----------
   async function charger() {
     const { data, error } = await sb.from('members').select('id,pseudo,city,club,lat,lng,created_at').order('created_at', { ascending: false });
     if (error) { $('#classement').innerHTML = '<li class="rien">La carte ne répond pas pour le moment. Réessaie dans une minute.</li>'; return; }
     membres = data || [];
-    calculerClubs(); dessiner(); classement(); listeMembres(); remplirClubs();
-    const q = new URLSearchParams(location.search).get('club'); if (q) montrerClub(cle(q));
+    calculerClubs(); dessiner(); classement(); listeMembres(); remplirClubs(); vueGenerale();
+    const q = new URLSearchParams(location.search).get('club'); if (q) montrerClub(cleClub(q));
   }
 
   function calculerClubs() {
     const g = new Map();
-    membres.forEach(m => { const k = cle(m.club); if (!k) return;
+    membres.forEach(m => { const k = cleClub(m.club); if (!k) return;
       if (!g.has(k)) g.set(k, { k, noms: new Map(), membres: [] });
       const c = g.get(k); c.membres.push(m); c.noms.set(m.club.trim(), (c.noms.get(m.club.trim()) || 0) + 1); });
-    clubs = [...g.values()].map(c => ({ ...c, nom: [...c.noms.entries()].sort((a, b) => b[1] - a[1])[0][0] }))
+    clubs = [...g.values()].map(c => { const tape = [...c.noms.entries()].sort((a, b) => b[1] - a[1])[0][0];
+        const nom = NOMS[c.k] || (motCourt(c.k) ? c.k.toUpperCase() : tape);
+        return { ...c, nom, sigle: sigleDe(c.k, nom) }; })
       .sort((a, b) => b.membres.length - a.membres.length || a.nom.localeCompare(b.nom));
     $('#n-membres').textContent = membres.length; $('#n-clubs').textContent = clubs.length;
   }
@@ -265,17 +312,18 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     amas.clearLayers(); marqueurs.clear();
     membres.forEach(m => {
       const mk = L.marker([m.lat, m.lng], { icon: icone(m.id === moiId), title: m.pseudo })
-        .bindPopup(`<div class="pop"><b>${esc(m.club)}</b><span>${esc(m.pseudo)}</span><small>${esc(m.city)}</small></div>`);
+        .bindPopup(`<div class="pop"><b>${esc(m.pseudo)}</b><span>${esc(m.club)}</span><small>${esc(m.city)}</small></div>`);
       marqueurs.set(m.id, mk); amas.addLayer(mk);
     });
   }
 
   function classement() {
     if (!clubs.length) { $('#classement').innerHTML = '<li class="rien">Personne sur la carte pour l\'instant. Sois le premier.</li>'; return; }
-    const max = clubs[0].membres.length;
-    $('#classement').innerHTML = clubs.map((c, i) => `<li><button type="button" data-club="${esc(c.k)}">
-      <span class="rg">${i + 1}</span><span class="nm">${esc(c.nom)}</span><span class="nb">${c.membres.length}</span>
-      <span class="barre-nb" aria-hidden="true"><i style="width:${Math.max(4, c.membres.length / max * 100)}%"></i></span></button></li>`).join('');
+    const max = clubs[0].membres.length, l = toutVoir ? clubs : clubs.slice(0, TOP);
+    $('#classement').innerHTML = l.map((c, i) => `<li><button type="button" data-club="${esc(c.k)}" aria-label="${esc(c.nom)}, ${i + 1}${i ? 'e' : 'er'}, ${c.membres.length} casual${c.membres.length > 1 ? 's' : ''}">
+      <span class="rg">${i + 1}</span>${pastille(c)}<span class="nm">${esc(c.nom)}</span>
+      <span class="jauge" aria-hidden="true"><i style="width:${Math.max(6, c.membres.length / max * 100)}%"></i></span><span class="nb">${c.membres.length}</span></button></li>`).join('')
+      + (clubs.length > TOP ? `<li><button type="button" class="tout-voir" data-tout-voir>${toutVoir ? 'Voir seulement les 10 premiers' : `Voir les ${clubs.length} clubs`}</button></li>` : '');
   }
 
   function montrerClub(k) {
@@ -283,11 +331,11 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     const b = L.latLngBounds(c.membres.map(m => [m.lat, m.lng]));
     map.flyToBounds(b.pad(.6), { maxZoom: 10, duration: .9 });
     const rang = clubs.indexOf(c) + 1;
-    $('#focus').innerHTML = `<div class="focus-club"><h2>${esc(c.nom)}</h2>
-      <p>${c.membres.length} casual${c.membres.length > 1 ? 's' : ''} sur la carte · ${rang}${rang === 1 ? 'er' : 'e'} du classement</p>
-      <p style="color:#cfcfcf">${c.membres.slice(0, 12).map(m => esc(m.pseudo)).join(', ')}${c.membres.length > 12 ? '…' : ''}</p>
+    $('#focus').innerHTML = `<div class="focus-club"><div class="tete-club">${pastille(c)}<div><h2>${esc(c.nom)}</h2>
+      <p>${c.membres.length} casual${c.membres.length > 1 ? 's' : ''} sur la carte, ${rang}${rang === 1 ? 'er' : 'e'} club sur ${clubs.length}</p></div></div>
+      <div class="pseudos">${c.membres.slice(0, 24).map(m => `<span>${esc(m.pseudo)}</span>`).join('')}${c.membres.length > 24 ? `<span>et ${c.membres.length - 24} autres</span>` : ''}</div>
       <div class="acts"><button class="btn plein petit-btn" type="button" data-partager-club="${esc(c.k)}">Partager le lien du club</button>
-      <button class="btn vide petit-btn" type="button" data-tout>Voir tous les clubs</button></div></div>`;
+      <button class="btn vide petit-btn" type="button" data-tout>Voir toute la carte</button></div></div>`;
     $('#focus').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
@@ -295,7 +343,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     const q = cle($('#recherche').value);
     const l = q ? membres.filter(m => cle(m.pseudo + ' ' + m.club + ' ' + m.city).includes(q)) : membres;
     $('#membres').innerHTML = l.length ? l.slice(0, 200).map(m => `<li><button class="m" type="button" data-membre="${m.id}">
-      <span class="p">${esc(m.pseudo)}</span><br><span class="l">${esc(m.club)} · ${esc(m.city)}</span></button>
+      <span class="p">${esc(m.pseudo)}</span><br><span class="l">${esc(m.club)}, ${esc(m.city)}</span></button>
       <span class="adm"><button type="button" data-modifier="${m.id}">Modifier</button><button type="button" data-supprimer="${m.id}">Supprimer</button></span></li>`).join('')
       : '<li class="rien">Aucun résultat. Essaie un autre pseudo, club ou ville.</li>';
   }
@@ -317,7 +365,8 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     const t = e.target.closest('button,a'); if (!t) return;
     if (t.dataset.aller) { ouvrir(t.dataset.aller); $('.onglets').scrollIntoView({ behavior: 'smooth' }); }
     if (t.dataset.club) montrerClub(t.dataset.club);
-    if (t.hasAttribute('data-tout')) { $('#focus').innerHTML = ''; map.flyTo([48.5, 6], 5, { duration: .8 }); }
+    if (t.hasAttribute('data-tout')) { $('#focus').innerHTML = ''; vueGenerale(); }
+    if (t.hasAttribute('data-tout-voir')) { toutVoir = !toutVoir; classement(); }
     if (t.dataset.partagerClub) { const c = clubs.find(x => x.k === t.dataset.partagerClub); partager(location.origin + location.pathname + '?club=' + encodeURIComponent(c.nom), `${c.nom} sur la Casual Map`); }
     if (t.dataset.membre) { const mk = marqueurs.get(+t.dataset.membre); if (mk) amas.zoomToShowLayer(mk, () => mk.openPopup()); if (innerWidth < 960) $('#map').scrollIntoView({ behavior: 'smooth' }); }
     if (t.dataset.modifier) modifier(+t.dataset.modifier);
@@ -378,7 +427,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     moiId = data.id; membres.unshift(data); calculerClubs(); dessiner(); classement(); listeMembres(); remplirClubs();
     $('#form').reset(); choix = null; ouvrir('classement');
     map.flyTo([data.lat, data.lng], 9, { duration: 1 });
-    const c = clubs.find(x => x.k === cle(data.club));
+    const c = clubs.find(x => x.k === cleClub(data.club));
     story(data, c ? c.membres.length : 1, c ? clubs.indexOf(c) + 1 : clubs.length);
   });
 
