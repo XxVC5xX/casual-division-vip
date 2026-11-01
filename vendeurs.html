@@ -17,41 +17,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <style>
-.intro{padding:130px var(--pad) 40px;max-width:var(--max);margin:0 auto}
-.intro h1{font-size:clamp(60px,14vw,160px)}
-.intro .lead{margin-top:22px}
-.outils{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 10px;display:flex;gap:8px;flex-wrap:wrap}
-.outils button{border:1px solid var(--trait);padding:10px 14px;font-size:14px;font-weight:620;color:#cfcfcf}
+/* Meilleurs vendeurs Vinted — retouche du 01/11 : même voix que Vendeurs fiables (titre fort, fiches fines). */
+.intro{padding:118px var(--pad) 34px;max-width:var(--max);margin:0 auto}
+.intro h1{font-size:clamp(52px,11vw,112px)}
+.intro .lead{margin-top:20px}
+.outils{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 6px;display:flex;gap:8px;flex-wrap:wrap}
+.outils[hidden]{display:none}
+.outils button{border:1px solid var(--trait);padding:9px 13px;font-size:14px;font-weight:560;color:#cfcfcf}
 .outils button[aria-pressed="true"]{background:#fff;color:#000;border-color:#fff}
-.zone{max-width:var(--max);margin:0 auto;padding:18px var(--pad) 60px}
-.grille{display:grid;gap:1px;background:var(--trait);border:1px solid var(--trait);grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))}
-.vend{background:#000;padding:22px 20px 20px;display:grid;grid-template-rows:auto 1fr auto;gap:14px;min-height:230px;position:relative}
-.vend .ini{font-size:84px;font-weight:860;font-variation-settings:"wdth" 75;line-height:.8;color:#2b2b2b;text-transform:uppercase}
-.vend.top .ini{color:#fff}
-.vend .tag{position:absolute;top:20px;right:20px;font-size:12px;font-weight:700;letter-spacing:.06em;padding:5px 8px;background:#fff;color:#000;font-variation-settings:"wdth" 110}
-.vend h2{font-size:26px;font-weight:800;font-variation-settings:"wdth" 82;line-height:1.05;word-break:break-word}
-.vend p{color:var(--gris);font-size:14px;margin-top:4px}
-.vend .btn{width:100%}
-.vend .adm{display:none;gap:6px}
+.zone{max-width:var(--max);margin:0 auto;padding:8px var(--pad) 56px}
+.grille{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));align-items:start}
+.vend{border:1px solid var(--trait);padding:22px;display:grid;gap:18px}
+.vend.top{border-color:#5a5a5a}
+.vend .haut{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;align-items:center}
+.avatar{width:56px;height:56px;border-radius:50%;border:1px solid #3a3a3a;overflow:hidden;display:grid;place-items:center;
+  font-size:20px;font-weight:600;color:#e6e6e6;background:#0d0d0d}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.vend .marque-top{display:block;font-size:13.5px;font-weight:600;color:#fff;margin-bottom:2px}
+.vend .neuf{display:inline-block;font-size:12.5px;font-weight:600;color:#000;background:#fff;padding:2px 7px;margin-bottom:5px}
+.verifie{margin-top:16px;color:#bdbdbd;font-size:15px}
+.vend h2{font-size:20px;font-weight:650;line-height:1.2;word-break:break-word}
+.vend p{color:var(--gris);font-size:14px;margin-top:3px}
+.vend .btn{width:100%;min-height:44px;border-width:1px}
+.vend .adm{display:none;gap:6px;margin-top:10px}
 body.admin .vend .adm{display:flex}
 .vend .adm button{font-size:13px;border:1px solid var(--trait);padding:6px 10px}
-.rien{color:var(--gris);padding:30px 20px;background:#000}
-.note-bas{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 50px;color:var(--gris);font-size:14px}
+.rien{color:var(--gris);padding:24px 0;grid-column:1/-1}
+.note-bas{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 48px;color:#7d7d7d;font-size:13.5px}
 .bandeau-admin{display:none;max-width:var(--max);margin:0 auto;padding:0 var(--pad) 18px;gap:10px;flex-wrap:wrap}
 body.admin .bandeau-admin{display:flex}
-dialog{margin:auto;background:#000;color:#fff;border:1px solid #3a3a3a;padding:0;width:min(520px,calc(100% - 24px))}
+dialog{margin:auto;background:#000;color:#fff;border:1px solid #333;padding:0;width:min(520px,calc(100% - 24px))}
 dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
 dialog .in{padding:24px}
-dialog h2{font-size:38px;font-weight:840;font-variation-settings:"wdth" 75;text-transform:uppercase;line-height:.95;padding-right:40px}
-dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px}
+dialog h2{font-size:28px;font-weight:700;line-height:1.1;padding-right:40px}
+dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:22px;color:var(--gris)}
 .form{display:grid;gap:14px;margin-top:16px}
-.champ label{display:block;font-size:14px;font-weight:620;margin-bottom:6px}
+.champ label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.champ .aide{display:block;font-size:13px;color:var(--gris);margin-top:6px}
 .champ input{width:100%;background:#0d0d0d;border:1px solid var(--trait);color:#fff;font:inherit;padding:12px 14px;font-size:16px}
 .champ input:focus{border-color:#fff;outline:0}
 .case{display:flex;gap:10px;align-items:center;font-size:15px}
 .case input{width:20px;height:20px;accent-color:#fff}
-.erreur{color:#fff;background:#2a0000;border:1px solid #5a1a1a;padding:10px 12px;font-size:14px}
-.form .btn{width:100%}
+.erreur{color:#fff;background:#1c0606;border:1px solid #4a1a1a;padding:10px 12px;font-size:14px}
+.form .btn{width:100%;border-width:1px}
 </style>
 </head>
 <body>
@@ -70,6 +78,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   <section class="intro">
     <h1 class="display">Meilleurs<br>vendeurs<br>Vinted.</h1>
     <p class="lead">Les vendeurs casual qu'on suit sur Vinted : bonnes pièces, bons prix, envois sérieux. Choisis par l'équipe de la Division.</p>
+    <p class="verifie" id="verifie" hidden></p>
   </section>
 
   <div class="bandeau-admin">
@@ -78,7 +87,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     <button class="btn vide petit-btn" type="button" id="sortir">Se déconnecter</button>
   </div>
 
-  <div class="outils" role="group" aria-label="Filtrer">
+  <div class="outils" role="group" aria-label="Filtrer" hidden>
     <button type="button" aria-pressed="true" data-f="tous">Tous</button>
     <button type="button" aria-pressed="false" data-f="top">Top vendeurs</button>
   </div>
@@ -106,6 +115,8 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     <div class="champ"><label for="v-pseudo">Pseudo Vinted</label><input id="v-pseudo" maxlength="50" required></div>
     <div class="champ"><label for="v-url">Lien du profil</label><input id="v-url" maxlength="200" inputmode="url" placeholder="https://www.vinted.fr/member/…" required></div>
     <div class="champ"><label for="v-spe">Spécialité (facultatif)</label><input id="v-spe" maxlength="80" placeholder="Lyle & Scott, Adidas…"></div>
+    <div class="champ"><label for="v-photo">Photo de profil (facultatif)</label><input id="v-photo" maxlength="300" inputmode="url" placeholder="https://images1.vinted.net/…">
+      <span class="aide">Sur Vinted : clic droit sur sa photo de profil, « Copier l'adresse de l'image ». Seulement un logo ou un objet, jamais un visage.</span></div>
     <label class="case"><input type="checkbox" id="v-top"> Top vendeur</label>
     <div id="v-erreur" class="erreur" role="alert" hidden></div>
     <button class="btn plein" type="submit">Enregistrer</button>
@@ -134,21 +145,34 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   const $ = s => document.querySelector(s);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const urlOk = u => /^https:\/\/(www\.)?vinted\.[a-z.]+\/member\//i.test(u || '');
+  const photoOk = u => /^https:\/\/images[0-9]*\.vinted\.net\//.test(u || '');
+  const initiale = p => esc((String(p).match(/[\p{L}\p{N}]/u) || ['?'])[0].toUpperCase());
+  const FILTRES_DES = 7;   // filtres seulement à partir de 7 vendeurs
+  const NOUVEAU_J = 30, DEPART = '2026-11-02';   // badge « Nouveau » pour les ajouts après le grand tri du 01/11
+  const nouveau = v => v.created_at >= DEPART && (Date.now() - new Date(v.created_at)) / 864e5 < NOUVEAU_J;
+  const jourFr = d => { const x = new Date(d + 'T12:00:00'), j = x.getDate();
+    return `${j === 1 ? '1er' : j} ${x.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`; };
   let liste = [], filtre = 'tous', admin = false, enCours = null;
 
   async function charger() {
-    const { data, error } = await sb.from('vendeurs_vinted').select('id,pseudo,vinted_url,top,specialite,ordre').order('top', { ascending: false }).order('ordre').order('pseudo');
+    const { data, error } = await sb.from('vendeurs_vinted').select('id,pseudo,vinted_url,top,specialite,ordre,photo_url,verifie_le,created_at').order('top', { ascending: false }).order('ordre').order('pseudo');
     if (error) { $('#grille').innerHTML = '<p class="rien">La liste ne répond pas pour le moment. Réessaie dans une minute.</p>'; return; }
-    liste = data; rendu();
+    liste = data; $('.outils').hidden = liste.length < FILTRES_DES || !liste.some(v => v.top);
+    const dates = liste.map(v => v.verifie_le).filter(Boolean).sort();
+    if (dates.length) { $('#verifie').textContent = `${liste.length} vendeurs, liste vérifiée le ${jourFr(dates.at(-1))}.`; $('#verifie').hidden = false; }
+    rendu();
   }
   function rendu() {
     const l = liste.filter(v => filtre === 'tous' || v.top);
     $('#grille').innerHTML = l.length ? l.map(v => `<article class="vend${v.top ? ' top' : ''}">
-      ${v.top ? '<span class="tag">TOP VENDEUR</span>' : ''}
-      <span class="ini" aria-hidden="true">${esc(v.pseudo.replace(/[^a-z0-9]/gi, '').slice(0, 2) || '?')}</span>
-      <div><h2>${esc(v.pseudo)}</h2><p>${esc(v.specialite || 'Vendeur casual')}</p></div>
+      <div class="haut">
+        <span class="avatar" aria-hidden="true">${photoOk(v.photo_url)
+          ? `<img src="${esc(v.photo_url)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${initiale(v.pseudo)}'">`
+          : initiale(v.pseudo)}</span>
+        <div>${nouveau(v) ? '<span class="neuf">Nouveau</span>' : ''}${v.top ? '<span class="marque-top">★ Top vendeur</span>' : ''}<h2>${esc(v.pseudo)}</h2><p>${esc(v.specialite || 'Vendeur casual')}</p></div>
+      </div>
       <div><a class="btn ${v.top ? 'plein' : 'vide'}" href="${urlOk(v.vinted_url) ? esc(v.vinted_url) : '#'}" target="_blank" rel="noopener nofollow">Voir sur Vinted</a>
-      <div class="adm" style="margin-top:10px"><button type="button" data-modif="${v.id}">Modifier</button><button type="button" data-suppr="${v.id}">Supprimer</button></div></div>
+      <div class="adm"><button type="button" data-modif="${v.id}">Modifier</button><button type="button" data-suppr="${v.id}">Supprimer</button></div></div>
     </article>`).join('') : '<p class="rien">Aucun vendeur pour ce filtre.</p>';
   }
   document.querySelectorAll('.outils button').forEach(b => b.addEventListener('click', () => {
@@ -156,7 +180,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
 
   const erreur = (id, t) => { const e = $(id); e.textContent = t; e.hidden = !t; };
   function editer(v) { enCours = v || null; $('#d-v-t').textContent = v ? 'Modifier' : 'Ajouter';
-    $('#v-pseudo').value = v?.pseudo || ''; $('#v-url').value = v?.vinted_url || ''; $('#v-spe').value = v?.specialite || ''; $('#v-top').checked = !!v?.top;
+    $('#v-pseudo').value = v?.pseudo || ''; $('#v-url').value = v?.vinted_url || ''; $('#v-spe').value = v?.specialite || ''; $('#v-top').checked = !!v?.top; $('#v-photo').value = v?.photo_url || '';
     erreur('#v-erreur', ''); $('#d-v').showModal(); }
   document.addEventListener('click', async e => {
     const t = e.target.closest('button'); if (!t) return;
@@ -169,9 +193,10 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   $('#ajouter').addEventListener('click', () => editer(null));
   $('#f-v').addEventListener('submit', async e => {
     e.preventDefault(); erreur('#v-erreur', '');
-    const d = { pseudo: $('#v-pseudo').value.trim(), vinted_url: $('#v-url').value.trim(), specialite: $('#v-spe').value.trim() || null, top: $('#v-top').checked };
+    const d = { pseudo: $('#v-pseudo').value.trim(), vinted_url: $('#v-url').value.trim(), specialite: $('#v-spe').value.trim() || null, top: $('#v-top').checked, photo_url: $('#v-photo').value.trim() || null, verifie_le: new Date().toISOString().slice(0, 10) };
     if (d.pseudo.length < 2) return erreur('#v-erreur', 'Pseudo trop court.');
     if (!urlOk(d.vinted_url)) return erreur('#v-erreur', 'Colle le lien du profil Vinted (https://www.vinted.fr/member/…).');
+    if (d.photo_url && !photoOk(d.photo_url)) return erreur('#v-erreur', 'La photo doit venir de Vinted (https://images1.vinted.net/…).');
     const { error } = enCours ? await sb.from('vendeurs_vinted').update(d).eq('id', enCours.id) : await sb.from('vendeurs_vinted').insert(d);
     if (error) return erreur('#v-erreur', 'Refusé : reconnecte-toi en admin.');
     $('#d-v').close(); cdToast('Enregistré.'); charger();
