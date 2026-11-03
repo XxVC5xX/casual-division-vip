@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Vendeurs fiables · Casual Division</title>
-<meta name="description" content="Les vendeurs casual vérifiés par El Cinco et notés par les membres de la Casual Division. Regarde ici avant d'acheter.">
+<meta name="description" content="Les vendeurs fiables de la Casual Division sont sur le Discord : un post par vendeur, avis vérifiés par El Cinco.">
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vendeurs fiables · Casual Division">
@@ -86,6 +86,8 @@ body.admin .adm-v{display:flex}
 .inviter h2{font-size:24px;font-weight:700;line-height:1.2}
 .inviter p{color:#bdbdbd;margin-top:8px;max-width:34em}
 .inviter .btn{margin-top:18px;min-height:46px;border-width:1px}
+.actions-discord{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.actions-discord .btn{border-width:1px}
 .avert{max-width:var(--max);margin:0 auto;padding:0 var(--pad) 48px;color:#7d7d7d;font-size:13.5px}
 
 .bandeau-admin{display:none;max-width:var(--max);margin:0 auto;padding:16px var(--pad);border-top:1px solid var(--trait);gap:10px;flex-wrap:wrap;align-items:center}
@@ -122,43 +124,25 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
 <main>
   <section class="intro">
     <h1 class="display">Vendeurs<br>fiables.</h1>
-    <p class="lead">Les vendeurs du Discord vérifiés par El Cinco et notés par les membres de la Division. Avant d'acheter à quelqu'un, regarde ici.</p>
-    <p class="compte" aria-live="polite"><b id="s-vendeurs">–</b> vendeurs vérifiés, <b id="s-avis">–</b> avis publiés.</p>
+    <p class="lead">Les vendeurs fiables sont maintenant sur le Discord, dans le salon ✅・vendeurs-fiables. Un post par vendeur, avec ses ventes et les avis des acheteurs, vérifiés par El Cinco preuves à l'appui.</p>
+    <div class="actions-discord">
+      <a class="btn plein" href="https://discord.com/channels/1407433837541199903/1567291220823244953" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#discord"/></svg>Voir les vendeurs fiables</a>
+      <a class="btn vide" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener">Rejoindre le Discord</a>
+    </div>
   </section>
 
-  <div class="bandeau-admin">
-    <strong>Mode admin</strong>
-    <button class="btn plein petit-btn" type="button" id="ajouter-v">Ajouter un vendeur</button>
-    <button class="btn vide petit-btn" type="button" id="voir-attente">Avis en attente (<span id="n-attente">0</span>)</button>
-    <button class="btn vide petit-btn" type="button" id="sortir">Se déconnecter</button>
-  </div>
-
-  <div class="outils" hidden><div class="in">
-    <label class="sr" for="recherche">Chercher un vendeur</label>
-    <input class="cherche" id="recherche" type="search" placeholder="Chercher un pseudo ou une marque" autocomplete="off">
-    <div class="filtres" role="group" aria-label="Filtrer par badge">
-      <button type="button" aria-pressed="true" data-f="tous">Tous</button>
-      <button type="button" aria-pressed="false" data-f="or">Vendeurs d'or</button>
-      <button type="button" aria-pressed="false" data-f="fiable">Fiables</button>
-      <button type="button" aria-pressed="false" data-f="nouveau">En observation</button>
+  <section class="inviter" aria-label="Comment ça marche">
+    <div>
+      <h2>Comment un vendeur devient fiable</h2>
+      <p>Après un achat, l'acheteur déclare la vente avec ses preuves en photo. El Cinco vérifie, puis l'avis est publié sur le post du vendeur. À 3 ventes vérifiées par 3 acheteurs différents, le vendeur passe ✅ Fiable. À 10, 🥇 Vendeur d'or.</p>
     </div>
-  </div></div>
-
-  <div class="liste" id="liste"><p class="rien">Chargement…</p></div>
-
-  <section class="inviter" aria-label="Donner son avis">
     <div>
       <h2>Tu as acheté à un membre ?</h2>
-      <p>Laisse ton avis sur sa fiche : ça aide les autres à acheter tranquille. Ton avis est publié après vérification par El Cinco.</p>
-    </div>
-    <div>
-      <h2>Le vendeur n'est pas dans la liste ?</h2>
-      <p>Écris à El Cinco sur Discord. Il vérifie le vendeur et l'ajoute ici.</p>
-      <a class="btn vide" href="https://discord.gg/hbKPnjCWtZ" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#discord"/></svg>Écrire sur Discord</a>
+      <p>Déclare ta vente sur le Discord. En attendant le bouton dédié, écris à El Cinco en message privé.</p>
     </div>
   </section>
 
-  <p class="avert">Les badges et les avis viennent de la communauté et sont vérifiés par El Cinco. Ils n'engagent ni la Casual Division ni ses admins : vérifie toujours toi-même avant d'acheter. Un problème avec un vendeur ? Écris à El Cinco sur Discord.</p>
+  <p class="avert">Les badges et les avis viennent de la communauté et sont vérifiés par El Cinco. Ils n'engagent ni la Casual Division ni ses admins : vérifie toujours toi-même avant d'acheter.</p>
 </main>
 
 <footer class="pied">
@@ -169,204 +153,11 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
       <div><p class="titre-col">Casu'Hall</p><ul><li><a href="https://casuhall.fr" target="_blank" rel="noopener">casuhall.fr</a></li><li><a href="https://www.tiktok.com/@el_cinco_casuals" target="_blank" rel="noopener">TikTok</a></li><li><a href="https://www.instagram.com/casuhall_france/" target="_blank" rel="noopener">Instagram</a></li></ul></div>
     </div>
   </div>
-  <div class="bas"><span>© <span data-annee>2026</span> Casual Division by Casu'Hall</span><button type="button" id="admin-btn" style="color:inherit">Admin</button></div>
+  <div class="bas"><span>© <span data-annee>2026</span> Casual Division by Casu'Hall</span></div>
 </footer>
-
-<dialog id="d-avis" aria-labelledby="d-avis-t"><div class="in">
-  <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
-  <h2 id="d-avis-t">Laisser un avis</h2>
-  <p id="d-avis-pour"></p>
-  <form class="form" id="f-avis" novalidate>
-    <div class="champ"><label for="a-pseudo">Ton pseudo Discord</label><input id="a-pseudo" maxlength="50" required></div>
-    <div class="champ"><span class="lab" id="lab-note">Ta note</span><div class="notes" role="radiogroup" aria-labelledby="lab-note" id="notes"></div></div>
-    <div class="champ"><label for="a-article">L'article acheté</label><input id="a-article" maxlength="80" placeholder="Veste Lyle & Scott navy, L"></div>
-    <div class="champ"><label for="a-prix">Le prix payé (€)</label><input id="a-prix" maxlength="10" inputmode="decimal"></div>
-    <div class="champ"><label for="a-envoi">L'envoi</label><select id="a-envoi"><option>Vinted</option><option>Mondial Relay</option><option>Colissimo</option><option>Main propre</option><option>Autre</option></select></div>
-    <div class="champ"><label for="a-com">Ton avis</label><textarea id="a-com" maxlength="400" placeholder="Envoi rapide, pièce conforme…"></textarea></div>
-    <div id="a-erreur" class="erreur" role="alert" hidden></div>
-    <button class="btn plein" type="submit">Envoyer mon avis</button>
-    <p class="petit">Ton avis est publié après vérification par El Cinco.</p>
-  </form>
-</div></dialog>
-
-<dialog id="d-vendeur" aria-labelledby="d-vendeur-t"><div class="in">
-  <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
-  <h2 id="d-vendeur-t">Vendeur</h2>
-  <form class="form" id="f-vendeur" novalidate>
-    <div class="champ"><label for="v-pseudo">Pseudo</label><input id="v-pseudo" maxlength="50" required></div>
-    <div class="champ"><label for="v-badge">Badge</label><select id="v-badge"><option value="or">Vendeur d'or</option><option value="fiable">Fiable</option><option value="nouveau">En observation</option><option value="suspendu">Suspendu (caché du public)</option><option value="banni">Banni (caché du public)</option></select></div>
-    <div class="champ"><label for="v-spe">Spécialité</label><input id="v-spe" maxlength="80" placeholder="Lyle & Scott, Stone Island…"></div>
-    <div class="champ"><label for="v-depuis">Membre depuis</label><input id="v-depuis" maxlength="30" placeholder="Mai 2025"></div>
-    <div class="champ"><label for="v-vinted">Lien du profil Vinted (facultatif)</label><input id="v-vinted" maxlength="200" inputmode="url" placeholder="https://www.vinted.fr/member/…"></div>
-    <div id="v-erreur" class="erreur" role="alert" hidden></div>
-    <button class="btn plein" type="submit">Enregistrer</button>
-  </form>
-</div></dialog>
-
-<dialog id="d-admin" aria-labelledby="d-admin-t"><div class="in">
-  <button class="fermer" type="button" aria-label="Fermer" data-fermer>×</button>
-  <h2 id="d-admin-t">Admin</h2>
-  <form id="admin-form" class="form">
-    <div class="champ"><label for="ad-mail">E-mail</label><input id="ad-mail" type="email" autocomplete="username" required></div>
-    <div class="champ"><label for="ad-mdp">Mot de passe</label><input id="ad-mdp" type="password" autocomplete="current-password" required></div>
-    <div id="ad-erreur" class="erreur" role="alert" hidden></div>
-    <button class="btn plein" type="submit">Se connecter</button>
-  </form>
-</div></dialog>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.319 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol></svg>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="assets/site.js" defer></script>
-<script src="assets/donnees.js"></script>
-<script>
-(() => {
-  const sb = CD.supabase();
-  const $ = s => document.querySelector(s);
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const BADGES = { or: "Vendeur d'or", fiable: 'Fiable', nouveau: 'En observation', suspendu: 'Suspendu', banni: 'Banni' };
-  const SYMBOLES = { or: '★ ', fiable: '✓ ' };
-  const ORDRE = { or: 0, fiable: 1, nouveau: 2, suspendu: 3, banni: 4 };
-  const PUBLICS = ['or', 'fiable', 'nouveau'];
-  const RECHERCHE_DES = 7;   // barre de recherche et filtres à partir de 7 vendeurs
-  const lienVinted = u => /^https:\/\/(www\.)?vinted\.[a-z.]+\/member\//i.test(u || '') ? u : '';
-  const virgule = n => Number(n).toFixed(1).replace('.', ',');
-  let vendeurs = [], avis = [], filtre = 'tous', admin = false, ouvert = null, cible = null, note = 0;
-
-  async function charger() {
-    const [v, a] = await Promise.all([
-      sb.from('vendors').select('id,pseudo,badge,specialite,membre_depuis,note_moyenne,nb_avis,vinted_url'),
-      sb.from('reviews').select('id,vendor_id,pseudo_acheteur,note,commentaire,article,prix,moyen_envoi,created_at,statut').order('created_at', { ascending: false })
-    ]);
-    if (v.error || a.error) { $('#liste').innerHTML = '<p class="rien">La liste ne répond pas pour le moment. Réessaie dans une minute.</p>'; return; }
-    vendeurs = v.data.sort((x, y) => (ORDRE[x.badge] ?? 9) - (ORDRE[y.badge] ?? 9) || (y.note_moyenne || 0) - (x.note_moyenne || 0) || x.pseudo.localeCompare(y.pseudo));
-    avis = a.data;
-    const visibles = vendeurs.filter(x => PUBLICS.includes(x.badge));
-    $('#s-vendeurs').textContent = visibles.length;
-    $('#s-avis').textContent = avis.filter(r => r.statut === 'publie').length;
-    $('#n-attente').textContent = avis.filter(r => r.statut === 'en_attente').length;
-    $('.outils').hidden = vendeurs.length < RECHERCHE_DES;
-    document.querySelectorAll('.filtres [data-f]').forEach(b => { b.hidden = b.dataset.f !== 'tous' && !vendeurs.some(x => x.badge === b.dataset.f); });
-    rendu();
-  }
-
-  const etoiles = n => '★'.repeat(n) + '☆'.repeat(5 - n);
-  const initiale = p => esc((String(p).trim().match(/[\p{L}\p{N}]/u) || ['?'])[0].toUpperCase());
-
-  function rendu() {
-    const q = $('#recherche').value.trim().toLowerCase();
-    const l = vendeurs.filter(x => (filtre === 'tous' || x.badge === filtre) && (!q || (x.pseudo + ' ' + (x.specialite || '')).toLowerCase().includes(q)));
-    if (!l.length) { $('#liste').innerHTML = `<p class="rien">${vendeurs.length ? 'Aucun vendeur pour cette recherche.' : 'Aucun vendeur vérifié pour l\'instant.'}</p>`; return; }
-    $('#liste').innerHTML = l.map(x => {
-      const ra = avis.filter(r => r.vendor_id === x.id && (r.statut === 'publie' || admin));
-      const vu = lienVinted(x.vinted_url), ouv = ouvert === x.id;
-      const voir = ra.length ? (ra.length > 1 ? `les ${ra.length} avis` : "l'avis") : 'les détails';
-      const detail = ra.length || x.membre_depuis || admin;
-      return `<article class="vendeur">
-        <div class="haut">
-          <span class="mono" aria-hidden="true">${initiale(x.pseudo)}</span>
-          <div><h2 class="ps">${esc(x.pseudo)}</h2>
-            <p class="sous"><span class="badge ${esc(x.badge)}">${SYMBOLES[x.badge] || ''}${esc(BADGES[x.badge] || x.badge)}</span>${x.specialite ? `<span>${esc(x.specialite)}</span>` : ''}</p></div>
-          <div class="note">${x.nb_avis ? `<b>${virgule(x.note_moyenne)}</b><span class="etoiles" aria-label="${virgule(x.note_moyenne)} sur 5">${etoiles(Math.round(x.note_moyenne))}</span><small>${x.nb_avis} avis</small>` : '<span class="pas-encore">Pas encore noté</span>'}</div>
-        </div>
-        <div class="actions">
-          ${detail ? `<button type="button" class="lien-btn" aria-expanded="${ouv}" aria-controls="d-${x.id}" data-ouvrir="${x.id}">${ouv ? 'Masquer' : 'Voir'} ${voir}</button>` : ''}
-          ${vu ? `<a class="lien-btn" href="${esc(vu)}" target="_blank" rel="noopener nofollow">Profil Vinted</a>` : ''}
-          <button class="btn vide petit-btn" type="button" data-avis="${x.id}">Laisser un avis</button>
-        </div>
-        ${detail ? `<div class="detail" id="d-${x.id}" ${ouv ? '' : 'hidden'}>
-          ${x.membre_depuis ? `<p class="depuis">Membre depuis ${esc(x.membre_depuis)}</p>` : ''}
-          ${ra.length ? `<ul class="avis">${ra.map(r => `<li class="${r.statut !== 'publie' ? 'att' : ''}">
-            <div class="h"><span><b>${esc(r.pseudo_acheteur)}</b><span class="etoiles" aria-label="${r.note} sur 5">${etoiles(r.note)}</span></span><span>${new Date(r.created_at).toLocaleDateString('fr-FR')}</span></div>
-            ${r.commentaire ? `<p>${esc(r.commentaire)}</p>` : ''}
-            ${(r.article || r.prix || r.moyen_envoi) ? `<small>${[r.article && esc(r.article), r.prix && (esc(r.prix) + ' €'), r.moyen_envoi && esc(r.moyen_envoi)].filter(Boolean).join(', ')}</small>` : ''}
-            ${r.statut !== 'publie' ? `<small>${r.statut === 'en_attente' ? 'En attente de validation' : 'Refusé'}</small>` : ''}
-            <div class="adm">${r.statut !== 'publie' ? `<button type="button" data-publier="${r.id}">Publier</button>` : ''}${r.statut === 'en_attente' ? `<button type="button" data-refuser="${r.id}">Refuser</button>` : ''}<button type="button" data-suppr-avis="${r.id}">Supprimer</button></div>
-          </li>`).join('')}</ul>` : ''}
-          <div class="adm-v"><button type="button" data-modif-v="${x.id}">Modifier le vendeur</button><button type="button" data-suppr-v="${x.id}">Supprimer le vendeur</button></div>
-        </div>` : ''}
-      </article>`; }).join('');
-  }
-
-  // filtres et recherche
-  document.querySelectorAll('.filtres button').forEach(b => b.addEventListener('click', () => {
-    filtre = b.dataset.f; document.querySelectorAll('.filtres button').forEach(x => x.setAttribute('aria-pressed', x === b)); rendu(); }));
-  $('#recherche').addEventListener('input', rendu);
-
-  // notes (étoiles)
-  $('#notes').innerHTML = [1, 2, 3, 4, 5].map(n => `<button type="button" role="radio" aria-checked="false" aria-label="${n} sur 5" data-n="${n}">★</button>`).join('');
-  $('#notes').addEventListener('click', e => { const b = e.target.closest('[data-n]'); if (!b) return; note = +b.dataset.n;
-    $('#notes').querySelectorAll('button').forEach(x => { const on = +x.dataset.n <= note; x.classList.toggle('on', on); x.setAttribute('aria-checked', +x.dataset.n === note); }); });
-
-  const erreur = (id, t) => { const e = $(id); e.textContent = t; e.hidden = !t; };
-
-  document.addEventListener('click', async e => {
-    const t = e.target.closest('button'); if (!t) return;
-    if (t.dataset.ouvrir) { const id = +t.dataset.ouvrir; ouvert = ouvert === id ? null : id; rendu(); }
-    if (t.dataset.avis) { cible = vendeurs.find(x => x.id === +t.dataset.avis); $('#d-avis-pour').textContent = 'Pour ' + cible.pseudo + '.'; $('#f-avis').reset(); note = 0;
-      $('#notes').querySelectorAll('button').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-checked', 'false'); }); erreur('#a-erreur', ''); $('#d-avis').showModal(); }
-    if (t.hasAttribute('data-fermer')) t.closest('dialog').close();
-    if (!admin) return;
-    if (t.dataset.publier || t.dataset.refuser) {
-      const id = +(t.dataset.publier || t.dataset.refuser);
-      const { error } = await sb.from('reviews').update({ statut: t.dataset.publier ? 'publie' : 'refuse' }).eq('id', id);
-      if (error) return cdToast('Refusé : reconnecte-toi en admin.'); cdToast(t.dataset.publier ? 'Avis publié.' : 'Avis refusé.'); charger(); }
-    if (t.dataset.supprAvis) { if (!confirm('Supprimer cet avis ?')) return; const { error } = await sb.from('reviews').delete().eq('id', +t.dataset.supprAvis);
-      if (error) return cdToast('Refusé : reconnecte-toi en admin.'); cdToast('Avis supprimé.'); charger(); }
-    if (t.dataset.supprV) { const v = vendeurs.find(x => x.id === +t.dataset.supprV); if (!confirm(`Supprimer ${v.pseudo} et tous ses avis ?`)) return;
-      const { error } = await sb.from('vendors').delete().eq('id', v.id); if (error) return cdToast('Refusé : reconnecte-toi en admin.'); cdToast('Vendeur supprimé.'); charger(); }
-    if (t.dataset.modifV) editer(vendeurs.find(x => x.id === +t.dataset.modifV));
-  });
-
-  // avis d'un membre (passe par la validation)
-  const MSG = { pseudo_invalide: 'Ton pseudo doit faire entre 2 et 50 caractères.', note_invalide: 'Choisis une note de 1 à 5.', vendeur_inconnu: 'Ce vendeur n\'existe plus.', trop_de_demandes: 'Beaucoup d\'avis en ce moment. Réessaie plus tard.' };
-  $('#f-avis').addEventListener('submit', async e => {
-    e.preventDefault(); erreur('#a-erreur', '');
-    if ($('#a-pseudo').value.trim().length < 2) return erreur('#a-erreur', MSG.pseudo_invalide);
-    if (!note) return erreur('#a-erreur', MSG.note_invalide);
-    const { error } = await sb.rpc('proposer_avis', { p_vendeur: cible.id, p_acheteur: $('#a-pseudo').value, p_note: note, p_commentaire: $('#a-com').value,
-      p_article: $('#a-article').value, p_prix: $('#a-prix').value, p_envoi: $('#a-envoi').value });
-    if (error) { const k = Object.keys(MSG).find(k => (error.message || '').includes(k)); return erreur('#a-erreur', MSG[k] || 'L\'envoi n\'a pas marché. Réessaie dans une minute.'); }
-    $('#d-avis').close(); cdToast('Merci. Ton avis sera publié après vérification.');
-    if (admin) charger();
-  });
-
-  // admin
-  let enCours = null;
-  function editer(v) { enCours = v || null; $('#d-vendeur-t').textContent = v ? 'Modifier' : 'Ajouter un vendeur';
-    $('#v-pseudo').value = v?.pseudo || ''; $('#v-badge').value = v?.badge || 'nouveau'; $('#v-spe').value = v?.specialite || ''; $('#v-depuis').value = v?.membre_depuis || ''; $('#v-vinted').value = v?.vinted_url || '';
-    erreur('#v-erreur', ''); $('#d-vendeur').showModal(); }
-  $('#ajouter-v').addEventListener('click', () => editer(null));
-  $('#f-vendeur').addEventListener('submit', async e => {
-    e.preventDefault(); erreur('#v-erreur', '');
-    const d = { pseudo: $('#v-pseudo').value.trim(), badge: $('#v-badge').value, specialite: $('#v-spe').value.trim() || null, membre_depuis: $('#v-depuis').value.trim() || null, vinted_url: $('#v-vinted').value.trim() || null };
-    if (d.pseudo.length < 2) return erreur('#v-erreur', 'Pseudo trop court.');
-    if (d.vinted_url && !lienVinted(d.vinted_url)) return erreur('#v-erreur', 'Le lien doit être un profil Vinted (https://www.vinted.fr/member/…).');
-    const { error } = enCours ? await sb.from('vendors').update(d).eq('id', enCours.id) : await sb.from('vendors').insert(d);
-    if (error) return erreur('#v-erreur', error.code === '23505' ? 'Ce pseudo existe déjà.' : 'Refusé : reconnecte-toi en admin.');
-    $('#d-vendeur').close(); cdToast('Enregistré.'); charger();
-  });
-  $('#voir-attente').addEventListener('click', () => {
-    const r = avis.find(x => x.statut === 'en_attente'); if (!r) return cdToast('Aucun avis en attente.');
-    ouvert = r.vendor_id; filtre = 'tous'; document.querySelectorAll('.filtres button').forEach(x => x.setAttribute('aria-pressed', x.dataset.f === 'tous')); rendu();
-    document.getElementById('d-' + r.vendor_id)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
-  async function majAdmin() {
-    const { data } = await sb.auth.getSession(); admin = false;
-    if (data.session) { const r = await sb.rpc('est_admin'); admin = r.data === true; }
-    document.body.classList.toggle('admin', admin); return admin;
-  }
-  $('#admin-btn').addEventListener('click', async () => { if (await majAdmin()) return cdToast('Déjà connecté en admin.'); erreur('#ad-erreur', ''); $('#d-admin').showModal(); });
-  $('#admin-form').addEventListener('submit', async e => {
-    e.preventDefault(); erreur('#ad-erreur', '');
-    const { error } = await sb.auth.signInWithPassword({ email: $('#ad-mail').value.trim(), password: $('#ad-mdp').value });
-    if (error) return erreur('#ad-erreur', 'E-mail ou mot de passe incorrect.');
-    if (!(await majAdmin())) { await sb.auth.signOut(); return erreur('#ad-erreur', 'Ce compte n\'a pas les droits admin.'); }
-    $('#d-admin').close(); charger();
-  });
-  $('#sortir').addEventListener('click', async () => { await sb.auth.signOut(); await majAdmin(); charger(); });
-
-  majAdmin().then(charger);
-})();
-</script>
 </body>
 </html>
