@@ -94,6 +94,18 @@ body.sans-intro .intro{display:none}
   .poignee i{width:42px;height:4px;border-radius:2px;background:#4a4a4a}
 }
 
+/* replié : on navigue sur la carte, le panneau s'efface (glisser ou zoomer à la main) ; « ☰ Classement » le ramène */
+body.replie .panneau{transform:translateX(calc(100% + 40px));opacity:0;pointer-events:none}
+@media (max-width:959px){body.replie .panneau{transform:translateY(105%)} body.replie .cmd{bottom:16px}}
+.rouvrir{position:fixed;z-index:35;display:none;align-items:center;gap:10px;height:46px;padding:0 18px;background:#fff;color:#000;font-weight:720;font-size:15px;
+  box-shadow:0 14px 40px rgba(0,0,0,.6);animation:apparait .4s var(--ease) both}
+.rouvrir svg{width:18px;height:18px}
+body.replie .rouvrir{display:flex}
+@media (min-width:960px){.rouvrir{top:84px;right:18px}}
+@media (max-width:959px){.rouvrir{right:12px;top:72px}}
+.masquer{position:absolute;top:14px;right:14px;z-index:6;display:flex;align-items:center;gap:6px;font-size:13px;color:#9c9c9c;padding:6px 10px;border:1px solid #2a2a2a;background:rgba(0,0,0,.4)}
+.masquer:hover{color:#fff;border-color:#fff}
+@media (max-width:959px){.masquer{top:18px}}
 .tete{padding:22px 26px 18px}
 .tete .kicker{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#8f8f8f;font-weight:600}
 .tete h1{font-size:clamp(46px,9vw,64px);margin-top:8px}
@@ -212,6 +224,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
 
 <aside class="panneau" id="panneau" aria-label="Classement, membres et inscription">
   <button class="poignee" type="button" id="poignee" aria-label="Agrandir ou réduire le panneau"><i></i></button>
+  <button class="masquer" type="button" id="masquer" aria-label="Masquer le panneau pour voir la carte">Masquer <span aria-hidden="true">✕</span></button>
   <div class="defile-int">
     <div class="tete">
       <div class="kicker">La carte de la Division</div>
@@ -261,6 +274,8 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
     </div>
   </div>
 </aside>
+
+<button class="rouvrir" type="button" id="rouvrir" aria-controls="panneau"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>Classement</button>
 
 <div class="cmd" role="group" aria-label="Vue de la carte">
   <button type="button" id="vue-globe" aria-pressed="false">Globe</button>
@@ -411,7 +426,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   map.on('sourcedata', e => { if (e.sourceId === 'casuals' && e.isSourceLoaded) majAmas(); });
 
   // cadrage : tous les casuals, en laissant la place au panneau
-  const marge = () => ordi() ? { top: 110, bottom: 70, left: 70, right: 500 } : { top: 90, bottom: Math.min(innerHeight * .46, 520) + 30, left: 30, right: 30 };
+  const marge = () => document.body.classList.contains('replie') ? { top: 100, bottom: 80, left: 50, right: 50 } : ordi() ? { top: 110, bottom: 70, left: 70, right: 500 } : { top: 90, bottom: Math.min(innerHeight * .46, 520) + 30, left: 30, right: 30 };
   const bornes = l => l.reduce((b, m) => b.extend([m.lng, m.lat]), new maplibregl.LngLatBounds([l[0].lng, l[0].lat], [l[0].lng, l[0].lat]));
   function vueGenerale(duree = 900) {
     if (!membres.length) return;
@@ -426,6 +441,16 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   $('#vue-globe').addEventListener('click', vueGlobe);
   $('#vue-carte').addEventListener('click', () => { $('#focus').innerHTML = ''; vueGenerale(1600); });
   $('#z-plus').addEventListener('click', () => map.zoomIn()); $('#z-moins').addEventListener('click', () => map.zoomOut());
+
+  // ---------- panneau : il s'efface quand on navigue soi-même sur la carte ----------
+  const replier = () => { if (!document.body.classList.contains('fini')) return; document.body.classList.add('replie'); $('#panneau').classList.remove('grand'); };
+  const deplier = () => document.body.classList.remove('replie');
+  map.on('dragstart', e => { if (e.originalEvent) replier(); });
+  map.on('zoomstart', e => { if (e.originalEvent) replier(); });
+  map.on('wheel', replier);                                                        // molette
+  map.on('touchstart', e => { if (e.originalEvent.touches && e.originalEvent.touches.length > 1) replier(); });   // zoom à 2 doigts
+  $('#masquer').addEventListener('click', replier);
+  $('#rouvrir').addEventListener('click', deplier);
 
   // ---------- intro : le globe tourne, puis on plonge sur les casuals ----------
   let tourne = avecIntro, tPrec = 0;
@@ -537,6 +562,7 @@ dialog .fermer{position:absolute;top:10px;right:12px;width:40px;height:40px;font
   // ---------- onglets, tiroir ----------
   const onglets = ['classement', 'membres', 'rejoindre'];
   function ouvrir(nom) {
+    deplier();
     onglets.forEach(o => { $('#t-' + o).setAttribute('aria-selected', o === nom); $('#v-' + o).hidden = o !== nom; });
     if (nom === 'rejoindre') { if (!ordi()) $('#panneau').classList.add('grand'); setTimeout(() => $('#f-pseudo').focus(), 50); }
   }
